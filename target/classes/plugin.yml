@@ -1,0 +1,6 @@
+name: RPGCraft
+version: '1.0-SNAPSHOT'
+main: org.rpg.rPGCraft.Main
+api-version: '1.21'
+prefix: RPGCraft
+authors: [ Lily ]
