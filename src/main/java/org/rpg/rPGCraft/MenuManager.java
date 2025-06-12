@@ -15,6 +15,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MenuManager implements Listener
 {
@@ -27,7 +28,7 @@ public class MenuManager implements Listener
         this.main = main;
     }
 
-    public void CreateRaceMenu(Player player, List<Race> races)
+    public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow)
     {
         // create the menu
         Inventory raceMenu = Bukkit.createInventory(player, 45,
@@ -62,49 +63,16 @@ public class MenuManager implements Listener
         }
 
         // generate the icon positions and place them
-        raceMenu = GenerateIconPositions(raceIcons, raceMenu, 7, 1);
+        raceMenu = GenerateIconPositions(raceIcons, raceMenu, 7, startRow);
 
-        // open the menu
-        player.openInventory(raceMenu);
+        // return the menu
+        return raceMenu;
     }
 
-    // TODO make CreateRaceMenu work for this
-    public void CreateSubraceMenu(Player player, Race parentRace)
+    public Inventory CreateSubraceMenu(Player player, Race parentRace)
     {
         // create the menu
-        Inventory raceMenu = Bukkit.createInventory(player, 45,
-                ChatColor.BOLD.toString() + "Select a Subrace!");
-
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < raceMenu.getSize(); i++)
-        {
-            raceMenu.setItem(i, border);
-        }
-
-        // extract all of the icons from races
-        List<ItemStack> raceIcons = new ArrayList<>();
-        for (Race race : parentRace.subraces)
-        {
-            ItemStack icon = race.GetRaceIcon();
-
-            // add the PersistentDataContainer to the icon
-            ItemMeta iconMeta = icon.getItemMeta();
-            iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, race.name);
-
-            icon.setItemMeta(iconMeta);
-
-            raceIcons.add(icon);
-        }
-
-        // generate the icon positions and place them
-        raceMenu = GenerateIconPositions(raceIcons, raceMenu, 7,2);
+        Inventory raceMenu = CreateRaceMenu(player, parentRace.subraces, 2);
 
         // get the parentRace icon
         ItemStack parentIcon = parentRace.GetRaceIcon();
@@ -117,8 +85,8 @@ public class MenuManager implements Listener
         // add the parentRace icon to the top left corner
         raceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
 
-        // open the menu
-        player.openInventory(raceMenu);
+        // return the menu
+        return raceMenu;
     }
 
     @EventHandler
@@ -129,7 +97,7 @@ public class MenuManager implements Listener
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
-            CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces());
+            player.openInventory(CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1));
         }
     }
 
@@ -153,16 +121,13 @@ public class MenuManager implements Listener
                 {
                     String racePersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
 
-                    player.sendMessage(racePersistent + " racePersistent");
                     // find the race clicked
                     for (Race race : main.GetChooseAbleRaces())
                     {
-                        player.sendMessage(race.name + " race");
                         // if the race name is the same as the race of what the player click, open the new subrace menu
-                        if (race.name == racePersistent)
+                        if (Objects.equals(race.name, racePersistent))
                         {
-                            player.sendMessage(race.name + " == " + racePersistent);
-                            CreateSubraceMenu(player, race);
+                            player.openInventory(CreateSubraceMenu(player, race));
                         }
                     }
 
