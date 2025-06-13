@@ -20,19 +20,28 @@ import java.util.Objects;
 public class MenuManager implements Listener
 {
 
+    private ItemStack backButton = new ItemStack(Material.GUNPOWDER);
+
     int FULL_ROW_SIZE = 9;
 
     Main main;
 
     public MenuManager(Main main) {
         this.main = main;
+
+        // generate the back button
+        ItemMeta backButtonMeta = backButton.getItemMeta();
+        backButtonMeta.setDisplayName(ChatColor.GRAY.toString() + ChatColor.BOLD.toString() + "Back");
+        backButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back");
+
+        backButton.setItemMeta(backButtonMeta);
     }
 
-    public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow)
+    public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
     {
         // create the menu
         Inventory raceMenu = Bukkit.createInventory(player, 45,
-                ChatColor.BOLD.toString() + "Select a Race!");
+                ChatColor.BOLD.toString() + inventoryTitle);
 
         // generate the item for the border
         ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
@@ -72,7 +81,7 @@ public class MenuManager implements Listener
     public Inventory CreateSubraceMenu(Player player, Race parentRace)
     {
         // create the menu
-        Inventory raceMenu = CreateRaceMenu(player, parentRace.subraces, 2);
+        Inventory subraceMenu = CreateRaceMenu(player, parentRace.subraces, 2, "Select a Subrace!");
 
         // get the parentRace icon
         ItemStack parentIcon = parentRace.GetRaceIcon();
@@ -82,11 +91,14 @@ public class MenuManager implements Listener
 
         parentIcon.setItemMeta(iconMeta);
 
-        // add the parentRace icon to the top left corner
-        raceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
+        // add the parentRace icon to the top center
+        subraceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
+
+        // add the back button to the bottom left corner
+        subraceMenu.setItem(FULL_ROW_SIZE*4, backButton);
 
         // return the menu
-        return raceMenu;
+        return subraceMenu;
     }
 
     @EventHandler
@@ -97,7 +109,7 @@ public class MenuManager implements Listener
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
-            player.openInventory(CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1));
+            player.openInventory(CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
     }
 
@@ -110,7 +122,7 @@ public class MenuManager implements Listener
             ItemStack clickedItem = e.getCurrentItem();
             Player player = (Player) e.getWhoClicked();
 
-            // if the player is in the correct inventory
+            // if the player is in the select race inventory
             if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Race!"))
             {
                 // cancel the event so the player can't take items
@@ -119,6 +131,7 @@ public class MenuManager implements Listener
                 // if the player didn't click a border
                 if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
                 {
+                    // get the PersistentDataContainer of the icon clicked
                     String racePersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
 
                     // find the race clicked
@@ -132,6 +145,39 @@ public class MenuManager implements Listener
                     }
 
                 }
+            }
+            // if the player is in the select subrace inventory
+            else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Subrace!"))
+            {
+                // cancel the event so the player can't take items
+                e.setCancelled(true);
+
+                // if the player didn't click a border
+                if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+                {
+                    // get the PersistentDataContainer of the icon clicked
+                    String clickedPersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+
+                    // get the PersistentDataContainer of the parent
+                    String parentPersistent = e.getClickedInventory().getItem(FULL_ROW_SIZE/2).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+
+                    // if the player didn't click the parent race, generate and open the confirm menu
+                    if (clickedPersistent != parentPersistent)
+                    {
+                        // create the menu
+                        Inventory confirmMenu = Bukkit.createInventory(player, 45,
+                            ChatColor.BOLD.toString() + "inventoryTitle");
+
+                        // place the icons and buttons
+                        confirmMenu = GenerateIconPositions(List.of(clickedItem, e.getClickedInventory().getItem(FULL_ROW_SIZE/2)), confirmMenu, 7, 1);
+
+                        // add the back button to the bottom left corner
+                        confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
+
+
+                    }
+                }
+
             }
         }
     }

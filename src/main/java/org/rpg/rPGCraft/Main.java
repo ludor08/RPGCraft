@@ -15,13 +15,20 @@ public final class Main extends JavaPlugin implements Listener
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
+    private final NamespacedKey UIKey = new NamespacedKey(this, "ui");
 
     // choose able races
     private final List<Race> chooseAbleRaces = List.of(new Furoid());
 
+    // Getters
     public NamespacedKey GetRaceKey()
     {
         return raceKey;
+    }
+
+    public NamespacedKey GetUIKey()
+    {
+        return UIKey;
     }
 
     public List<Race> GetChooseAbleRaces()
