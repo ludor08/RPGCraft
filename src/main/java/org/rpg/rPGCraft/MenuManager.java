@@ -44,8 +44,6 @@ public class MenuManager implements Listener
         confirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm");
 
         confirmButton.setItemMeta(confirmButtonMeta);
-
-
     }
 
     public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
@@ -134,7 +132,7 @@ public class MenuManager implements Listener
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e)
     {
-        // if the player clicked on an item
+        // if the player did not click on an item
         if (e.getCurrentItem() == null)
         {
             return;
@@ -146,10 +144,10 @@ public class MenuManager implements Listener
         // check if a UI button was clicked
         if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetUIKey(), PersistentDataType.STRING))
         {
-            String[] UIPersistents = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING).split("_");
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
 
-                player.sendMessage("'" + UIPersistents[0] + "'");
-                player.sendMessage(UIPersistents[0] + " == " + "back");
+            String[] UIPersistents = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING).split("_");
 
             // if it was a back button
             if (Objects.equals(UIPersistents[0], "back"))
@@ -178,6 +176,37 @@ public class MenuManager implements Listener
 
                     default:
                         player.sendMessage("undefined menu exception : " + UIPersistents[1]);
+                }
+            }
+            // if it was a confirm button
+            else if (Objects.equals(UIPersistents[0], "confirm"))
+            {
+                switch (UIPersistents[1])
+                {
+                    case "subrace" :
+                        String playerRace = UIPersistents[2];
+
+                        // find the subrace
+                        for (int i = 0; i < e.getInventory().getSize(); i++)
+                        {
+                            // if this item is not null
+                            if (e.getInventory().getItem(i) != null)
+                            {
+                                // if this item has the race PersistentDataContainer
+                                if (e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().has(main.GetRaceKey()))
+                                {
+                                    playerRace += "_" + e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+                                    break;
+                                }
+                            }
+                        }
+
+                        // add the race PersistentDataContainer to the player
+                        player.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, playerRace);
+
+                        // close the inventory
+                        e.getInventory().close();
+                        break;
                 }
             }
         }
@@ -232,7 +261,7 @@ public class MenuManager implements Listener
         }
     }
 
-    public Inventory CreateConfirmMenu(Player player, List<ItemStack> itemsToConfirm, String confirmation, String backButtonData)
+    public Inventory CreateConfirmMenu(Player player, List<ItemStack> itemsToConfirm, String confirmation, String buttonData)
     {
         // create the menu
         Inventory confirmMenu = Bukkit.createInventory(player, 45,
@@ -258,14 +287,20 @@ public class MenuManager implements Listener
         ItemStack subraceBackButton = backButton;
         ItemMeta subraceBackButtonMeta = subraceBackButton.getItemMeta();
 
-        subraceBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_" + backButtonData);
+        subraceBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_" + buttonData);
 
         subraceBackButton.setItemMeta(subraceBackButtonMeta);
 
         confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
 
         // add the confirm button to the row under the icons
-        confirmMenu.setItem((int) (FULL_ROW_SIZE*3.5f), confirmButton);
+        ItemStack subraceConfirmButton = confirmButton;
+        ItemMeta subraceConfirmButtonMeta = subraceConfirmButton.getItemMeta();
+        subraceConfirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm_" + buttonData);
+
+        subraceConfirmButton.setItemMeta(subraceConfirmButtonMeta);
+
+        confirmMenu.setItem((int) (FULL_ROW_SIZE*3.5f), subraceConfirmButton);
 
         // return the menu
         return confirmMenu;
