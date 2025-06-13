@@ -29,11 +29,12 @@ public class MenuManager implements Listener
 
     public MenuManager(Main main) {
         this.main = main;
+        Bukkit.getPluginManager().registerEvents(this,main);
+
 
         // generate the back button
         ItemMeta backButtonMeta = backButton.getItemMeta();
         backButtonMeta.setDisplayName(ChatColor.GRAY.toString() + ChatColor.BOLD.toString() + "Back");
-        backButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back");
 
         backButton.setItemMeta(backButtonMeta);
 
@@ -42,7 +43,9 @@ public class MenuManager implements Listener
         confirmButtonMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Confirm");
         confirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm");
 
-        confirmButton.setItemMeta(backButtonMeta);
+        confirmButton.setItemMeta(confirmButtonMeta);
+
+
     }
 
     public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
@@ -103,7 +106,14 @@ public class MenuManager implements Listener
         subraceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
 
         // add the back button to the bottom left corner
-        subraceMenu.setItem(FULL_ROW_SIZE*4, backButton);
+        ItemStack subraceBackButton = backButton;
+        ItemMeta subraceBackButtonMeta = subraceBackButton.getItemMeta();
+
+        subraceBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back.race");
+
+        subraceBackButton.setItemMeta(subraceBackButtonMeta);
+
+        subraceMenu.setItem(FULL_ROW_SIZE*4, subraceBackButton);
 
         // return the menu
         return subraceMenu;
@@ -125,72 +135,94 @@ public class MenuManager implements Listener
     public void OnInventoryClick(InventoryClickEvent e)
     {
         // if the player clicked on an item
-        if (e.getCurrentItem() != null)
+        if (e.getCurrentItem() == null)
         {
-            ItemStack clickedItem = e.getCurrentItem();
-            Player player = (Player) e.getWhoClicked();
+            return;
+        }
 
-            // if the player is in the select race inventory
-            if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Race!"))
+        ItemStack clickedItem = e.getCurrentItem();
+        Player player = (Player) e.getWhoClicked();
+
+        // if the player is in the select race inventory
+        if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Race!"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+
+            // if the player didn't click a border
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
             {
-                // cancel the event so the player can't take items
-                e.setCancelled(true);
+                // get the PersistentDataContainer of the icon clicked
+                String racePersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
 
-                // if the player didn't click a border
-                if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+                // find the race clicked
+                for (Race race : main.GetChooseAbleRaces())
                 {
-                    // get the PersistentDataContainer of the icon clicked
-                    String racePersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
-
-                    // find the race clicked
-                    for (Race race : main.GetChooseAbleRaces())
+                    // if the race name is the same as the race of what the player click, open the new subrace menu
+                    if (Objects.equals(race.name, racePersistent))
                     {
-                        // if the race name is the same as the race of what the player click, open the new subrace menu
-                        if (Objects.equals(race.name, racePersistent))
-                        {
-                            player.openInventory(CreateSubraceMenu(player, race));
-                        }
-                    }
-
-                }
-            }
-            // if the player is in the select subrace inventory
-            else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Subrace!"))
-            {
-                // cancel the event so the player can't take items
-                e.setCancelled(true);
-
-                // if the player didn't click a border
-                if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
-                {
-                    // get the PersistentDataContainer of the icon clicked
-                    String clickedPersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
-
-                    // get the PersistentDataContainer of the parent
-                    String parentPersistent = e.getClickedInventory().getItem(FULL_ROW_SIZE/2).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
-
-                    // if the player didn't click the parent race, generate and open the confirm menu
-                    if (clickedPersistent != parentPersistent)
-                    {
-                        // create the menu
-                        Inventory confirmMenu = Bukkit.createInventory(player, 45,
-                            ChatColor.BOLD.toString() + "inventoryTitle");
-
-                        // place the icons and buttons
-                        confirmMenu = GenerateIconPositions(List.of(clickedItem, e.getClickedInventory().getItem(FULL_ROW_SIZE/2)), confirmMenu, 7, 1);
-
-                        // add the back button to the bottom left corner
-                        confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
-
-                        // add the confirm button to the row under the icons
-                        confirmMenu.setItem((int) (FULL_ROW_SIZE*3.5f), confirmButton);
-
-
+                        player.openInventory(CreateSubraceMenu(player, race));
                     }
                 }
 
             }
         }
+        // if the player is in the select subrace inventory
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Subrace!"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+
+            // if the player didn't click a border
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+            {
+                // get the PersistentDataContainer of the icon clicked
+                String clickedPersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+
+                // get the PersistentDataContainer of the parent
+                String parentPersistent = e.getClickedInventory().getItem(FULL_ROW_SIZE/2).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+
+                // if the player didn't click the parent race, generate and open the confirm menu
+                if (clickedPersistent != parentPersistent)
+                {
+                    // open the confirm menu
+                    player.openInventory(CreateConfirmMenu(player, List.of(clickedItem,e.getClickedInventory().getItem(FULL_ROW_SIZE/2)), "Subrace"));
+                }
+            }
+
+        }
+    }
+
+    public Inventory CreateConfirmMenu(Player player, List<ItemStack> itemsToConfirm, String confirmation)
+    {
+        // create the menu
+        Inventory confirmMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Confirm " + confirmation + "?");
+
+        // generate the item for the border
+        ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        ItemMeta borderMeta = border.getItemMeta();
+
+        borderMeta.setDisplayName(" ");
+        border.setItemMeta(borderMeta);
+
+        // fill the menu with the borders
+        for (int i = 0; i < confirmMenu.getSize(); i++)
+        {
+            confirmMenu.setItem(i, border);
+        }
+
+        // place the icons and buttons
+        confirmMenu = GenerateIconPositions(itemsToConfirm, confirmMenu, 7, 1);
+
+        // add the back button to the bottom left corner
+        confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
+
+        // add the confirm button to the row under the icons
+        confirmMenu.setItem((int) (FULL_ROW_SIZE*3.5f), confirmButton);
+
+        // return the menu
+        return confirmMenu;
     }
 
     public Inventory GenerateIconPositions(List<ItemStack> icons, Inventory inventory, int maxItemsPerRow, int startRow)

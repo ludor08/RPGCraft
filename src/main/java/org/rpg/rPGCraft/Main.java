@@ -11,7 +11,7 @@ import java.util.List;
 public final class Main extends JavaPlugin implements Listener
 {
     // managers
-    private final MenuManager menuManager = new MenuManager(this);
+    private MenuManager menuManager;
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
@@ -39,6 +39,6 @@ public final class Main extends JavaPlugin implements Listener
     @Override
     public void onEnable()
     {
-        Bukkit.getPluginManager().registerEvents(menuManager,this);
+        menuManager = new MenuManager(this);
     }
 }
