@@ -25,7 +25,6 @@ public class Race {
 
         this.traits = traits;
         this.subraces = subraces;
-        this.parentRace = parentRace;
     }
 
     public ItemStack GetRaceIcon()

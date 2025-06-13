@@ -183,7 +183,7 @@ public class MenuManager implements Listener
                         confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
 
                         // add the confirm button to the row under the icons
-
+                        confirmMenu.setItem((int) (FULL_ROW_SIZE*3.5f), confirmButton);
 
 
                     }
