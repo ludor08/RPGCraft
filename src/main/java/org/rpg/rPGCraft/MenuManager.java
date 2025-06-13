@@ -122,6 +122,8 @@ public class MenuManager implements Listener
     {
         Player player = e.getPlayer();
 
+        player.getPersistentDataContainer().remove(main.GetRaceKey());
+
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
@@ -152,12 +154,10 @@ public class MenuManager implements Listener
             // if it was a back button
             if (Objects.equals(UIPersistents[0], "back"))
             {
-                player.sendMessage("you clicked a back button");
                 switch (UIPersistents[1])
                 {
                     // if the back button has the data of race then go back to the race menu
                     case "race" :
-                        player.sendMessage("opening new race menu");
                         player.openInventory(CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
                         break;
 
@@ -184,8 +184,6 @@ public class MenuManager implements Listener
                 switch (UIPersistents[1])
                 {
                     case "subrace" :
-                        String playerRace = UIPersistents[2];
-
                         // find the subrace
                         for (int i = 0; i < e.getInventory().getSize(); i++)
                         {
@@ -195,14 +193,14 @@ public class MenuManager implements Listener
                                 // if this item has the race PersistentDataContainer
                                 if (e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().has(main.GetRaceKey()))
                                 {
-                                    playerRace += "_" + e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING);
+                                    player.getPersistentDataContainer().set(main.GetSubraceKey(), PersistentDataType.STRING, e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
                                     break;
                                 }
                             }
                         }
 
                         // add the race PersistentDataContainer to the player
-                        player.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, playerRace);
+                        player.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, UIPersistents[2]);
 
                         // close the inventory
                         e.getInventory().close();

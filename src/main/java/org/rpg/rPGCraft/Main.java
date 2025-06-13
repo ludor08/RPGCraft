@@ -15,6 +15,7 @@ public final class Main extends JavaPlugin implements Listener
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
+    private final NamespacedKey subraceKey = new NamespacedKey(this, "subrace");
     private final NamespacedKey UIKey = new NamespacedKey(this, "ui");
 
     // choose able races
@@ -24,6 +25,11 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetRaceKey()
     {
         return raceKey;
+    }
+
+    public NamespacedKey GetSubraceKey()
+    {
+        return subraceKey;
     }
 
     public NamespacedKey GetUIKey()
