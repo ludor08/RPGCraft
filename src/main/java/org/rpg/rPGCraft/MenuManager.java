@@ -21,6 +21,7 @@ public class MenuManager implements Listener
 {
 
     private ItemStack backButton = new ItemStack(Material.GUNPOWDER);
+    private ItemStack confirmButton = new ItemStack(Material.LIME_CONCRETE);
 
     int FULL_ROW_SIZE = 9;
 
@@ -35,6 +36,13 @@ public class MenuManager implements Listener
         backButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back");
 
         backButton.setItemMeta(backButtonMeta);
+
+        // generate the confirm button
+        ItemMeta confirmButtonMeta = confirmButton.getItemMeta();
+        confirmButtonMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Confirm");
+        confirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm");
+
+        confirmButton.setItemMeta(backButtonMeta);
     }
 
     public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
@@ -173,6 +181,9 @@ public class MenuManager implements Listener
 
                         // add the back button to the bottom left corner
                         confirmMenu.setItem(FULL_ROW_SIZE*4, backButton);
+
+                        // add the confirm button to the row under the icons
+
 
 
                     }
