@@ -122,6 +122,7 @@ public class MenuManager implements Listener
     {
         Player player = e.getPlayer();
 
+        // TODO remove this
         player.getPersistentDataContainer().remove(main.GetRaceKey());
 
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
@@ -129,6 +130,8 @@ public class MenuManager implements Listener
         {
             player.openInventory(CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
+
+
     }
 
     @EventHandler
@@ -201,6 +204,9 @@ public class MenuManager implements Listener
 
                         // add the race PersistentDataContainer to the player
                         player.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, UIPersistents[2]);
+
+                        // send the confirmation message
+                        player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "race selected");
 
                         // close the inventory
                         e.getInventory().close();
