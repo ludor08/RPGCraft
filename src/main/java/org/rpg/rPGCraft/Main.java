@@ -6,12 +6,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.rpg.rPGCraft.Races.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Main extends JavaPlugin implements Listener
 {
     // managers
-    private MenuManager menuManager;
+    public MenuManager menuManager;
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
@@ -20,6 +21,9 @@ public final class Main extends JavaPlugin implements Listener
 
     // choose able races
     private final List<Race> chooseAbleRaces = List.of(new Furoid());
+
+    // stat sheets
+    private List<StatSheet> statSheets = new ArrayList<>();
 
     // Getters
     public NamespacedKey GetRaceKey()
@@ -40,6 +44,17 @@ public final class Main extends JavaPlugin implements Listener
     public List<Race> GetChooseAbleRaces()
     {
         return chooseAbleRaces;
+    }
+
+    public List<StatSheet> GetStatSheets()
+    {
+        return statSheets;
+    }
+
+    // Setter/Adders
+    public void AddStatSheet(StatSheet statSheet)
+    {
+        this.statSheets.add(statSheet);
     }
 
     @Override
