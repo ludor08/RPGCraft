@@ -4,10 +4,18 @@ import org.bukkit.entity.Player;
 
 public class StatSheet {
 
-    public Race race;
-    public Race subrace;
+    private Race race;
+    private Race subrace;
 
-    public StatSheet(Player player) {
+    private Player player;
 
+    public Player GetPlayer()
+    {
+        return player;
+    }
+
+    public StatSheet(Player player)
+    {
+        this.player = player;
     }
 }

@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Races;
 
+import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.StatSheet;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 public class StatSheetManager
 {
+    Main main;
+
 
     // stat sheets
     private List<StatSheet> statSheets = new ArrayList<>();
@@ -18,6 +21,19 @@ public class StatSheetManager
         return statSheets;
     }
 
+    public StatSheet FindStatSheetByPlayer(Player player)
+    {
+        for (StatSheet statSheet : statSheets)
+        {
+            if (statSheet.GetPlayer().equals(player))
+            {
+                return statSheet;
+            }
+        }
+
+        return null;
+    }
+
     // Adder
     public void AddStatSheet(StatSheet statSheet)
     {
@@ -26,7 +42,7 @@ public class StatSheetManager
 
     public StatSheetManager(Main main)
     {
-
+        this.main = main;
     }
 
 }

@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,7 +18,6 @@ import java.util.Objects;
 
 public class MenuManager implements Listener
 {
-
     private ItemStack backButton = new ItemStack(Material.GUNPOWDER);
     private ItemStack confirmButton = new ItemStack(Material.LIME_CONCRETE);
 
@@ -27,7 +25,8 @@ public class MenuManager implements Listener
 
     Main main;
 
-    public MenuManager(Main main) {
+    public MenuManager(Main main)
+    {
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this,main);
 
@@ -115,23 +114,6 @@ public class MenuManager implements Listener
 
         // return the menu
         return subraceMenu;
-    }
-
-    @EventHandler
-    public void OnJoin(PlayerJoinEvent e)
-    {
-        Player player = e.getPlayer();
-
-        // TODO remove this
-        player.getPersistentDataContainer().remove(main.GetRaceKey());
-
-        // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
-        if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
-        {
-            player.openInventory(CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
-        }
-
-
     }
 
     @EventHandler

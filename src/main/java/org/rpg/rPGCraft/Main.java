@@ -14,6 +14,7 @@ public final class Main extends JavaPlugin implements Listener
     // managers
     public MenuManager menuManager;
     public StatSheetManager statSheetManager;
+    public GameManager gameManager;
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
@@ -51,5 +52,6 @@ public final class Main extends JavaPlugin implements Listener
     {
         menuManager = new MenuManager(this);
         statSheetManager = new StatSheetManager(this);
+        gameManager = new GameManager(this);
     }
 }

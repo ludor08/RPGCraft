@@ -1,0 +1,42 @@
+package org.rpg.rPGCraft;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.persistence.PersistentDataType;
+
+public class GameManager implements Listener {
+
+    Main main;
+
+    public GameManager(Main main)
+    {
+        this.main = main;
+        Bukkit.getPluginManager().registerEvents(this,main);
+    }
+
+    @EventHandler
+    public void OnJoin(PlayerJoinEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // TODO remove this
+        player.getPersistentDataContainer().remove(main.GetRaceKey());
+
+        // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
+        if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+        {
+            player.openInventory(main.menuManager.CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
+        }
+
+        // if there is no stat sheet assigned to a player when they join
+        if (main.statSheetManager.FindStatSheetByPlayer(e.getPlayer()) == null)
+        {
+            e.getPlayer().sendMessage("added stat sheet");
+            main.statSheetManager.AddStatSheet(new StatSheet(e.getPlayer()));
+        }
+
+    }
+}
