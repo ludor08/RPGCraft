@@ -178,7 +178,8 @@ public class MenuManager implements Listener
                                 // if this item has the race PersistentDataContainer
                                 if (e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().has(main.GetRaceKey()))
                                 {
-                                    player.getPersistentDataContainer().set(main.GetSubraceKey(), PersistentDataType.STRING, e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
+                                    main.statSheetManager.FindStatSheetByPlayer(player).SetRacePersistent(e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING), UIPersistents[2]);
+                                    player.getPersistentDataContainer().set(main.GetSubraceKey(), PersistentDataType.STRING, );
                                     break;
                                 }
                             }

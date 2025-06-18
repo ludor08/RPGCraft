@@ -25,17 +25,17 @@ public class GameManager implements Listener {
         // TODO remove this
         player.getPersistentDataContainer().remove(main.GetRaceKey());
 
-        // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
-        if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
-        {
-            player.openInventory(main.menuManager.CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
-        }
-
         // if there is no stat sheet assigned to a player when they join
         if (main.statSheetManager.FindStatSheetByPlayer(e.getPlayer()) == null)
         {
             e.getPlayer().sendMessage("added stat sheet");
-            main.statSheetManager.AddStatSheet(new StatSheet(e.getPlayer()));
+            main.statSheetManager.AddStatSheet(new StatSheet(e.getPlayer(), main));
+        }
+
+        // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
+        if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+        {
+            player.openInventory(main.menuManager.CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
 
     }
