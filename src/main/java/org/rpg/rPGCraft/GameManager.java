@@ -23,19 +23,26 @@ public class GameManager implements Listener {
         Player player = e.getPlayer();
 
         // TODO remove this
-        player.getPersistentDataContainer().remove(main.GetRaceKey());
+        player.sendMessage(String.valueOf(!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING)));
+
+        player.sendMessage(String.valueOf(main.statSheetManager.FindStatSheetByPlayer(player) != null));
+
+        if (main.statSheetManager.FindStatSheetByPlayer(player) != null)
+        {
+            main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
+        }
 
         // if there is no stat sheet assigned to a player when they join
-        if (main.statSheetManager.FindStatSheetByPlayer(e.getPlayer()) == null)
+        if (main.statSheetManager.FindStatSheetByPlayer(player) == null)
         {
-            e.getPlayer().sendMessage("added stat sheet");
-            main.statSheetManager.AddStatSheet(new StatSheet(e.getPlayer(), main));
+            player.sendMessage("added stat sheet");
+            main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId(), main));
         }
 
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
-            player.openInventory(main.menuManager.CreateRaceMenu(e.getPlayer(), main.GetChooseAbleRaces(), 1, "Select a Race!"));
+            player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
 
     }

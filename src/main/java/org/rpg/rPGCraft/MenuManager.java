@@ -182,6 +182,7 @@ public class MenuManager implements Listener
 
                                     // send the confirmation message
                                     player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Race Selected!");
+
                                     break;
                                 }
                             }
