@@ -13,6 +13,6 @@ public class Feloid extends Race
     // name of the race
     public Feloid()
     {
-        super("Feloid", ChatColor.WHITE, Material.COD, List.of(new Fur(), new AnimalAgility()),null);
+        super("Feloid", ChatColor.WHITE, Material.COD, List.of(),null);
     }
 }

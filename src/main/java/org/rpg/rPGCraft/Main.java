@@ -22,7 +22,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey UIKey = new NamespacedKey(this, "ui");
 
     // choose able races
-    private final List<Race> chooseAbleRaces = List.of(new Furoid());
+    private final List<Race> chooseAbleRaces = List.of(new Furoid(this));
 
     // Getters
     public NamespacedKey GetRaceKey()

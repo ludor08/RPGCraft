@@ -160,7 +160,7 @@ public class MenuManager implements Listener
                         break;
 
                     default:
-                        player.sendMessage("undefined menu exception : " + UIPersistents[1]);
+                        player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
                 }
             }
             // if it was a confirm button
@@ -179,21 +179,20 @@ public class MenuManager implements Listener
                                 if (e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().has(main.GetRaceKey()))
                                 {
                                     main.statSheetManager.FindStatSheetByPlayer(player).SetRacePersistent(e.getInventory().getItem(i).getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING), UIPersistents[2]);
-                                    player.getPersistentDataContainer().set(main.GetSubraceKey(), PersistentDataType.STRING, );
+
+                                    // send the confirmation message
+                                    player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Race Selected!");
                                     break;
                                 }
                             }
                         }
 
-                        // add the race PersistentDataContainer to the player
-                        player.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, UIPersistents[2]);
-
-                        // send the confirmation message
-                        player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "race selected");
-
                         // close the inventory
                         e.getInventory().close();
                         break;
+
+                    default:
+                        player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
                 }
             }
         }

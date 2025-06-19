@@ -1,6 +1,7 @@
 package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 

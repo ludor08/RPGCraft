@@ -14,7 +14,6 @@ public class Race {
 
     public Material iconMaterial;
     public List<Race> subraces;
-    public Race parentRace;
     public List<Trait> traits;
 
     public Race(String name, ChatColor nameColor, Material iconMaterial, List<Trait> traits, List<Race> subraces)

@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.List;
 import java.util.Objects;
 
 public class StatSheet
@@ -25,10 +26,13 @@ public class StatSheet
 
     public void AddTraits(Race race)
     {
-        // Set the race PersistentDataContainer
-        // Find the race script
-        // Find the Traits that come from the new race
+        // Get the Traits that come from the race
+        List<Trait> traits = race.traits;
         // Add the on add effects to the player
+        for (Trait trait : traits)
+        {
+            trait.OnGainTraitBuff(player);
+        }
     }
 
     public void SetRacePersistent(String subrace, String parentRace)
