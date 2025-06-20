@@ -129,7 +129,8 @@ public class MenuManager implements Listener
         Player player = (Player) e.getWhoClicked();
 
         // check if a UI button was clicked
-        if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetUIKey(), PersistentDataType.STRING))
+        if (clickedItem.getItemMeta() != null
+                && clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetUIKey(), PersistentDataType.STRING))
         {
             // cancel the event so the player can't take items
             e.setCancelled(true);

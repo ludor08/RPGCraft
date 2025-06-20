@@ -4,6 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
@@ -34,5 +37,17 @@ public class AnimalAgility extends Trait
     public void OnRemoveTraitBuff(Player player)
     {
         player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
+    }
+
+    @Override
+    public void OnRespawnBuffs(PlayerRespawnEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnTakeDamage(EntityDamageEvent e)
+    {
+
     }
 }

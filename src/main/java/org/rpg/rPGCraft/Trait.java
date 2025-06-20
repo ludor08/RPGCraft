@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,14 @@ public abstract class Trait
     // Add the buffs that need to be applied when you gain this trait
     public abstract void OnGainTraitBuff(Player player);
 
-    // Cleanup the buffs that need to be applied when you gain this trait
+    // Cleanup the buffs that need to be removed when you lose this trait
     public abstract void OnRemoveTraitBuff(Player player);
+
+    // Re add buffs that you lose when you die
+    public abstract void OnRespawnBuffs(PlayerRespawnEvent e);
+
+    // Re add buffs that you lose when you die
+    public abstract void OnTakeDamage(EntityDamageEvent e);
 
 
 }
