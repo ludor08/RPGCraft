@@ -57,10 +57,11 @@ public class StatSheet
                 // add all of the traits
                 traits.addAll(raceOfParent.traits);
 
+                // if the player has a subrace
                 if (player.getPersistentDataContainer().has(main.GetSubraceKey(), PersistentDataType.STRING))
                 {
                     // Find the parent race script
-                    Race raceOfSubrace = main.statSheetManager.FindSubrace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING), raceOfParent);
+                    Race raceOfSubrace = main.statSheetManager.FindSubrace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING), raceOfParent);
 
                     // if there is a parent race
                     if (raceOfSubrace != null)
@@ -112,20 +113,17 @@ public class StatSheet
 
         // If there is a subrace
         if (subrace != null) {
-            player.sendMessage("1");
             // Find the subrace script
             Race raceOfSubrace = main.statSheetManager.FindSubrace(subrace, raceOfParent);
 
             // if there isn't a subrace then end the function and throw an error
             if (raceOfSubrace == null) {
-                player.sendMessage("null");
                 System.out.println(ChatColor.RED.toString() + "ERROR: invalid subrace. " + player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING));
                 return;
             }
 
             // Set the subrace
             player.getPersistentDataContainer().set(main.GetSubraceKey(), PersistentDataType.STRING, subrace);
-            player.sendMessage(raceOfSubrace.traits+"");
             AddTraits(raceOfSubrace);
         }
     }

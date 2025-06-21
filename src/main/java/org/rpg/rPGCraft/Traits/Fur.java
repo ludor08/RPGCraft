@@ -3,8 +3,10 @@ package org.rpg.rPGCraft.Traits;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.rpg.rPGCraft.Trait;
 
@@ -65,13 +67,13 @@ public class Fur extends Trait
     }
 
     @Override
-    public void OnDealDamage(EntityDamageEvent e)
+    public void OnDealDamage(EntityDamageByEntityEvent e)
     {
 
     }
 
     @Override
-    public void OnEat(EntityDamageEvent e)
+    public void OnEat(FoodLevelChangeEvent e)
     {
 
     }

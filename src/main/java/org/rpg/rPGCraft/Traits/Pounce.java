@@ -1,44 +1,37 @@
 package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.rpg.rPGCraft.Main;
+import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Trait;
 
 import static org.rpg.rPGCraft.Utils.AssembleLoreFromString;
 
-public class AnimalAgility extends Trait
+public class Pounce extends Trait
 {
-    private AttributeModifier speedMod;
 
-    public AnimalAgility(Main main)
-    {
+    public Pounce() {
         // add the name and lore
-        super("Animal Agility", false, null,AssembleLoreFromString(
-                ChatColor.AQUA.toString() + "   - Gains more walking speed.\n"
+        super("Pounce", false, null,AssembleLoreFromString(
+                ChatColor.AQUA.toString() + "   - Crits deal 10% more damage."
         ));
-
-        speedMod = new AttributeModifier(main.GetRaceKey(), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
-
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(speedMod);
+
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
+
     }
 
     @Override
@@ -56,7 +49,19 @@ public class AnimalAgility extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+        // check if the attack was a crit
+        boolean wasACrit = e.getDamager().getFallDistance() > 0.0F && !e.getDamager().isOnGround() && e.getDamager() instanceof LivingEntity living && !living.hasPotionEffect(PotionEffectType.BLINDNESS) && e.getDamager().getVehicle() == null;
 
+        Player player = (Player) e.getDamager();
+        player.sendMessage("was it a crit?");
+
+        // if it was a crit
+        if (wasACrit)
+        {
+            // do 10% more damage
+            player.sendMessage("damage : " + e.getDamage() + " -> " + e.getDamage() * 1.15);
+            e.setDamage(e.getDamage()*1.15);
+        }
     }
 
     @Override
@@ -64,4 +69,6 @@ public class AnimalAgility extends Trait
     {
 
     }
+
+
 }

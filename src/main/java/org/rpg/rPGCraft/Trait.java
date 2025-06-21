@@ -4,7 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
@@ -60,10 +62,10 @@ public abstract class Trait
     public abstract void OnTakeDamage(EntityDamageEvent e);
 
     // Re add buffs that you lose when you die
-    public abstract void OnDealDamage(EntityDamageEvent e);
+    public abstract void OnDealDamage(EntityDamageByEntityEvent e);
 
     // Re add buffs that you lose when you die
-    public abstract void OnEat(EntityDamageEvent e);
+    public abstract void OnEat(FoodLevelChangeEvent e);
 
 
 }

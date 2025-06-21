@@ -4,7 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
@@ -53,13 +55,13 @@ public class FoxoidAgility extends Trait
     }
 
     @Override
-    public void OnDealDamage(EntityDamageEvent e)
+    public void OnDealDamage(EntityDamageByEntityEvent e)
     {
 
     }
 
     @Override
-    public void OnEat(EntityDamageEvent e)
+    public void OnEat(FoodLevelChangeEvent e)
     {
 
     }

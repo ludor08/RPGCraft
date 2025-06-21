@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataType;
@@ -62,9 +63,15 @@ public class StatSheetManager implements Listener
 
     public Race FindSubrace(String subracePersistent, Race parentRace)
     {
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            player.sendMessage(subracePersistent);
+            player.sendMessage(parentRace.name);
+        }
+
         for (Race race : parentRace.subraces)
         {
-            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(race + " ?= " + subracePersistent);
+            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(race.name + " ?= " + subracePersistent);
 
 
             // if the race name is the same as the name of the parent race
@@ -114,6 +121,28 @@ public class StatSheetManager implements Listener
                 for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
                 {
                     trait.OnTakeDamage(e);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnDealDamage(EntityDamageByEntityEvent e)
+    {
+        if (e.getDamager() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                {
+                    trait.OnDealDamage(e);
                 }
             }
             // if they do not have one
