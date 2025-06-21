@@ -64,5 +64,17 @@ public class Fur extends Trait
         }
     }
 
+    @Override
+    public void OnDealDamage(EntityDamageEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnEat(EntityDamageEvent e)
+    {
+
+    }
+
 
 }

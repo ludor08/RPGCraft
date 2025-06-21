@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.rpg.rPGCraft.Main;
@@ -12,31 +11,33 @@ import org.rpg.rPGCraft.Trait;
 
 import static org.rpg.rPGCraft.Utils.AssembleLoreFromString;
 
-public class AnimalAgility extends Trait
+public class FoxoidAgility extends Trait
 {
-    private AttributeModifier speedMod;
+    private AttributeModifier jumpMod;
 
-    public AnimalAgility(Main main)
+    public FoxoidAgility(Main main)
     {
         // add the name and lore
-        super("Animal Agility", false, null,AssembleLoreFromString(
-                ChatColor.AQUA.toString() + "   - Gains more walking speed.\n"
+        super("Foxoid Agility", false, null,AssembleLoreFromString(
+                ChatColor.AQUA.toString() + "   - Gains more jump strength.\n"
         ));
 
-        speedMod = new AttributeModifier(main.GetRaceKey(), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
+        jumpMod = new AttributeModifier(main.GetRaceKey(), 0.2d, AttributeModifier.Operation.ADD_NUMBER);
 
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(speedMod);
+        player.sendMessage("jump " + player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue());
+        player.getAttribute(Attribute.JUMP_STRENGTH).addModifier(jumpMod);
+        player.sendMessage("jump " + player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue());
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
+        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(jumpMod);
     }
 
     @Override

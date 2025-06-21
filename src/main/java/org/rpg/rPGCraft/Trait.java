@@ -59,5 +59,11 @@ public abstract class Trait
     // Re add buffs that you lose when you die
     public abstract void OnTakeDamage(EntityDamageEvent e);
 
+    // Re add buffs that you lose when you die
+    public abstract void OnDealDamage(EntityDamageEvent e);
+
+    // Re add buffs that you lose when you die
+    public abstract void OnEat(EntityDamageEvent e);
+
 
 }

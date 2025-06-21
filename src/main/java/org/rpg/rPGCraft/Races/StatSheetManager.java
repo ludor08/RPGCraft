@@ -64,11 +64,17 @@ public class StatSheetManager implements Listener
     {
         for (Race race : parentRace.subraces)
         {
+            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(race + " ?= " + subracePersistent);
+
+
             // if the race name is the same as the name of the parent race
             if (Objects.equals(race.name, subracePersistent)) {
+                for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage("true");
+
                 return race;
             }
         }
+        for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage("false");
         return null;
     }
 
