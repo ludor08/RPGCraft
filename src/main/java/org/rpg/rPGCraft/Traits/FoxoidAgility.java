@@ -20,7 +20,7 @@ public class FoxoidAgility extends Trait
     public FoxoidAgility(Main main)
     {
         // add the name and lore
-        super("Foxoid Agility", false, null,AssembleLoreFromString(
+        super("Foxoid Agility", false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Gains more jump strength.\n"
         ));
 
@@ -31,9 +31,7 @@ public class FoxoidAgility extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.sendMessage("jump " + player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue());
         player.getAttribute(Attribute.JUMP_STRENGTH).addModifier(jumpMod);
-        player.sendMessage("jump " + player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue());
     }
 
     @Override
