@@ -21,7 +21,7 @@ public class AnimalAgility extends Trait
     public AnimalAgility(Main main)
     {
         // add the name and lore
-        super("Animal Agility", false, null,AssembleLoreFromString(
+        super("Animal Agility", false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Gains more walking speed.\n"
         ));
 

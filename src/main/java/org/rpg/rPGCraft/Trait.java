@@ -20,14 +20,12 @@ public abstract class Trait
 
     // type of buffs
     boolean tickTrait;
-    Event event;
 
-    public Trait(String name, boolean tickTrait,Event event, List<String> lore)
+    public Trait(String name, boolean tickTrait, List<String> lore)
     {
         this.name = name;
         this.lore = lore;
         this.tickTrait = tickTrait;
-        this.event = event;
     }
 
     // get lore as a item lore friendly String List

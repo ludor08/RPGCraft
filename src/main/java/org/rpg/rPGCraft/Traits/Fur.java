@@ -17,7 +17,7 @@ public class Fur extends Trait
 
     public Fur() {
         // add the name and lore
-        super("Fur", false, null,AssembleLoreFromString(
+        super("Fur", false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Takes 0.5x cold damage.\n" +
                 ChatColor.AQUA.toString() + "   - Takes 1.5x damage from fire.\n"
         ));

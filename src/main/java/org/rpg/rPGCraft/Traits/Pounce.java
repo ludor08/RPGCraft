@@ -17,7 +17,7 @@ public class Pounce extends Trait
 
     public Pounce() {
         // add the name and lore
-        super("Pounce", false, null,AssembleLoreFromString(
+        super("Pounce", false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Crits deal 10% more damage."
         ));
     }
