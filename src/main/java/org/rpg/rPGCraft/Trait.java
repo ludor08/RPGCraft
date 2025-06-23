@@ -1,9 +1,7 @@
 package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -63,7 +61,7 @@ public abstract class Trait
     public abstract void OnDealDamage(EntityDamageByEntityEvent e);
 
     // Re add buffs that you lose when you die
-    public abstract void OnEat(FoodLevelChangeEvent e);
+    public abstract void OnFoodLevelChange(FoodLevelChangeEvent e);
 
 
 }

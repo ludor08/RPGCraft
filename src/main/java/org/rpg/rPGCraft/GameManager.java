@@ -30,6 +30,8 @@ public class GameManager implements Listener {
             main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId(), main));
         }
 
+        main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
+
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {

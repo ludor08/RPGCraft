@@ -59,7 +59,7 @@ public class FoxoidAgility extends Trait
     }
 
     @Override
-    public void OnEat(FoodLevelChangeEvent e)
+    public void OnFoodLevelChange(FoodLevelChangeEvent e)
     {
 
     }

@@ -77,7 +77,6 @@ public class StatSheet
             }
         }
 
-        player.sendMessage("" + traits);
         return traits;
     }
 
