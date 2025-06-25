@@ -1,6 +1,7 @@
 package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,7 +20,7 @@ public abstract class Trait
     // type of buffs
     boolean tickTrait;
 
-    public Trait(String name, boolean tickTrait, List<String> lore)
+    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, List<String> lore)
     {
         this.name = name;
         this.lore = lore;

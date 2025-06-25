@@ -1,6 +1,7 @@
 package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class AnimalAgility extends Trait
     public AnimalAgility(Main main)
     {
         // add the name and lore
-        super("Animal Agility", false,AssembleLoreFromString(
+        super("Animal Agility", ChatColor.AQUA, Material.SUGAR, false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Gains more walking speed.\n"
         ));
 

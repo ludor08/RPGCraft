@@ -1,6 +1,7 @@
 package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,7 +18,7 @@ public class Fur extends Trait
 
     public Fur() {
         // add the name and lore
-        super("Fur", false,AssembleLoreFromString(
+        super("Fur", ChatColor.AQUA, Material.RABBIT_HIDE, false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Takes 0.5x cold damage.\n" +
                 ChatColor.AQUA.toString() + "   - Takes 1.5x damage from fire.\n"
         ));
