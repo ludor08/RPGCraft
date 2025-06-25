@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.rpg.rPGCraft.Races.*;
+import org.rpg.rPGCraft.commands.StatSheetCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,5 @@ public final class Main extends JavaPlugin implements Listener
         menuManager = new MenuManager(this);
         statSheetManager = new StatSheetManager(this);
         gameManager = new GameManager(this);
-
-
     }
 }
