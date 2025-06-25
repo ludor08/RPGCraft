@@ -4,3 +4,6 @@ main: org.rpg.rPGCraft.Main
 api-version: '1.21'
 prefix: RPGCraft
 authors: [ Lily ]
+
+commands:
+  statSheet:
