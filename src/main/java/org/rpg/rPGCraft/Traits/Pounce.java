@@ -1,6 +1,9 @@
 package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -8,30 +11,35 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import static org.rpg.rPGCraft.Utils.AssembleLoreFromString;
 
 public class Pounce extends Trait
 {
+    private AttributeModifier jumpMod;
 
-    public Pounce() {
+    public Pounce(Main main) {
         // add the name and lore
-        super("Pounce", false,AssembleLoreFromString(
-                ChatColor.AQUA.toString() + "   - Crits deal 10% more damage."
+        super("Pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false,AssembleLoreFromString(
+                ChatColor.AQUA.toString() + "   - Crits deal 15% more damage.\n" +
+                ChatColor.AQUA.toString() + "   - Gains more jump strength."
         ));
+
+        jumpMod = new AttributeModifier(main.GetRaceKey(), 0.2d, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-
+        player.getAttribute(Attribute.JUMP_STRENGTH).addModifier(jumpMod);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-
+        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(jumpMod);
     }
 
     @Override
@@ -49,18 +57,18 @@ public class Pounce extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+        float POUNCE_CRIT_MOD = 1.15f;
+
         // check if the attack was a crit
         boolean wasACrit = e.getDamager().getFallDistance() > 0.0F && !e.getDamager().isOnGround() && e.getDamager() instanceof LivingEntity living && !living.hasPotionEffect(PotionEffectType.BLINDNESS) && e.getDamager().getVehicle() == null;
 
         Player player = (Player) e.getDamager();
-        player.sendMessage("was it a crit?");
 
         // if it was a crit
         if (wasACrit)
         {
-            // do 10% more damage
-            player.sendMessage("damage : " + e.getDamage() + " -> " + e.getDamage() * 1.15);
-            e.setDamage(e.getDamage()*1.15);
+            // do pounceCritMod more damage
+            e.setDamage(e.getDamage()* POUNCE_CRIT_MOD);
         }
     }
 
