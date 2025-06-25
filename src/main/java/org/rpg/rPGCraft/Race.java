@@ -49,7 +49,7 @@ public class Race {
             // add the traits to the lore
             for (Trait trait : traits)
             {
-                lore.addAll(trait.getTraitLore());
+                lore.addAll(trait.GetTraitLore());
                 lore.add("\n");
             }
         }
