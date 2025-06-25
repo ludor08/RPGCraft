@@ -4,9 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.commands.StatSheetCommand;
 
 public class GameManager implements Listener {
 
@@ -16,6 +16,9 @@ public class GameManager implements Listener {
     {
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this,main);
+
+        // commands
+        main.getCommand("statSheet").setExecutor(new StatSheetCommand(main));
     }
 
     @EventHandler
