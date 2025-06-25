@@ -7,6 +7,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ public abstract class Trait
 {
     // name and lore of this trait
     public String name;
+    public ChatColor nameColor;
+    public Material iconMaterial;
     public List<String> lore;
 
     // type of buffs
@@ -24,11 +28,33 @@ public abstract class Trait
     {
         this.name = name;
         this.lore = lore;
+        this.nameColor = nameColor;
+        this.iconMaterial = iconMaterial;
+
         this.tickTrait = tickTrait;
     }
 
+    public ItemStack GetTraitIcon()
+    {
+        // generates the icon for this trait
+        ItemStack traitIcon = new ItemStack(iconMaterial);
+        ItemMeta traitIconMeta = traitIcon.getItemMeta();
+
+        traitIconMeta.setDisplayName(nameColor.toString() + ChatColor.BOLD + name);
+
+        // add the description
+        List<String> lore = GetTraitLore();
+
+        traitIconMeta.setLore(lore);
+
+        traitIcon.setItemMeta(traitIconMeta);
+
+        // return the icon
+        return traitIcon;
+    }
+
     // get lore as a item lore friendly String List
-    public List<String> getTraitLore()
+    public List<String> GetTraitLore()
     {
         List<String> itemLore = new ArrayList<>();
 
