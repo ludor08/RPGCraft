@@ -3,6 +3,7 @@ package org.rpg.rPGCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class StatSheet
         if (player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
             // Find the parent race script
-            Race raceOfParent = main.statSheetManager.FindParentRace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
+            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
 
             // if there is a parent race
             if (raceOfParent != null)
@@ -61,7 +62,7 @@ public class StatSheet
                 if (player.getPersistentDataContainer().has(main.GetSubraceKey(), PersistentDataType.STRING))
                 {
                     // Find the parent race script
-                    Race raceOfSubrace = main.statSheetManager.FindSubrace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING), raceOfParent);
+                    Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING));
 
                     // if there is a parent race
                     if (raceOfSubrace != null)
@@ -73,7 +74,7 @@ public class StatSheet
             }
             else
             {
-                System.out.println(ChatColor.RED.toString() + "ERROR: invalid parent race");
+                System.out.println("ERROR: invalid parent race");
             }
         }
 
@@ -97,7 +98,7 @@ public class StatSheet
         Player player = Bukkit.getPlayer(playerUUID);
 
         // Find the parent race script
-        Race raceOfParent = main.statSheetManager.FindParentRace(parentRace);
+        Race raceOfParent = main.statSheetManager.FindRace(parentRace);
 
         // if there isn't a parent race then end the function and throw an error
         if (raceOfParent == null)
@@ -113,7 +114,7 @@ public class StatSheet
         // If there is a subrace
         if (subrace != null) {
             // Find the subrace script
-            Race raceOfSubrace = main.statSheetManager.FindSubrace(subrace, raceOfParent);
+            Race raceOfSubrace = main.statSheetManager.FindRace(subrace);
 
             // if there isn't a subrace then end the function and throw an error
             if (raceOfSubrace == null) {
@@ -136,7 +137,7 @@ public class StatSheet
         if (player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
             // Find the parent race script
-            Race raceOfParent = main.statSheetManager.FindParentRace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
+            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
 
             // if there isn't a parent race then end the function and throw an error
             if (raceOfParent == null) {
@@ -148,7 +149,7 @@ public class StatSheet
             if (player.getPersistentDataContainer().has(main.GetSubraceKey(), PersistentDataType.STRING))
             {
                 // Find the subrace script
-                Race raceOfSubrace = main.statSheetManager.FindSubrace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING), raceOfParent);
+                Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING));
 
                 // if there isn't a subrace then end the function and throw an error
                 if (raceOfSubrace == null) {
