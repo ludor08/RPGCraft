@@ -44,9 +44,11 @@ public abstract class Trait
 
         // add the description
         List<String> lore = GetTraitLore();
+        lore.removeFirst();
 
         traitIconMeta.setLore(lore);
 
+        // set the item meta
         traitIcon.setItemMeta(traitIconMeta);
 
         // return the icon
