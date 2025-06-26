@@ -24,7 +24,7 @@ public class Pounce extends Trait
         // add the name and lore
         super("Pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false,AssembleLoreFromString(
                 ChatColor.AQUA.toString() + "   - Crits deal 15% more damage.\n" +
-                ChatColor.AQUA.toString() + "   - Gains more jump strength."
+                ChatColor.AQUA.toString() + "   - Gain more jump strength."
         ));
 
         jumpMod = new AttributeModifier(main.GetRaceKey(), 0.2d, AttributeModifier.Operation.ADD_NUMBER);

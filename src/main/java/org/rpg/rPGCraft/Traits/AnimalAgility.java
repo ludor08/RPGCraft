@@ -23,7 +23,7 @@ public class AnimalAgility extends Trait
     {
         // add the name and lore
         super("Animal Agility", ChatColor.AQUA, Material.SUGAR, false,AssembleLoreFromString(
-                ChatColor.AQUA.toString() + "   - Gains more walking speed.\n"
+                ChatColor.AQUA.toString() + "   - Gain more walking speed.\n"
         ));
 
         speedMod = new AttributeModifier(main.GetRaceKey(), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
