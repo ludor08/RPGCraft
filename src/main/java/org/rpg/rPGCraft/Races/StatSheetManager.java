@@ -49,27 +49,26 @@ public class StatSheetManager implements Listener
         this.statSheets.add(statSheet);
     }
 
-    public Race FindParentRace(String parentPersistent)
+    public Race FindRace(String persistent)
     {
+        // go through all of the races
         for (Race race : main.GetChooseAbleRaces())
         {
-            // if the race name is the same as the name of the parent race
-            if (Objects.equals(race.name, parentPersistent)) {
+            // if the race name is the same as the persistent
+            if (Objects.equals(race.name, persistent)) {
                 return race;
             }
-        }
-        return null;
-    }
 
-    public Race FindSubrace(String subracePersistent, Race parentRace)
-    {
-        for (Race race : parentRace.subraces)
-        {
-            // if the race name is the same as the name of the parent race
-            if (Objects.equals(race.name, subracePersistent)) {
-                return race;
+            // go through all of the subraces
+            for (Race subrace : race.subraces)
+            {
+                // if the subrace name is the same as the persistent
+                if (Objects.equals(subrace.name, persistent)) {
+                    return subrace;
+                }
             }
         }
+
         return null;
     }
 
