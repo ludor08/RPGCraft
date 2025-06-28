@@ -2,14 +2,19 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -73,6 +78,7 @@ public class MenuManager implements Listener
         ItemMeta borderMeta = border.getItemMeta();
 
         borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
         border.setItemMeta(borderMeta);
 
         // fill the menu with the borders
@@ -200,6 +206,21 @@ public class MenuManager implements Listener
                         }
                         break;
 
+                    case "stat" :
+                        // if there is a third argument
+                        if (UIPersistents.length > 2)
+                        {
+                            // open a stat menu
+                            player.openInventory(CreateStatMenu(player));
+                        }
+                        // if there isn't a third argument
+                        else
+                        {
+                            // open the main stat sheet menu
+                            player.openInventory(CreateStatSheetMenu(player));
+                        }
+                        break;
+
                     default:
                         player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
                 }
@@ -240,7 +261,12 @@ public class MenuManager implements Listener
             // if it was a stat menu button
             else if (Objects.equals(UIPersistents[0], "statMenu"))
             {
-
+                player.openInventory(CreateStatMenu(player));
+            }
+            // if it was a trait menu button
+            else if (Objects.equals(UIPersistents[0], "traits"))
+            {
+                player.openInventory(CreateTraitMenu(player, e.getInventory().getItem(4*FULL_ROW_SIZE).getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING) + "_traits"));
             }
         }
 
@@ -332,6 +358,196 @@ public class MenuManager implements Listener
                 }
             }
         }
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Stats"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+        }
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Traits"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+        }
+    }
+
+    public Inventory CreateStatMenu(Player player)
+    {
+        // create the stat menu
+        Inventory statMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Stats");
+
+        // generate the item for the border
+        ItemStack border = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+        ItemMeta borderMeta = border.getItemMeta();
+
+        borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
+        border.setItemMeta(borderMeta);
+
+        // fill the menu with the borders
+        for (int i = 0; i < statMenu.getSize(); i++)
+        {
+            statMenu.setItem(i, border);
+        }
+
+        // get the back button
+        ItemStack statBackButton = backButton;
+        ItemMeta statBackButtonMeta = statBackButton.getItemMeta();
+
+        statBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_stat");
+
+        // add the back button to the bottom left corner
+        statBackButton.setItemMeta(statBackButtonMeta);
+
+        statMenu.setItem(FULL_ROW_SIZE*4, statBackButton);
+
+
+        // generate the max health icon
+        ItemStack maxHealthIcon = new ItemStack(Material.POTION);
+
+        // set the max health icon color
+        PotionMeta maxHealthPotion = (PotionMeta) maxHealthIcon.getItemMeta();
+
+        maxHealthPotion.setColor(Color.RED);
+        maxHealthIcon.setItemMeta(maxHealthPotion);
+
+        // set the max health icon name
+        ItemMeta maxHealthMeta = maxHealthIcon.getItemMeta();
+
+        maxHealthMeta.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Max Health : " + player.getAttribute(Attribute.MAX_HEALTH).getValue());
+        maxHealthIcon.setItemMeta(maxHealthMeta);
+
+        // place the icon one to the side and two down
+        statMenu.setItem(FULL_ROW_SIZE*2+1, maxHealthIcon);
+
+        // generate the armor mod icon
+        ItemStack armorModIcon = new ItemStack(Material.IRON_CHESTPLATE);
+        ItemMeta armorModMeta = armorModIcon.getItemMeta();
+
+        double armorMod = 0;
+
+        for (AttributeModifier modifier : player.getAttribute(Attribute.ARMOR).getModifiers())
+        {
+            if (!modifier.getKey().namespace().contains("minecraft"))
+            {
+                armorMod += modifier.getAmount();
+            }
+        }
+
+        armorModMeta.setDisplayName(ChatColor.GRAY.toString() + ChatColor.BOLD.toString() + "Armor Mod : " + armorMod);
+        armorModIcon.setItemMeta(armorModMeta);
+
+        // place the icon two to the side and two down
+        statMenu.setItem(FULL_ROW_SIZE*2+2, armorModIcon);
+
+        // generate the trait icon
+        ItemStack traitIcon = new ItemStack(Material.PAPER);
+        ItemMeta traitMeta = traitIcon.getItemMeta();
+
+        List<Trait> traits = main.statSheetManager.FindStatSheetByPlayer(player).GetTraits();
+        List<String> traitsLore = new ArrayList<>();
+
+        for (Trait trait : traits)
+        {
+            traitsLore.add("- " + trait.name);
+        }
+
+        traitMeta.setLore(traitsLore);
+        traitMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + "Traits");
+        traitMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "traits");
+        traitIcon.setItemMeta(traitMeta);
+
+        // place the icon four to the side and two down
+        statMenu.setItem(FULL_ROW_SIZE*2+4, traitIcon);
+
+        // generate the speed mod icon
+        ItemStack speedModIcon = new ItemStack(Material.SUGAR);
+        ItemMeta speedModMeta = speedModIcon.getItemMeta();
+
+        double speedMod = 0;
+
+        for (AttributeModifier modifier : player.getAttribute(Attribute.MOVEMENT_SPEED).getModifiers())
+        {
+            if (!modifier.getKey().namespace().contains("minecraft"))
+            {
+                speedMod += modifier.getAmount();
+            }
+        }
+
+        speedModMeta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.BOLD.toString() + "Speed Mod : " + speedMod);
+        speedModIcon.setItemMeta(speedModMeta);
+
+        // place the icon six to the side and two down
+        statMenu.setItem(FULL_ROW_SIZE*2+6, speedModIcon);
+
+        // generate the jump mod icon
+        ItemStack jumpModIcon = new ItemStack(Material.RABBIT_FOOT);
+        ItemMeta jumpModMeta = jumpModIcon.getItemMeta();
+
+        double jumpMod = 0;
+
+        for (AttributeModifier modifier : player.getAttribute(Attribute.JUMP_STRENGTH).getModifiers())
+        {
+            if (!modifier.getKey().namespace().contains("minecraft"))
+            {
+                jumpMod += modifier.getAmount();
+            }
+        }
+
+        jumpModMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Jump Mod : " + jumpMod);
+        jumpModIcon.setItemMeta(jumpModMeta);
+
+        // place the icon seven to the side and two down
+        statMenu.setItem(FULL_ROW_SIZE*2+7, jumpModIcon);
+
+        // return the menu
+        return statMenu;
+    }
+
+    public Inventory CreateTraitMenu(Player player, String origin)
+    {
+        // create the stat menu
+        Inventory statMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Traits");
+
+        // generate the item for the border
+        ItemStack border = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+        ItemMeta borderMeta = border.getItemMeta();
+
+        borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
+        border.setItemMeta(borderMeta);
+
+        // fill the menu with the borders
+        for (int i = 0; i < statMenu.getSize(); i++)
+        {
+            statMenu.setItem(i, border);
+        }
+
+        // get the back button
+        ItemStack statBackButton = backButton;
+        ItemMeta statBackButtonMeta = statBackButton.getItemMeta();
+
+        statBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, origin);
+
+        // add the back button to the bottom left corner
+        statBackButton.setItemMeta(statBackButtonMeta);
+
+        statMenu.setItem(FULL_ROW_SIZE*4, statBackButton);
+
+        // get all of the trait icons
+        List<ItemStack> traitIcons = new ArrayList<>();
+
+        for (Trait trait : main.statSheetManager.FindStatSheetByPlayer(player).GetTraits())
+        {
+            traitIcons.add(trait.GetTraitIcon());
+        }
+
+        // place the trait icons
+        statMenu = GenerateIconPositions(traitIcons, statMenu,7,2);
+
+        // return the menu
+        return statMenu;
     }
 
     public Inventory CreateRaceInfoMenu(Player player, Race race, String origin)
@@ -345,6 +561,7 @@ public class MenuManager implements Listener
         ItemMeta borderMeta = border.getItemMeta();
 
         borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
         border.setItemMeta(borderMeta);
 
         // fill the menu with the borders
@@ -443,6 +660,7 @@ public class MenuManager implements Listener
         ItemMeta borderMeta = border.getItemMeta();
 
         borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
         border.setItemMeta(borderMeta);
 
         // fill the menu with the borders
@@ -488,6 +706,7 @@ public class MenuManager implements Listener
         ItemMeta borderMeta = border.getItemMeta();
 
         borderMeta.setDisplayName(" ");
+        borderMeta.setHideTooltip(true);
         border.setItemMeta(borderMeta);
 
         // fill the menu with the borders

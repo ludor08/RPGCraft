@@ -62,8 +62,6 @@ public class Pounce extends Trait
         // check if the attack was a crit
         boolean wasACrit = e.getDamager().getFallDistance() > 0.0F && !e.getDamager().isOnGround() && e.getDamager() instanceof LivingEntity living && !living.hasPotionEffect(PotionEffectType.BLINDNESS) && e.getDamager().getVehicle() == null;
 
-        Player player = (Player) e.getDamager();
-
         // if it was a crit
         if (wasACrit)
         {

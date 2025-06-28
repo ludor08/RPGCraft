@@ -40,13 +40,15 @@ public class StatSheetManager implements Listener
             }
         }
 
-        return null;
+        // if the player does not have a stat sheet give them one
+        return AddStatSheet(new StatSheet(player.getUniqueId(), main));
     }
 
     // Adder
-    public void AddStatSheet(StatSheet statSheet)
+    public StatSheet AddStatSheet(StatSheet statSheet)
     {
         this.statSheets.add(statSheet);
+        return statSheet;
     }
 
     public Race FindRace(String persistent)
