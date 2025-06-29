@@ -67,78 +67,6 @@ public class MenuManager implements Listener
         statMenuIcon.setItemMeta(statMenuIconMeta);
     }
 
-    public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
-    {
-        // create the menu
-        Inventory raceMenu = Bukkit.createInventory(player, 45,
-                ChatColor.BOLD.toString() + inventoryTitle);
-
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        borderMeta.setHideTooltip(true);
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < raceMenu.getSize(); i++)
-        {
-            raceMenu.setItem(i, border);
-        }
-
-        // extract all of the icons from races
-        List<ItemStack> raceIcons = new ArrayList<>();
-        for (Race race : races)
-        {
-            ItemStack icon = race.GetRaceIcon();
-
-            // add the PersistentDataContainer to the icon
-            ItemMeta iconMeta = icon.getItemMeta();
-            iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, race.name);
-
-            icon.setItemMeta(iconMeta);
-
-            raceIcons.add(icon);
-        }
-
-        // generate the icon positions and place them
-        raceMenu = GenerateIconPositions(raceIcons, raceMenu, 7, startRow);
-
-        // return the menu
-        return raceMenu;
-    }
-
-    public Inventory CreateSubraceMenu(Player player, Race parentRace)
-    {
-        // create the menu
-        Inventory subraceMenu = CreateRaceMenu(player, parentRace.subraces, 2, "Select a Subrace!");
-
-        // get the parentRace icon
-        ItemStack parentIcon = parentRace.GetRaceIcon();
-
-        ItemMeta iconMeta = parentIcon.getItemMeta();
-        iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, parentRace.name);
-
-        parentIcon.setItemMeta(iconMeta);
-
-        // add the parentRace icon to the top center
-        subraceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
-
-        // add the back button to the bottom left corner
-        ItemStack subraceBackButton = backButton;
-        ItemMeta subraceBackButtonMeta = subraceBackButton.getItemMeta();
-
-        subraceBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_race");
-
-        subraceBackButton.setItemMeta(subraceBackButtonMeta);
-
-        subraceMenu.setItem(FULL_ROW_SIZE*4, subraceBackButton);
-
-        // return the menu
-        return subraceMenu;
-    }
-
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e)
     {
@@ -250,8 +178,18 @@ public class MenuManager implements Listener
                             }
                         }
 
-                        // close the inventory
-                        e.getInventory().close();
+                        // if the player has not yet chosen a class when they join the game
+                        if (!player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+                        {
+                            // give them a prompt to choose a class
+                            player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
+                        }
+                        // if they have a class
+                        else
+                        {
+                            // close the inventory
+                            e.getInventory().close();
+                        }
                         break;
 
                     default:
@@ -294,6 +232,30 @@ public class MenuManager implements Listener
 
             }
         }
+        // if the player is in the select class inventory
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Class!"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+
+            // if the player didn't click a border
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+            {
+                // get the PersistentDataContainer of the icon clicked
+                String classPersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING);
+
+                // find the race clicked
+                for (PlayableClass playableClass : main.GetChooseAbleClasses())
+                {
+                    // if the race name is the same as the race of what the player click, open the new subrace menu
+                    if (Objects.equals(playableClass.name, classPersistent))
+                    {
+                        player.openInventory(CreateTraitTreeMenu(player, playableClass, true));
+                    }
+                }
+
+            }
+        }
         // if the player is in the select subrace inventory
         else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Select a Subrace!"))
         {
@@ -313,7 +275,7 @@ public class MenuManager implements Listener
                 if (clickedPersistent != parentPersistent)
                 {
                     // open the confirm menu
-                    player.openInventory(CreateConfirmMenu(player, List.of(clickedItem,e.getClickedInventory().getItem(FULL_ROW_SIZE/2)), "Subrace", "subrace_" + parentPersistent));
+                    player.openInventory(CreateConfirmMenu(player, List.of(clickedItem,e.getClickedInventory().getItem(FULL_ROW_SIZE/2)), "Subrace", "subrace_" + parentPersistent, Material.RED_STAINED_GLASS_PANE));
                 }
             }
 
@@ -370,14 +332,91 @@ public class MenuManager implements Listener
         }
     }
 
-    public Inventory CreateStatMenu(Player player)
+    public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, boolean isView)
     {
-        // create the stat menu
-        Inventory statMenu = Bukkit.createInventory(player, 45,
-                ChatColor.BOLD.toString() + "Stats");
+        // create the menu
+        Inventory traitTreeMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Trait Tree");
 
+        // add the borders
+        traitTreeMenu = AddBorder(Material.BLUE_STAINED_GLASS_PANE, traitTreeMenu);
+
+        // get the parentRace icon
+        ItemStack classIcon = playableClass.GetClassIcon();
+
+        ItemMeta iconMeta = classIcon.getItemMeta();
+        if (!isView) iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, playableClass.name);
+
+        classIcon.setItemMeta(iconMeta);
+
+        // add the parentRace icon to the top center
+        traitTreeMenu.setItem(FULL_ROW_SIZE/2, classIcon);
+
+        // go through all of the inventory
+        for (int i = 0; i < traitTreeMenu.getSize(); i++)
+        {
+            // go through all of the nodes
+            for (Node node : playableClass.traitTree.nodes)
+            {
+                // if the slot coordinates are the same as a nodes coordinates
+                if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE))
+                {
+                    ItemStack nodeIcon = node.GetNodeIcon();
+
+                    traitTreeMenu.setItem(i, nodeIcon);
+                }
+            }
+        }
+
+        // add the back button to the bottom left corner
+        ItemStack classBackButton = backButton;
+        ItemMeta classBackButtonMeta = classBackButton.getItemMeta();
+
+        classBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_class");
+
+        classBackButton.setItemMeta(classBackButtonMeta);
+
+        traitTreeMenu.setItem(FULL_ROW_SIZE*4, classBackButton);
+
+        // return the menu
+        return traitTreeMenu;
+    }
+
+    public Inventory CreateClassMenu(Player player, List<PlayableClass> classes)
+    {
+        // create the menu
+        Inventory classMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Select a Class!");
+
+        // add the borders
+        classMenu = AddBorder(Material.BLUE_STAINED_GLASS_PANE, classMenu);
+
+        // extract all of the icons from races
+        List<ItemStack> classIcons = new ArrayList<>();
+        for (PlayableClass playableClass : classes)
+        {
+            ItemStack icon = playableClass.GetClassIcon();
+
+            // add the PersistentDataContainer to the icon
+            ItemMeta iconMeta = icon.getItemMeta();
+            iconMeta.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, playableClass.name);
+
+            icon.setItemMeta(iconMeta);
+
+            classIcons.add(icon);
+        }
+
+        // generate the icon positions and place them
+        classMenu = GenerateIconPositions(classIcons, classMenu, 7, 1);
+
+        // return the menu
+        return classMenu;
+    }
+
+    public Inventory AddBorder(Material borderType, Inventory inventory)
+    {
         // generate the item for the border
-        ItemStack border = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+        ItemStack border = new ItemStack(borderType);
         ItemMeta borderMeta = border.getItemMeta();
 
         borderMeta.setDisplayName(" ");
@@ -385,10 +424,83 @@ public class MenuManager implements Listener
         border.setItemMeta(borderMeta);
 
         // fill the menu with the borders
-        for (int i = 0; i < statMenu.getSize(); i++)
+        for (int i = 0; i < inventory.getSize(); i++)
         {
-            statMenu.setItem(i, border);
+            inventory.setItem(i, border);
         }
+
+        return inventory;
+    }
+
+    public Inventory CreateRaceMenu(Player player, List<Race> races, int startRow, String inventoryTitle)
+    {
+        // create the menu
+        Inventory raceMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + inventoryTitle);
+
+        // add the borders
+        raceMenu = AddBorder(Material.RED_STAINED_GLASS_PANE, raceMenu);
+
+        // extract all of the icons from races
+        List<ItemStack> raceIcons = new ArrayList<>();
+        for (Race race : races)
+        {
+            ItemStack icon = race.GetRaceIcon();
+
+            // add the PersistentDataContainer to the icon
+            ItemMeta iconMeta = icon.getItemMeta();
+            iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, race.name);
+
+            icon.setItemMeta(iconMeta);
+
+            raceIcons.add(icon);
+        }
+
+        // generate the icon positions and place them
+        raceMenu = GenerateIconPositions(raceIcons, raceMenu, 7, startRow);
+
+        // return the menu
+        return raceMenu;
+    }
+
+    public Inventory CreateSubraceMenu(Player player, Race parentRace)
+    {
+        // create the menu
+        Inventory subraceMenu = CreateRaceMenu(player, parentRace.subraces, 2, "Select a Subrace!");
+
+        // get the parentRace icon
+        ItemStack parentIcon = parentRace.GetRaceIcon();
+
+        ItemMeta iconMeta = parentIcon.getItemMeta();
+        iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, parentRace.name);
+
+        parentIcon.setItemMeta(iconMeta);
+
+        // add the parentRace icon to the top center
+        subraceMenu.setItem(FULL_ROW_SIZE/2, parentIcon);
+
+        // add the back button to the bottom left corner
+        ItemStack subraceBackButton = backButton;
+        ItemMeta subraceBackButtonMeta = subraceBackButton.getItemMeta();
+
+        subraceBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_race");
+
+        subraceBackButton.setItemMeta(subraceBackButtonMeta);
+
+        subraceMenu.setItem(FULL_ROW_SIZE*4, subraceBackButton);
+
+        // return the menu
+        return subraceMenu;
+    }
+
+    public Inventory CreateStatMenu(Player player)
+    {
+        // create the stat menu
+        Inventory statMenu = Bukkit.createInventory(player, 45,
+                ChatColor.BOLD.toString() + "Stats");
+
+        // add the borders
+        statMenu = AddBorder(Material.LIME_STAINED_GLASS_PANE, statMenu);
 
         // get the back button
         ItemStack statBackButton = backButton;
@@ -507,22 +619,11 @@ public class MenuManager implements Listener
     public Inventory CreateTraitMenu(Player player, String origin)
     {
         // create the stat menu
-        Inventory statMenu = Bukkit.createInventory(player, 45,
+        Inventory traitMenu = Bukkit.createInventory(player, 45,
                 ChatColor.BOLD.toString() + "Traits");
 
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        borderMeta.setHideTooltip(true);
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < statMenu.getSize(); i++)
-        {
-            statMenu.setItem(i, border);
-        }
+        // add the borders
+        traitMenu = AddBorder(Material.LIME_STAINED_GLASS_PANE, traitMenu);
 
         // get the back button
         ItemStack statBackButton = backButton;
@@ -533,7 +634,7 @@ public class MenuManager implements Listener
         // add the back button to the bottom left corner
         statBackButton.setItemMeta(statBackButtonMeta);
 
-        statMenu.setItem(FULL_ROW_SIZE*4, statBackButton);
+        traitMenu.setItem(FULL_ROW_SIZE*4, statBackButton);
 
         // get all of the trait icons
         List<ItemStack> traitIcons = new ArrayList<>();
@@ -544,10 +645,10 @@ public class MenuManager implements Listener
         }
 
         // place the trait icons
-        statMenu = GenerateIconPositions(traitIcons, statMenu,7,2);
+        traitMenu = GenerateIconPositions(traitIcons, traitMenu,7,2);
 
         // return the menu
-        return statMenu;
+        return traitMenu;
     }
 
     public Inventory CreateRaceInfoMenu(Player player, Race race, String origin)
@@ -556,19 +657,8 @@ public class MenuManager implements Listener
         Inventory raceInfoMenu = Bukkit.createInventory(player, 45,
                 ChatColor.BOLD.toString() + "Race Info");
 
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        borderMeta.setHideTooltip(true);
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < raceInfoMenu.getSize(); i++)
-        {
-            raceInfoMenu.setItem(i, border);
-        }
+        // add the borders
+        raceInfoMenu = AddBorder(Material.RED_STAINED_GLASS_PANE, raceInfoMenu);
 
         // get the back button
         ItemStack traitBackButton = backButton;
@@ -649,25 +739,14 @@ public class MenuManager implements Listener
         return raceInfoMenu;
     }
 
-    public Inventory CreateConfirmMenu(Player player, List<ItemStack> itemsToConfirm, String confirmation, String buttonData)
+    public Inventory CreateConfirmMenu(Player player, List<ItemStack> itemsToConfirm, String confirmation, String buttonData, Material confirmBorder)
     {
         // create the menu
         Inventory confirmMenu = Bukkit.createInventory(player, 45,
                 ChatColor.BOLD.toString() + "Confirm " + confirmation + "?");
 
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        borderMeta.setHideTooltip(true);
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < confirmMenu.getSize(); i++)
-        {
-            confirmMenu.setItem(i, border);
-        }
+        // add the borders
+        confirmMenu = AddBorder(confirmBorder, confirmMenu);
 
         // place the icons and buttons
         confirmMenu = GenerateIconPositions(itemsToConfirm, confirmMenu, 7, 1);
@@ -701,19 +780,8 @@ public class MenuManager implements Listener
         Inventory statSheet = Bukkit.createInventory(player, 45,
                 ChatColor.BOLD.toString() + "Stat Sheet");
 
-        // generate the item for the border
-        ItemStack border = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-        ItemMeta borderMeta = border.getItemMeta();
-
-        borderMeta.setDisplayName(" ");
-        borderMeta.setHideTooltip(true);
-        border.setItemMeta(borderMeta);
-
-        // fill the menu with the borders
-        for (int i = 0; i < statSheet.getSize(); i++)
-        {
-            statSheet.setItem(i, border);
-        }
+        // add the borders
+        statSheet = AddBorder(Material.LIME_STAINED_GLASS_PANE, statSheet);
 
         /// extract all of the icons from the stat sheet
         // if the player has a race persistent

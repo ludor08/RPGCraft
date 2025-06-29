@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Races;
+package org.rpg.rPGCraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,10 +8,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Race;
-import org.rpg.rPGCraft.StatSheet;
-import org.rpg.rPGCraft.Trait;
 
 import java.util.ArrayList;
 import java.util.List;

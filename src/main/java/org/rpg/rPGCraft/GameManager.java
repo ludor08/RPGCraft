@@ -40,6 +40,11 @@ public class GameManager implements Listener {
         {
             player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
+        // if the player has not yet chosen a class but has chosen a race when they join the game, give them a prompt to choose a class
+        else if (!player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
+        }
 
     }
 }
