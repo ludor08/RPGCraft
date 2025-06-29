@@ -17,30 +17,31 @@ import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Pounce extends Trait
+public class Vitality extends Trait
 {
-    private AttributeModifier jumpMod;
+    private AttributeModifier healthMod;
 
-    public Pounce(Main main) {
+    public Vitality(Main main) {
         // add the name and lore
-        super("Pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Crits deal 15% more damage.",
-                ChatColor.AQUA.toString() + "   - Gain more jump strength."
+        super("Vitality", ChatColor.AQUA, Material.APPLE, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Gain one extra heart."
         ));
 
-        jumpMod = new AttributeModifier(new NamespacedKey(main, "pounce"), 0.2d, AttributeModifier.Operation.ADD_NUMBER);
+        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 2, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.JUMP_STRENGTH).addModifier(jumpMod);
+        player.getAttribute(Attribute.MAX_HEALTH).addModifier(healthMod);
+        player.setHealth(player.getHealth()+healthMod.getAmount());
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(jumpMod);
+        player.getAttribute(Attribute.MAX_HEALTH).removeModifier(healthMod);
+        player.setHealth(player.getHealth()-healthMod.getAmount());
     }
 
     @Override
@@ -58,17 +59,6 @@ public class Pounce extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-        float POUNCE_CRIT_MOD = 1.15f;
-
-        // check if the attack was a crit
-        boolean wasACrit = e.getDamager().getFallDistance() > 0.0F && !e.getDamager().isOnGround() && e.getDamager() instanceof LivingEntity living && !living.hasPotionEffect(PotionEffectType.BLINDNESS) && e.getDamager().getVehicle() == null;
-
-        // if it was a crit
-        if (wasACrit)
-        {
-            // do pounceCritMod more damage
-            e.setDamage(e.getDamage()* POUNCE_CRIT_MOD);
-        }
     }
 
     @Override
@@ -76,6 +66,4 @@ public class Pounce extends Trait
     {
 
     }
-
-
 }

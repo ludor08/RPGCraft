@@ -16,6 +16,6 @@ public class Furoid extends Race
     // name of the race
     public Furoid(Main main)
     {
-        super("Furoid", ChatColor.GRAY, Material.BEEF, List.of(new Fur(), new AnimalAgility(main)),List.of(new Foxoid(main)));
+        super("Furoid", ChatColor.GRAY, Material.BEEF, List.of(new Fur(main), new AnimalAgility(main)),List.of(new Foxoid(main)));
     }
 }

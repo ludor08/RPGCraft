@@ -11,9 +11,9 @@ import java.util.List;
 
 public class Foxoid extends Race
 {
-    // name of the race
+    // set up the race
     public Foxoid(Main main)
     {
-        super("Foxoid", ChatColor.GOLD, Material.SWEET_BERRIES, List.of(new Pounce(main), new AbnormalDiet_Berries()),null);
+        super("Foxoid", ChatColor.GOLD, Material.SWEET_BERRIES, List.of(new Pounce(main), new AbnormalDiet_Berries(main)),null);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Feloid extends Race
 {
-    // name of the race
+    // set up the race
     public Feloid()
     {
         super("Feloid", ChatColor.WHITE, Material.COD, List.of(),null);

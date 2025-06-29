@@ -2,24 +2,23 @@ package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.potion.PotionEffectType;
+import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
-import static org.rpg.rPGCraft.Utils.AssembleLoreFromString;
+import java.util.List;
 
 public class AbnormalDiet_Berries extends Trait
 {
 
-    public AbnormalDiet_Berries() {
+    public AbnormalDiet_Berries(Main main) {
         // add the name and lore
-        super("Abnormal Diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false,AssembleLoreFromString(
-                ChatColor.AQUA.toString() + "   - Food other then berries only gives 0.75% saturation.\n" +
+        super("Abnormal Diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Food other then berries only gives 0.75% saturation.",
                 ChatColor.AQUA.toString() + "   - Berries also give 2.5x the saturation."
         ));
     }

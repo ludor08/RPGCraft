@@ -2,6 +2,7 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -9,6 +10,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,17 @@ public abstract class Trait
     // type of buffs
     boolean tickTrait;
 
-    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, List<String> lore)
+    // main
+    Main main;
+
+    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
     {
         this.name = name;
         this.lore = lore;
         this.nameColor = nameColor;
         this.iconMaterial = iconMaterial;
+
+        this.main = main;
 
         this.tickTrait = tickTrait;
     }
@@ -41,6 +48,9 @@ public abstract class Trait
         ItemMeta traitIconMeta = traitIcon.getItemMeta();
 
         traitIconMeta.setDisplayName(nameColor.toString() + ChatColor.BOLD + name);
+
+        // add the trait
+        traitIconMeta.getPersistentDataContainer().set(main.GetTraitKey(), PersistentDataType.STRING, name);
 
         // add the description
         List<String> lore = GetTraitLore();
