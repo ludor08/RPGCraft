@@ -46,5 +46,10 @@ public class GameManager implements Listener {
             player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
         }
 
+        if (!player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.INTEGER))
+        {
+            player.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.INTEGER, 1);
+        }
+
     }
 }
