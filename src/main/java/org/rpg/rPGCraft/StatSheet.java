@@ -108,6 +108,49 @@ public class StatSheet
         }
     }
 
+    public void RemoveTraits(PlayableClass playableClass)
+    {
+        // get all of the players selected nodes
+        List<Node> selectedNodes = new ArrayList<>();
+
+        // get the traits from said nodes
+        for (String traitName : Arrays.stream(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+        {
+            for (Node node : playableClass.traitTree.nodes)
+            {
+                if (traitName.equals(node.trait.name))
+                {
+                    selectedNodes.add(node);
+                }
+            }
+        }
+
+        // remove the traits from the player
+        for (Node node : selectedNodes)
+        {
+            node.trait.OnRemoveTraitBuff(Bukkit.getPlayer(playerUUID));
+        }
+    }
+
+    public void SetClassPersistent(String playableClass)
+    {
+        // the player
+        Player player = Bukkit.getPlayer(playerUUID);
+
+        // Find the parent race script
+        PlayableClass classOfClass = main.statSheetManager.FindClass(playableClass);
+
+        // if there isn't a parent race then end the function and throw an error
+        if (classOfClass == null)
+        {
+            System.out.println(ChatColor.RED.toString() + "ERROR: invalid class. " + classOfClass);
+            return;
+        }
+
+        // Set the class
+        player.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, playableClass);
+    }
+
     public void SetRacePersistent(String subrace, String parentRace)
     {
         // the player
