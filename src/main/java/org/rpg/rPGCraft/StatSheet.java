@@ -227,4 +227,29 @@ public class StatSheet
             RemoveTraits(raceOfParent);
         }
     }
+
+    public void ResetClassPersistent()
+    {
+        // the player
+        Player player = Bukkit.getPlayer(playerUUID);
+
+        // if the player has a race persistent
+        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            // Find the parent race script
+            PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+            // if there isn't a parent race then end the function and throw an error
+            if (playableClass == null) {
+                System.out.println(ChatColor.RED.toString() + "ERROR: invalid class");
+                return;
+            }
+
+            // Reset the race
+            player.getPersistentDataContainer().remove(main.GetClassKey());
+            RemoveTraits(playableClass);
+
+            player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
+        }
+    }
 }
