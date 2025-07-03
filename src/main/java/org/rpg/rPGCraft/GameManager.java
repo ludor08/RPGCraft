@@ -34,6 +34,7 @@ public class GameManager implements Listener {
         }
 
         main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
+        main.statSheetManager.FindStatSheetByPlayer(player).ResetClassPersistent();
 
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
@@ -46,9 +47,17 @@ public class GameManager implements Listener {
             player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
         }
 
-        if (!player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.INTEGER))
+        // if the player doesn't have a level persistent
+        if (!player.getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
         {
-            player.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.INTEGER, 1);
+            // give them one
+            player.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, 1);
+        }
+
+        // if the player doesn't have a tree progression persistent
+        if (!player.getPersistentDataContainer().has(main.GetTreeProgressionKey(), PersistentDataType.STRING))
+        {
+            player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
         }
 
     }
