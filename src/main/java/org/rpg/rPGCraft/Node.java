@@ -23,7 +23,7 @@ public class Node
     public int GetTranslatedCoordinates(int fullRowSize)
     {
         int translatedCoordinates = (int) coordinates.x;
-        translatedCoordinates += (int) (fullRowSize*coordinates.y);
+        translatedCoordinates += (int) (fullRowSize*(4-coordinates.y));
 
         return translatedCoordinates;
     }
