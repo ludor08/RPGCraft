@@ -78,6 +78,22 @@ public class StatSheet
             }
         }
 
+        // if the player has a class
+        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            // get the traits from said nodes
+            for (String traitName : Arrays.stream(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+            {
+                for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
+                {
+                    if (traitName.equals(node.trait.name))
+                    {
+                        traits.add(node.trait);
+                    }
+                }
+            }
+        }
+
         return traits;
     }
 
