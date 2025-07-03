@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -149,6 +150,21 @@ public class MenuManager implements Listener
                         }
                         break;
 
+                    case "class" :
+                        // if we are in the select menu
+                        if (Objects.equals(UIPersistents[2], "view"))
+                        {
+                            // open a class select menu
+                            player.openInventory(CreateClassMenu(player, main.GetChooseAbleClasses()));
+                        }
+                        // if we are in the stat sheet menu
+                        else if (Objects.equals(UIPersistents[2], "stat"))
+                        {
+                            // open the stat sheet menu
+                            player.openInventory(CreateStatSheetMenu(player));
+                        }
+                        break;
+
                     default:
                         player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
                 }
@@ -190,6 +206,17 @@ public class MenuManager implements Listener
                             // close the inventory
                             e.getInventory().close();
                         }
+                        break;
+
+                    case "class" :
+                        // set the class
+                        main.statSheetManager.FindStatSheetByPlayer(player).SetClassPersistent(e.getInventory().getItem(FULL_ROW_SIZE/2).getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+                        // send the confirmation message
+                        player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Class Selected!");
+
+                        // close the inventory
+                        e.getInventory().close();
                         break;
 
                     default:
@@ -244,13 +271,23 @@ public class MenuManager implements Listener
                 // get the PersistentDataContainer of the icon clicked
                 String classPersistent = clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING);
 
-                // find the race clicked
+                // find the class clicked
                 for (PlayableClass playableClass : main.GetChooseAbleClasses())
                 {
-                    // if the race name is the same as the race of what the player click, open the new subrace menu
+                    // if the class name is the same as the class of what the player click, open the new class menu
                     if (Objects.equals(playableClass.name, classPersistent))
                     {
-                        player.openInventory(CreateTraitTreeMenu(player, playableClass, true));
+                        Inventory classMenu = CreateTraitTreeMenu(player, playableClass, "Confirm Class?", "class_view");
+                        // add the confirm button to the row under the icons
+                        ItemStack classConfirmButton = confirmButton;
+                        ItemMeta classConfirmButtonMeta = classConfirmButton.getItemMeta();
+                        classConfirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm_class");
+
+                        classConfirmButton.setItemMeta(classConfirmButtonMeta);
+
+                        classMenu.setItem((int) (FULL_ROW_SIZE*5.5f), classConfirmButton);
+
+                        player.openInventory(classMenu);
                     }
                 }
 
@@ -291,7 +328,33 @@ public class MenuManager implements Listener
             {
                 player.openInventory(CreateRaceInfoMenu(player, main.statSheetManager.FindRace(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING)),null));
             }
+            // if the player clicked a class icon
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+            {
+                // build the trait tree menu
+                Inventory traitTreeMenu = CreateTraitTreeMenu(player, main.statSheetManager.FindClass(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)),"Class Trait Tree", "class_stat");
+
+                // get the info icon
+                ItemStack infoIcon = new ItemStack(Material.NETHER_STAR);
+                ItemMeta infoIconMeta = infoIcon.getItemMeta();
+
+                List<String> lore = new ArrayList<>();
+                lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+                lore.add("Available trait points : " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_").length-1)));
+
+                infoIconMeta.setDisplayName(ChatColor.BOLD.toString() + ChatColor.RED + "Class Info");
+                infoIconMeta.setLore(lore);
+
+                infoIcon.setItemMeta(infoIconMeta);
+
+                // add the info
+                traitTreeMenu.setItem((int) (traitTreeMenu.getSize()-(FULL_ROW_SIZE*0.5)), infoIcon);
+
+                // open the inventory
+                player.openInventory(traitTreeMenu);
+            }
         }
+        // if the player is in the race info menu in the stat sheet
         else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Race Info"))
         {
             // cancel the event so the player can't take items
@@ -320,32 +383,110 @@ public class MenuManager implements Listener
                 }
             }
         }
+        // if the player is in the stats menu in the stat sheet
         else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Stats"))
         {
             // cancel the event so the player can't take items
             e.setCancelled(true);
         }
+        // if the player is in the traits menu in the stat sheet
         else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Traits"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+        }
+        // if the player is in the class trait tree menu in the stat sheet
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Class Trait Tree"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+
+            // if what the player clicked was a trait node
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetTraitKey(), PersistentDataType.STRING))
+            {
+                // find the class
+                PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+                // already selected traits
+                List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+
+                // go through all of the traits in selected traits
+                for (String trait : selectedTraits)
+                {
+                    // if the player has already selected this trait
+                    if (Objects.equals(trait, clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
+                    {
+                        return;
+                    }
+                }
+
+                // if the player has enough trait selection points(equal to the players level)
+                if ((player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (selectedTraits.size()-1)) >= 1)
+                {
+                    // add the trait
+                    Trait trait = null;
+
+                    // go through all of the nodes
+                    for (Node node : playableClass.traitTree.nodes)
+                    {
+                        // if the node trait name and the trait that you clicked on have the same name
+                        if (Objects.equals(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING), node.trait.name))
+                        {
+                            trait = node.trait;
+                            break;
+                        }
+                    }
+
+                    // if there is a trait
+                    if (trait != null)
+                    {
+                        trait.OnGainTraitBuff(player);
+
+                        clickedItem.setType(Material.LIME_STAINED_GLASS_PANE);
+
+                        player.getPersistentDataContainer().set(
+                                main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING));
+                    }
+
+                    // get the info icon
+                    ItemStack infoIcon = e.getInventory().getItem((int) (e.getInventory().getSize()-(FULL_ROW_SIZE*0.5)));
+                    ItemMeta infoIconMeta = infoIcon.getItemMeta();
+
+                    List<String> lore = new ArrayList<>();
+                    lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+                    lore.add("Available trait points : " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_").length-1)));
+
+                    infoIconMeta.setLore(lore);
+
+                    infoIcon.setItemMeta(infoIconMeta);
+
+                    // add the info
+                    e.getInventory().setItem((int) (e.getInventory().getSize()-(FULL_ROW_SIZE*0.5)), infoIcon);
+                }
+            }
+        }
+        // if the player is in the select class inventory
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Confirm Class?"))
         {
             // cancel the event so the player can't take items
             e.setCancelled(true);
         }
     }
 
-    public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, boolean isView)
+    public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, String title, String origin)
     {
         // create the menu
-        Inventory traitTreeMenu = Bukkit.createInventory(player, 45,
-                ChatColor.BOLD.toString() + "Trait Tree");
+        Inventory traitTreeMenu = Bukkit.createInventory(player, 54,
+                ChatColor.BOLD.toString() + title);
 
         // add the borders
-        traitTreeMenu = AddBorder(Material.BLUE_STAINED_GLASS_PANE, traitTreeMenu);
+        traitTreeMenu = AddBorder(Material.RED_STAINED_GLASS_PANE, traitTreeMenu);
 
         // get the parentRace icon
         ItemStack classIcon = playableClass.GetClassIcon();
 
         ItemMeta iconMeta = classIcon.getItemMeta();
-        if (!isView) iconMeta.getPersistentDataContainer().set(main.GetRaceKey(), PersistentDataType.STRING, playableClass.name);
+        iconMeta.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, playableClass.name);
 
         classIcon.setItemMeta(iconMeta);
 
@@ -358,10 +499,34 @@ public class MenuManager implements Listener
             // go through all of the nodes
             for (Node node : playableClass.traitTree.nodes)
             {
+                // if the slot coordinates
+                if (i >= traitTreeMenu.getSize()-FULL_ROW_SIZE)
+                {
+                    // generate the item for the border
+                    ItemStack border = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);;
+
+                    ItemMeta borderMeta = border.getItemMeta();
+
+                    borderMeta.setDisplayName(" ");
+                    borderMeta.setHideTooltip(true);
+                    border.setItemMeta(borderMeta);
+
+                    // add border to the inventory
+                    traitTreeMenu.setItem(i, border);
+                }
                 // if the slot coordinates are the same as a nodes coordinates
-                if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE))
+                else if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE))
                 {
                     ItemStack nodeIcon = node.GetNodeIcon();
+
+                    // already selected traits
+                    List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+
+                    // if the player has this node, light it up
+                    if (selectedTraits.contains(node.trait.name))
+                    {
+                        nodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+                    }
 
                     traitTreeMenu.setItem(i, nodeIcon);
                 }
@@ -372,11 +537,11 @@ public class MenuManager implements Listener
         ItemStack classBackButton = backButton;
         ItemMeta classBackButtonMeta = classBackButton.getItemMeta();
 
-        classBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_class");
+        classBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_" + origin);
 
         classBackButton.setItemMeta(classBackButtonMeta);
 
-        traitTreeMenu.setItem(FULL_ROW_SIZE*4, classBackButton);
+        traitTreeMenu.setItem(FULL_ROW_SIZE*5, classBackButton);
 
         // return the menu
         return traitTreeMenu;
@@ -389,7 +554,7 @@ public class MenuManager implements Listener
                 ChatColor.BOLD.toString() + "Select a Class!");
 
         // add the borders
-        classMenu = AddBorder(Material.BLUE_STAINED_GLASS_PANE, classMenu);
+        classMenu = AddBorder(Material.RED_STAINED_GLASS_PANE, classMenu);
 
         // extract all of the icons from races
         List<ItemStack> classIcons = new ArrayList<>();
@@ -838,6 +1003,33 @@ public class MenuManager implements Listener
         }
 
         // if the player has a class persistent
+        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            // Find the class script
+            PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+            // if there isn't a class then end the function and throw an error
+            if (playableClass == null)
+            {
+                Bukkit.getLogger().info(ChatColor.RED + "ERROR: invalid class");
+                return null;
+            }
+
+            // Get the class icon
+            ItemStack classIcon = playableClass.GetClassIcon();
+
+            ItemMeta classIconMeta = classIcon.getItemMeta();
+            List<String> lore = classIconMeta.getLore();
+            lore.add("Level: " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+
+            classIconMeta.setLore(lore);
+            classIconMeta.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+            classIcon.setItemMeta(classIconMeta);
+
+            // place the class icon four to the side and one down
+            statSheet.setItem(4+(FULL_ROW_SIZE), classIcon);
+        }
 
         // add the stat menu icon seven to the side and one down
         statSheet.setItem(7+(FULL_ROW_SIZE), statMenuIcon);
