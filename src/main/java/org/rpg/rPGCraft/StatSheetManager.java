@@ -70,6 +70,22 @@ public class StatSheetManager implements Listener
         return null;
     }
 
+    public PlayableClass FindClass(String persistent)
+    {
+        // go through all of the classes
+        for (PlayableClass playableClass : main.GetChooseAbleClasses())
+        {
+            Bukkit.getLogger().info(playableClass.name + " ?= " + persistent);
+
+            // if the race name is the same as the persistent
+            if (Objects.equals(playableClass.name, persistent)) {
+                return playableClass;
+            }
+        }
+
+        return null;
+    }
+
     public StatSheetManager(Main main)
     {
         this.main = main;
