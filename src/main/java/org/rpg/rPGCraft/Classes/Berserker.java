@@ -7,6 +7,7 @@ import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Node;
 import org.rpg.rPGCraft.PlayableClass;
 import org.rpg.rPGCraft.TraitTree;
+import org.rpg.rPGCraft.Traits.Question_Axer;
 import org.rpg.rPGCraft.Traits.Vitality;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class Berserker extends PlayableClass
     public Berserker(Main main)
     {
         super("Berserker", ChatColor.RED, Material.IRON_AXE, List.of(ChatColor.AQUA + "Close range fight that can take a beating, and give it right back"), new TraitTree(List.of(
-                new Node(new Vector2d(0,2), new Vitality(main)
-                ))));
+                new Node(new Vector2d(4,0), new Vitality(main)),
+                new Node(new Vector2d(4,1), new Question_Axer(main))
+        )));
     }
 }
