@@ -66,8 +66,8 @@ public class Question_Axer extends Trait
         if (weapon.getType().equals(Material.WOODEN_AXE) || weapon.getType().equals(Material.STONE_AXE) || weapon.getType().equals(Material.GOLDEN_AXE) || weapon.getType().equals(Material.IRON_AXE) || weapon.getType().equals(Material.DIAMOND_AXE) || weapon.getType().equals(Material.NETHERITE_AXE) ||
                 weapon.getPersistentDataContainer().get(main.GetWeaponTypeKey(), PersistentDataType.STRING).equals("axe"))
         {
-            // do pounceCritMod more damage
-            e.setDamage(e.getDamage()* AXE_DAMAGE_MOD);
+            // do AXE_DAMAGE_MOD times more damage
+            e.setDamage(e.getDamage()*AXE_DAMAGE_MOD);
         }
     }
 

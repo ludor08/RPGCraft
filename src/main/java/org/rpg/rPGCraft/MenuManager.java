@@ -410,15 +410,23 @@ public class MenuManager implements Listener
                 // already selected traits
                 List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
 
-                // go through all of the traits in selected traits
-                for (String trait : selectedTraits)
+                // if the player has already selected this trait
+                if (selectedTraits.contains(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
                 {
-                    // if the player has already selected this trait
-                    if (Objects.equals(trait, clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
-                    {
-                        return;
-                    }
+                    return;
                 }
+
+//                // go through all of the traits in selected traits
+//                for (String trait : selectedTraits)
+//                {
+//                    // if the player has already selected this trait
+//                    if (Objects.equals(trait, clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
+//                    {
+//                        return;
+//                    }
+//                }
+
+                // TODO make this work like a skill tree
 
                 // if the player has enough trait selection points(equal to the players level)
                 if ((player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (selectedTraits.size()-1)) >= 1)
@@ -426,12 +434,35 @@ public class MenuManager implements Listener
                     // add the trait
                     Trait trait = null;
 
-                    // go through all of the nodes
+                    // find the node that the player clicked
                     for (Node node : playableClass.traitTree.nodes)
                     {
                         // if the node trait name and the trait that you clicked on have the same name
                         if (Objects.equals(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING), node.trait.name))
                         {
+                            // if this node is not at y 0
+                            if (node.coordinates.y > 0)
+                            {
+                                // if the player has already selected an adjacent node
+                                boolean hasAdjacentNode = false;
+
+                                player.sendMessage("node coordinates " + node.coordinates.x + "x " + node.coordinates.y + "y");
+
+                                for (Node adjacentNode : playableClass.traitTree.GetSurroundingNodes(node))
+                                {
+                                    player.sendMessage("adjacentNode coordinates" + adjacentNode.coordinates.x + "x " + adjacentNode.coordinates.y + "y");
+                                    // if the player has this node
+                                    if (selectedTraits.contains(adjacentNode.trait.name))
+                                    {
+                                        player.sendMessage("selected");
+                                        hasAdjacentNode = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!hasAdjacentNode) return;
+                            }
+
                             trait = node.trait;
                             break;
                         }
@@ -499,7 +530,7 @@ public class MenuManager implements Listener
             // go through all of the nodes
             for (Node node : playableClass.traitTree.nodes)
             {
-                // if the slot coordinates
+                // if the slot coordinates do not correspond to the bottom row
                 if (i >= traitTreeMenu.getSize()-FULL_ROW_SIZE)
                 {
                     // generate the item for the border
