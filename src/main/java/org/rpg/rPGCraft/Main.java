@@ -22,9 +22,11 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey UIKey = new NamespacedKey(this, "ui");
     private final NamespacedKey traitKey = new NamespacedKey(this, "trait");
     private final NamespacedKey levelKey = new NamespacedKey(this, "level");
+    private final NamespacedKey classXPKey = new NamespacedKey(this, "class_xp");
     private final NamespacedKey treeProgressionKey = new NamespacedKey(this, "tree_progression");
 
     private final NamespacedKey weaponTypeKey = new NamespacedKey(this, "weapon_type");
+    private final NamespacedKey customMobKey = new NamespacedKey(this, "custom_mob");
 
     // choose able races
     private final List<Race> chooseAbleRaces = List.of(new Furoid(this));
@@ -63,9 +65,19 @@ public final class Main extends JavaPlugin implements Listener
         return levelKey;
     }
 
+    public NamespacedKey GetClassXPKey()
+    {
+        return classXPKey;
+    }
+
     public NamespacedKey GetWeaponTypeKey()
     {
         return weaponTypeKey;
+    }
+
+    public NamespacedKey GetCustomMobKey()
+    {
+        return customMobKey;
     }
 
     public NamespacedKey GetTreeProgressionKey()
