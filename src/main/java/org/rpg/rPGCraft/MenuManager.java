@@ -416,18 +416,6 @@ public class MenuManager implements Listener
                     return;
                 }
 
-//                // go through all of the traits in selected traits
-//                for (String trait : selectedTraits)
-//                {
-//                    // if the player has already selected this trait
-//                    if (Objects.equals(trait, clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
-//                    {
-//                        return;
-//                    }
-//                }
-
-                // TODO make this work like a skill tree
-
                 // if the player has enough trait selection points(equal to the players level)
                 if ((player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (selectedTraits.size()-1)) >= 1)
                 {
