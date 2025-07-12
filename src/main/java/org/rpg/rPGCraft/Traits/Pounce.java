@@ -23,7 +23,7 @@ public class Pounce extends Trait
 
     public Pounce(Main main) {
         // add the name and lore
-        super("Pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false, main, List.of(
+        super("Pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false, main, 1, List.of(
                 ChatColor.AQUA.toString() + "   - Crits deal 15% more damage.",
                 ChatColor.AQUA.toString() + "   - Gain more jump strength."
         ));

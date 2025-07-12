@@ -26,7 +26,7 @@ public class Question_Axer extends Trait
 
     public Question_Axer(Main main) {
         // add the name and lore
-        super("Question Axer", ChatColor.AQUA, Material.IRON_AXE, false, main, List.of(
+        super("Question Axer", ChatColor.AQUA, Material.IRON_AXE, false, main, 1, List.of(
                 ChatColor.AQUA.toString() + "   - Does 10% more damage with axes."
         ));
 

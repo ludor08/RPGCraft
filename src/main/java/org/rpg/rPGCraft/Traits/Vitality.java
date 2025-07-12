@@ -21,7 +21,7 @@ public class Vitality extends Trait
 
     public Vitality(Main main) {
         // add the name and lore
-        super("Vitality", ChatColor.AQUA, Material.APPLE, false, main, List.of(
+        super("Vitality", ChatColor.AQUA, Material.APPLE, false, main, 5, List.of(
                 ChatColor.AQUA.toString() + "   - Gain one extra heart."
         ));
 

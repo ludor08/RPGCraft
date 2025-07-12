@@ -29,7 +29,7 @@ public abstract class Trait
     // main
     Main main;
 
-    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
+    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, int maxLevel, List<String> lore)
     {
         this.name = name;
         this.lore = lore;
