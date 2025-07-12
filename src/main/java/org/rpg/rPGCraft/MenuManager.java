@@ -1,21 +1,19 @@
 package org.rpg.rPGCraft;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Debug;
+import org.joml.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +28,9 @@ public class MenuManager implements Listener
     private ItemStack nullIcon = new ItemStack(Material.BARRIER);
     private ItemStack statMenuIcon = new ItemStack(Material.BOOK);
 
+    private NamespacedKey xOffsetKey;
+    private NamespacedKey yOffsetKey;
+
     int FULL_ROW_SIZE = 9;
 
     Main main;
@@ -39,6 +40,8 @@ public class MenuManager implements Listener
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this,main);
 
+        xOffsetKey = new NamespacedKey(main, "x_offset");
+        yOffsetKey = new NamespacedKey(main, "y_offset");
 
         // generate the back button
         ItemMeta backButtonMeta = backButton.getItemMeta();
@@ -210,7 +213,7 @@ public class MenuManager implements Listener
 
                     case "class" :
                         // set the class
-                        main.statSheetManager.FindStatSheetByPlayer(player).SetClassPersistent(e.getInventory().getItem(FULL_ROW_SIZE/2).getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+                        main.statSheetManager.FindStatSheetByPlayer(player).SetClassPersistent(e.getInventory().getItem((int) (e.getInventory().getSize()-(FULL_ROW_SIZE*0.5))).getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
 
                         // send the confirmation message
                         player.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Class Selected!");
@@ -233,6 +236,99 @@ public class MenuManager implements Listener
             {
                 player.openInventory(CreateTraitMenu(player, e.getInventory().getItem(4*FULL_ROW_SIZE).getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING) + "_traits"));
             }
+            // if it was an up button
+            else if (Objects.equals(UIPersistents[0], "up"))
+            {
+                int infoIndex = (int) (e.getInventory().getSize()-(FULL_ROW_SIZE*0.5));
+
+                // get the playableClass from the class info
+                PlayableClass playableClass = main.statSheetManager.FindClass(e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+                // get the origin from the back button
+                String origin = e.getInventory().getItem((int) (e.getInventory().getSize()-FULL_ROW_SIZE)).getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING).replace("back_", "");
+
+                // get the offset from the  classInfo
+                Vector2d offset = new Vector2d(e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(xOffsetKey, PersistentDataType.INTEGER),
+                        e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(yOffsetKey, PersistentDataType.INTEGER));
+
+                offset.y += 1;
+
+                // create the Tait tree
+                Inventory traitTreeMenu = CreateTraitTreeMenu(player, playableClass, ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()), origin, offset);
+
+                switch (UIPersistents[2])
+                {
+                    case "view" :
+                        // add the confirm button to the row under the icons
+                        ItemStack classConfirmButton = confirmButton;
+                        ItemMeta classConfirmButtonMeta = classConfirmButton.getItemMeta();
+                        classConfirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm_class");
+
+                        classConfirmButton.setItemMeta(classConfirmButtonMeta);
+
+                        traitTreeMenu.setItem((int) (FULL_ROW_SIZE*5.5f)-1, classConfirmButton);
+
+                        // open the menu
+                        player.openInventory(traitTreeMenu);
+                        break;
+
+                    case "stat" :
+                        // open the menu
+                        player.openInventory(traitTreeMenu);
+                        break;
+
+                    default:
+                        player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
+                }
+
+            }
+            // if it was a down button
+            else if (Objects.equals(UIPersistents[0], "down"))
+            {
+                int infoIndex = (int) (e.getInventory().getSize()-(FULL_ROW_SIZE*0.5));
+
+                // get the playableClass from the class info
+                PlayableClass playableClass = main.statSheetManager.FindClass(e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+                // get the origin from the back button
+                String origin = e.getInventory().getItem((int) (e.getInventory().getSize()-FULL_ROW_SIZE)).getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING).replace("back_", "");
+
+                // get the offset from the  classInfo
+                Vector2d offset = new Vector2d(e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(xOffsetKey, PersistentDataType.INTEGER),
+                        e.getInventory().getItem(infoIndex).getItemMeta().getPersistentDataContainer().get(yOffsetKey, PersistentDataType.INTEGER));
+
+                offset.y -= 1;
+
+                // create the Tait tree
+                Inventory traitTreeMenu = CreateTraitTreeMenu(player, playableClass, ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()), origin, offset);
+
+                switch (UIPersistents[2])
+                {
+                    case "view" :
+                        // add the confirm button to the row under the icons
+                        ItemStack classConfirmButton = confirmButton;
+                        ItemMeta classConfirmButtonMeta = classConfirmButton.getItemMeta();
+                        classConfirmButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "confirm_class");
+
+                        classConfirmButton.setItemMeta(classConfirmButtonMeta);
+
+                        traitTreeMenu.setItem((int) (FULL_ROW_SIZE*5.5f)-1, classConfirmButton);
+
+                        // open the menu
+                        player.openInventory(traitTreeMenu);
+                        break;
+
+                    case "stat" :
+                        // open the menu
+                        player.openInventory(traitTreeMenu);
+                        break;
+
+                    default:
+                        player.sendMessage("undefined menu exception : " + clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetUIKey(), PersistentDataType.STRING));
+                }
+
+            }
+
         }
 
         // if the player is in the select race inventory
@@ -277,7 +373,7 @@ public class MenuManager implements Listener
                     // if the class name is the same as the class of what the player click, open the new class menu
                     if (Objects.equals(playableClass.name, classPersistent))
                     {
-                        Inventory classMenu = CreateTraitTreeMenu(player, playableClass, "Confirm Class?", "class_view");
+                        Inventory classMenu = CreateTraitTreeMenu(player, playableClass, ChatColor.BOLD + "Confirm Class?", "class_view", new Vector2d(0,0));
                         // add the confirm button to the row under the icons
                         ItemStack classConfirmButton = confirmButton;
                         ItemMeta classConfirmButtonMeta = classConfirmButton.getItemMeta();
@@ -285,7 +381,7 @@ public class MenuManager implements Listener
 
                         classConfirmButton.setItemMeta(classConfirmButtonMeta);
 
-                        classMenu.setItem((int) (FULL_ROW_SIZE*5.5f), classConfirmButton);
+                        classMenu.setItem((int) (FULL_ROW_SIZE*5.5f)-1, classConfirmButton);
 
                         player.openInventory(classMenu);
                     }
@@ -332,23 +428,7 @@ public class MenuManager implements Listener
             if (clickedItem.getItemMeta().getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
             {
                 // build the trait tree menu
-                Inventory traitTreeMenu = CreateTraitTreeMenu(player, main.statSheetManager.FindClass(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)),"Class Trait Tree", "class_stat");
-
-                // get the info icon
-                ItemStack infoIcon = new ItemStack(Material.NETHER_STAR);
-                ItemMeta infoIconMeta = infoIcon.getItemMeta();
-
-                List<String> lore = new ArrayList<>();
-                lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
-                lore.add("Available trait points : " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_").length-1)));
-
-                infoIconMeta.setDisplayName(ChatColor.BOLD.toString() + ChatColor.RED + "Class Info");
-                infoIconMeta.setLore(lore);
-
-                infoIcon.setItemMeta(infoIconMeta);
-
-                // add the info
-                traitTreeMenu.setItem((int) (traitTreeMenu.getSize()-(FULL_ROW_SIZE*0.5)), infoIcon);
+                Inventory traitTreeMenu = CreateTraitTreeMenu(player, main.statSheetManager.FindClass(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)), ChatColor.BOLD + "Class Trait Tree", "class_stat", new Vector2d(0,0));
 
                 // open the inventory
                 player.openInventory(traitTreeMenu);
@@ -410,15 +490,15 @@ public class MenuManager implements Listener
                 // already selected traits
                 List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
 
-                // if the player has already selected this trait
-                if (selectedTraits.contains(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
-                {
-                    return;
-                }
-
                 // if the player has enough trait selection points(equal to the players level)
                 if ((player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (selectedTraits.size()-1)) >= 1)
                 {
+                    // if the player has already selected this trait
+                    if (selectedTraits.contains(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
+                    {
+                        return;
+                    }
+
                     // add the trait
                     Trait trait = null;
 
@@ -434,15 +514,11 @@ public class MenuManager implements Listener
                                 // if the player has already selected an adjacent node
                                 boolean hasAdjacentNode = false;
 
-                                player.sendMessage("node coordinates " + node.coordinates.x + "x " + node.coordinates.y + "y");
-
                                 for (Node adjacentNode : playableClass.traitTree.GetSurroundingNodes(node))
                                 {
-                                    player.sendMessage("adjacentNode coordinates" + adjacentNode.coordinates.x + "x " + adjacentNode.coordinates.y + "y");
                                     // if the player has this node
                                     if (selectedTraits.contains(adjacentNode.trait.name))
                                     {
-                                        player.sendMessage("selected");
                                         hasAdjacentNode = true;
                                         break;
                                     }
@@ -492,33 +568,101 @@ public class MenuManager implements Listener
         }
     }
 
-    public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, String title, String origin)
+    public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, String title, String origin, Vector2d offset)
     {
         // create the menu
-        Inventory traitTreeMenu = Bukkit.createInventory(player, 54,
-                ChatColor.BOLD.toString() + title);
+        Inventory traitTreeMenu = Bukkit.createInventory(player, 54, title);
 
         // add the borders
         traitTreeMenu = AddBorder(Material.RED_STAINED_GLASS_PANE, traitTreeMenu);
 
-        // get the parentRace icon
-        ItemStack classIcon = playableClass.GetClassIcon();
+        // place the nodes and the border
+        PlaceTraitTreeItems(player, playableClass, traitTreeMenu, offset);
 
-        ItemMeta iconMeta = classIcon.getItemMeta();
-        iconMeta.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, playableClass.name);
+        // get the info icon
+        ItemStack infoIcon = new ItemStack(Material.NETHER_STAR);
+        ItemMeta infoIconMeta = infoIcon.getItemMeta();
 
-        classIcon.setItemMeta(iconMeta);
+        List<String> lore = new ArrayList<>();
+        lore.add("Class : " + playableClass.name);
+        lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+        lore.add("Available trait points : " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) - (player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_").length-1)));
 
-        // add the parentRace icon to the top center
-        traitTreeMenu.setItem(FULL_ROW_SIZE/2, classIcon);
+        infoIconMeta.setDisplayName(ChatColor.BOLD.toString() + ChatColor.RED + "Class Info");
+        infoIconMeta.setLore(lore);
 
+        infoIconMeta.getPersistentDataContainer().set(main.GetClassKey(), PersistentDataType.STRING, playableClass.name);
+        infoIconMeta.getPersistentDataContainer().set(xOffsetKey, PersistentDataType.INTEGER, (int) offset.x);
+        infoIconMeta.getPersistentDataContainer().set(yOffsetKey, PersistentDataType.INTEGER, (int) offset.y);
+
+        infoIcon.setItemMeta(infoIconMeta);
+
+        // add the info
+        traitTreeMenu.setItem((int) (traitTreeMenu.getSize()-(FULL_ROW_SIZE*0.5)), infoIcon);
+
+        // add the back button to the bottom left corner
+        ItemStack classBackButton = backButton;
+        ItemMeta classBackButtonMeta = classBackButton.getItemMeta();
+
+        classBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_" + origin);
+
+        classBackButton.setItemMeta(classBackButtonMeta);
+
+        traitTreeMenu.setItem(FULL_ROW_SIZE*5, classBackButton);
+
+        // add the up item to the bottom right corner
+        boolean notAtTheTop = false;
+
+        for (Node node : playableClass.traitTree.nodes)
+        {
+            if (node.coordinates.y>offset.y+4)
+            {
+                notAtTheTop = true;
+            }
+        }
+
+        if (notAtTheTop)
+        {
+            ItemStack upButton = new ItemStack(Material.ARROW);
+            ItemMeta upButtonMeta = upButton.getItemMeta();
+
+            upButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "up_" + origin);
+            upButtonMeta.setDisplayName("Up");
+
+            upButton.setItemMeta(upButtonMeta);
+
+            traitTreeMenu.setItem(FULL_ROW_SIZE * 6 - 1, upButton);
+        }
+
+        // if we're not at the bottom
+        if (offset.y > 0)
+        {
+            // add the up item to the bottom row and 7 to the side
+            ItemStack downButton = new ItemStack(Material.ARROW);
+            ItemMeta downButtonMeta = downButton.getItemMeta();
+
+            downButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "down_" + origin);
+            downButtonMeta.setDisplayName("Down");
+
+            downButton.setItemMeta(downButtonMeta);
+
+            traitTreeMenu.setItem(FULL_ROW_SIZE*6-2, downButton);
+        }
+
+
+        // return the menu
+        return traitTreeMenu;
+    }
+
+    private void PlaceTraitTreeItems(Player player, PlayableClass playableClass, Inventory traitTreeMenu, Vector2d offset)
+    {
         // go through all of the inventory
         for (int i = 0; i < traitTreeMenu.getSize(); i++)
         {
             // go through all of the nodes
             for (Node node : playableClass.traitTree.nodes)
             {
-                // if the slot coordinates do not correspond to the bottom row
+                // if the slot coordinates do correspond to the bottom row
                 if (i >= traitTreeMenu.getSize()-FULL_ROW_SIZE)
                 {
                     // generate the item for the border
@@ -534,7 +678,7 @@ public class MenuManager implements Listener
                     traitTreeMenu.setItem(i, border);
                 }
                 // if the slot coordinates are the same as a nodes coordinates
-                else if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE))
+                else if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE, offset))
                 {
                     ItemStack nodeIcon = node.GetNodeIcon();
 
@@ -551,19 +695,6 @@ public class MenuManager implements Listener
                 }
             }
         }
-
-        // add the back button to the bottom left corner
-        ItemStack classBackButton = backButton;
-        ItemMeta classBackButtonMeta = classBackButton.getItemMeta();
-
-        classBackButtonMeta.getPersistentDataContainer().set(main.GetUIKey(), PersistentDataType.STRING, "back_" + origin);
-
-        classBackButton.setItemMeta(classBackButtonMeta);
-
-        traitTreeMenu.setItem(FULL_ROW_SIZE*5, classBackButton);
-
-        // return the menu
-        return traitTreeMenu;
     }
 
     public Inventory CreateClassMenu(Player player, List<PlayableClass> classes)
@@ -1048,6 +1179,33 @@ public class MenuManager implements Listener
 
             // place the class icon four to the side and one down
             statSheet.setItem(4+(FULL_ROW_SIZE), classIcon);
+        }
+
+        // if the player has a xp and level persistent
+        if (player.getPersistentDataContainer().has(main.GetClassXPKey(), PersistentDataType.INTEGER)
+        && player.getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
+        {
+            // make the xp bar item
+            ItemStack xpBar = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+            ItemMeta xpBarMeta = xpBar.getItemMeta();
+
+            xpBarMeta.setDisplayName(ChatColor.GRAY.toString() + player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER) + "/" + main.statSheetManager.GetLevelXPRequirements(player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER)));
+
+            xpBar.setItemMeta(xpBarMeta);
+
+            // place the xp bar items in the middle of the fourth row
+            for (int i = -1; i < 2; i++)
+            {
+                // if the xp is more than 33 percent of the way full, light up the first one. 66 for the second, and 99 for the third
+                ItemStack tempXpBar = xpBar;
+
+                if (0.33 * (i+2) < ((float) player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER) / (float) main.statSheetManager.GetLevelXPRequirements(player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER))))
+                {
+                    tempXpBar.setType(Material.BLACK_STAINED_GLASS_PANE);
+                }
+
+                statSheet.setItem((int) ((FULL_ROW_SIZE*3.5) + i), xpBar);
+            }
         }
 
         // add the stat menu icon seven to the side and one down
