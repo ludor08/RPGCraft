@@ -1,12 +1,26 @@
 package org.rpg.rPGCraft;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.commands.ClassLevelCommand;
+import org.rpg.rPGCraft.commands.ClassXPCommand;
+import org.rpg.rPGCraft.commands.ClassXPTab;
 import org.rpg.rPGCraft.commands.StatSheetCommand;
+
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.Random;
 
 public class GameManager implements Listener {
 
@@ -19,6 +33,11 @@ public class GameManager implements Listener {
 
         // commands
         main.getCommand("statSheet").setExecutor(new StatSheetCommand(main));
+
+        main.getCommand("classXp").setExecutor(new ClassXPCommand(main));
+        main.getCommand("classXp").setTabCompleter(new ClassXPTab());
+
+        main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
     }
 
     @EventHandler
