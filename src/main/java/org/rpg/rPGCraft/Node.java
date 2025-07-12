@@ -1,7 +1,9 @@
 package org.rpg.rPGCraft;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -20,10 +22,10 @@ public class Node
         this.trait = trait;
     }
 
-    public int GetTranslatedCoordinates(int fullRowSize)
+    public int GetTranslatedCoordinates(int fullRowSize, Vector2d offset)
     {
-        int translatedCoordinates = (int) coordinates.x;
-        translatedCoordinates += (int) (fullRowSize*(4-coordinates.y));
+        int translatedCoordinates = (int) (coordinates.x-offset.x);
+        translatedCoordinates += (int) (fullRowSize*(4-(coordinates.y-offset.y)));
 
         return translatedCoordinates;
     }
