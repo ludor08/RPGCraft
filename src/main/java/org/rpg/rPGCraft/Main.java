@@ -27,6 +27,7 @@ public final class Main extends JavaPlugin implements Listener
 
     private final NamespacedKey weaponTypeKey = new NamespacedKey(this, "weapon_type");
     private final NamespacedKey customMobKey = new NamespacedKey(this, "custom_mob");
+    private final NamespacedKey levelStatModKey = new NamespacedKey(this, "level_hp_mod");
 
     // choose able races
     private final List<Race> chooseAbleRaces = List.of(new Furoid(this));
@@ -63,6 +64,11 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetLevelKey()
     {
         return levelKey;
+    }
+
+    public NamespacedKey GetLevelStatModKey()
+    {
+        return levelStatModKey;
     }
 
     public NamespacedKey GetClassXPKey()
