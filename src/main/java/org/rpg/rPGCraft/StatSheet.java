@@ -249,4 +249,59 @@ public class StatSheet
             player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
         }
     }
+
+    public void GiveXP(int value)
+    {
+        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+        int currentXp = Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER);
+
+        Player player = Bukkit.getPlayer(playerUUID);
+
+        // check if the players xp is more or equal to the xp needed to level up
+        if (currentXp + value >= levelXpNeeded)
+        {
+            // level up message
+            player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER)+1));
+
+            player.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + 1);
+            player.getPersistentDataContainer().set(main.GetClassXPKey(), PersistentDataType.INTEGER, 0);
+
+            // give the overflow xp back
+            GiveXP((currentXp + value) - levelXpNeeded);
+        }
+        // if not
+        else
+        {
+            player.getPersistentDataContainer().set(main.GetClassXPKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER) + value);
+        }
+
+
+    }
+
+    public void SetXP(int value)
+    {
+        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+
+        Player player = Bukkit.getPlayer(playerUUID);
+
+        // check if the players xp is more or equal to the xp needed to level up
+        if (value >= levelXpNeeded)
+        {
+            // level up message
+            player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER)+1));
+
+            player.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + 1);
+            player.getPersistentDataContainer().set(main.GetClassXPKey(), PersistentDataType.INTEGER, 0);
+
+            // give the overflow xp back
+            GiveXP(value - levelXpNeeded);
+        }
+        // if not
+        else
+        {
+            player.getPersistentDataContainer().set(main.GetClassXPKey(), PersistentDataType.INTEGER, value);
+        }
+
+
+    }
 }
