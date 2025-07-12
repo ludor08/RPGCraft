@@ -1,13 +1,22 @@
 package org.rpg.rPGCraft;
 
+import com.google.common.eventbus.DeadEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +29,19 @@ public class StatSheetManager implements Listener
     // stat sheets
     private List<StatSheet> statSheets = new ArrayList<>();
 
-    // Getter
-    public List<StatSheet> GetStatSheets()
+    int[] levelXPRequirements = {
+            50,
+            75,
+            115,
+            175,
+            265,
+            400,
+            600
+    };
+
+    public int GetLevelXPRequirements(int level)
     {
-        return statSheets;
+        return levelXPRequirements[level-1];
     }
 
     public StatSheet FindStatSheetByPlayer(Player player)
@@ -75,8 +93,6 @@ public class StatSheetManager implements Listener
         // go through all of the classes
         for (PlayableClass playableClass : main.GetChooseAbleClasses())
         {
-            Bukkit.getLogger().info(playableClass.name + " ?= " + persistent);
-
             // if the race name is the same as the persistent
             if (Objects.equals(playableClass.name, persistent)) {
                 return playableClass;
@@ -156,7 +172,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnDealDamage(FoodLevelChangeEvent e)
+    public void OnFoodLevelChangeDamage(FoodLevelChangeEvent e)
     {
         if (e.getEntity() instanceof Player player)
         {
@@ -173,6 +189,42 @@ public class StatSheetManager implements Listener
             {
                 // give them one :)
                 AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnPlayerKillEvent(EntityDeathEvent e)
+    {
+        // if the entity was killed by a player
+        if (e.getEntity().getKiller() != null)
+        {
+            // if the entity has a level
+            if (e.getEntity().getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
+            {
+
+                // if the entity was a MONSTER
+                if (e.getEntity().getSpawnCategory().equals(SpawnCategory.MONSTER))
+                {
+                    // if the monster is not a custom entity
+                    if (!e.getEntity().getPersistentDataContainer().has(main.GetCustomMobKey(), PersistentDataType.STRING))
+                    {
+                        Entity entity = e.getEntity();
+
+                        Player player = e.getEntity().getKiller();
+
+                        switch (entity.getType())
+                        {
+                            case WITHER:
+                                FindStatSheetByPlayer(player).GiveXP(1400);
+                                break;
+
+                            default:
+                                FindStatSheetByPlayer(player).GiveXP(e.getDroppedExp());
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
