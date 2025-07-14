@@ -38,12 +38,8 @@ public class TraitTree
         {
             for (int y = -1; y < 2; y++)
             {
-                for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(x+"x " + y+"y");
-
                 if (x != y && (x == 0 || y == 0))
                 {
-                    for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage("allowed through " + x+"x " + y+"y");
-
                     // if there is a node at nodeCoordinates + x y
                     if (GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x+x, nodeCoordinates.y+y)) != null)
                     {
@@ -53,34 +49,6 @@ public class TraitTree
                 }
             }
         }
-
-//        // if there is a node to the right
-//        if (GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x+1, nodeCoordinates.y)) != null)
-//        {
-//            // add it to the list of nodes
-//            surroundingNodes.add(GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x+1, nodeCoordinates.y)));
-//        }
-//
-//        // if there is a node to the left
-//        if (GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x-1, nodeCoordinates.y)) != null)
-//        {
-//            // add it to the list of nodes
-//            surroundingNodes.add(GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x-1, nodeCoordinates.y)));
-//        }
-//
-//        // if there is a node above this one
-//        if (GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x, nodeCoordinates.y+1)) != null)
-//        {
-//            // add it to the list of nodes
-//            surroundingNodes.add(GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x, nodeCoordinates.y+1)));
-//        }
-//
-//        // if there is a node below this one
-//        if (GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x, nodeCoordinates.y-1)) != null)
-//        {
-//            // add it to the list of nodes
-//            surroundingNodes.add(GetNodeAtCoordinates(new Vector2d(nodeCoordinates.x, nodeCoordinates.y-1)));
-//        }
 
         return surroundingNodes;
     }
