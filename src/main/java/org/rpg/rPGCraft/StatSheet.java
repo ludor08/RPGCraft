@@ -83,9 +83,12 @@ public class StatSheet
             {
                 for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
                 {
-                    if (traitName.equals(node.trait.name))
+                    for (Trait trait : node.traits)
                     {
-                        traits.add(node.trait);
+                        if (traitName.equals(trait.name))
+                        {
+                            traits.add(trait);
+                        }
                     }
                 }
             }
@@ -108,24 +111,27 @@ public class StatSheet
     public void RemoveTraits(PlayableClass playableClass)
     {
         // get all of the players selected nodes
-        List<Node> selectedNodes = new ArrayList<>();
+        List<Trait> selectedNodes = new ArrayList<>();
 
         // get the traits from said nodes
         for (String traitName : Arrays.stream(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
         {
             for (Node node : playableClass.traitTree.nodes)
             {
-                if (traitName.equals(node.trait.name))
+                for (Trait trait : node.traits)
                 {
-                    selectedNodes.add(node);
+                    if (traitName.equals(trait.name_id))
+                    {
+                        selectedNodes.add(trait);
+                    }
                 }
             }
         }
 
         // remove the traits from the player
-        for (Node node : selectedNodes)
+        for (Trait removeTrait : selectedNodes)
         {
-            node.trait.OnRemoveTraitBuff(Bukkit.getPlayer(playerUUID));
+            removeTrait.OnRemoveTraitBuff(Bukkit.getPlayer(playerUUID));
         }
     }
 
@@ -237,7 +243,8 @@ public class StatSheet
             PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
 
             // if there isn't a parent race then end the function and throw an error
-            if (playableClass == null) {
+            if (playableClass == null)
+            {
                 System.out.println(ChatColor.RED.toString() + "ERROR: invalid class");
                 return;
             }
