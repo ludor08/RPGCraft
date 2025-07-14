@@ -19,6 +19,7 @@ public abstract class Trait
 {
     // name and lore of this trait
     public String name;
+    public String name_id;
     public ChatColor nameColor;
     public Material iconMaterial;
     public List<String> lore;
@@ -29,9 +30,10 @@ public abstract class Trait
     // main
     Main main;
 
-    public Trait(String name, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, int maxLevel, List<String> lore)
+    public Trait(String name, String name_id, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
     {
         this.name = name;
+        this.name_id = name_id;
         this.lore = lore;
         this.nameColor = nameColor;
         this.iconMaterial = iconMaterial;

@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits;
+package org.rpg.rPGCraft.Traits.Vitality;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,17 +15,17 @@ import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Vitality extends Trait
+public class Vitality_1 extends Trait
 {
     private AttributeModifier healthMod;
 
-    public Vitality(Main main) {
+    public Vitality_1(Main main) {
         // add the name and lore
-        super("Vitality", ChatColor.AQUA, Material.APPLE, false, main, 5, List.of(
+        super("Vitality", "vitality 1", ChatColor.AQUA, Material.APPLE, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Gain one extra heart."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality_1"), 2, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override

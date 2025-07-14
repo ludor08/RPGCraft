@@ -17,7 +17,7 @@ public class AbnormalDiet_Berries extends Trait
 
     public AbnormalDiet_Berries(Main main) {
         // add the name and lore
-        super("Abnormal Diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false, main, 1, List.of(
+        super("Abnormal Diet:Berries", "abnormal diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Food other then berries only gives 0.75% saturation.",
                 ChatColor.AQUA.toString() + "   - Berries also give 2.5x the saturation."
         ));
