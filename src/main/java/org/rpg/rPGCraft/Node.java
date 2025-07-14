@@ -13,13 +13,13 @@ import java.util.List;
 
 public class Node
 {
-    Trait trait;
+    List<Trait> traits;
     Vector2d coordinates;
 
-    public Node(Vector2d coordinates, Trait trait)
+    public Node(Vector2d coordinates, List<Trait> traits)
     {
         this.coordinates = coordinates;
-        this.trait = trait;
+        this.traits = traits;
     }
 
     public int GetTranslatedCoordinates(int fullRowSize, Vector2d offset)
@@ -30,20 +30,21 @@ public class Node
         return translatedCoordinates;
     }
 
-    public ItemStack GetNodeIcon()
+    public ItemStack GetNodeIcon(int level, boolean showLevel)
     {
         // generates the icon for this trait
         ItemStack nodeIcon = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
         ItemMeta traitIconMeta = nodeIcon.getItemMeta();
 
-        traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + trait.name);
+        if (showLevel) traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name + " " + level);
+        else traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(trait.main.GetTraitKey(), PersistentDataType.STRING, trait.name);
+        traitIconMeta.getPersistentDataContainer().set(traits.get(level-1).main.GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id);
 
         // add the description
-        List<String> lore = trait.GetTraitLore();
-        lore.removeFirst();
+        List<String> lore = traits.get(level-1).GetTraitLore();
+        lore.set(0, "Max Level " + traits.size());
 
         traitIconMeta.setLore(lore);
 
@@ -53,4 +54,23 @@ public class Node
         // return the icon
         return nodeIcon;
     }
+
+    public Trait GetTraitFromString(String traitName)
+    {
+        Trait trait = null;
+
+        for (Trait nodeTrait : traits)
+        {
+            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(nodeTrait.name_id);
+
+            if (nodeTrait.name_id.equals(traitName))
+            {
+                trait = traits.get(traits.indexOf(nodeTrait));
+            }
+        }
+
+        return trait;
+    }
+
+
 }
