@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,7 +52,14 @@ public class Pounce extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL))
+        {
+            Player player = (Player) e.getEntity();
 
+            int distance = (int) (player.getFallDistance()-1);
+
+            if (distance-3 < 1) e.setCancelled(true);
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits.Vitality;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,31 +15,31 @@ import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Vitality_1 extends Trait
+public class AnimalAgility extends Trait
 {
-    private AttributeModifier healthMod;
+    private AttributeModifier speedMod;
 
-    public Vitality_1(Main main) {
+    public AnimalAgility(Main main)
+    {
         // add the name and lore
-        super("Vitality", "vitality 1", ChatColor.AQUA, Material.APPLE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain one extra heart."
+        super("Animal Agility", "animal agility", ChatColor.AQUA, Material.SUGAR, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Gain more walking speed."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality_1"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        speedMod = new AttributeModifier(new NamespacedKey(main, "animal_agility"), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
+
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MAX_HEALTH).addModifier(healthMod);
-        player.setHealth(player.getHealth()+healthMod.getAmount());
+        player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(speedMod);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MAX_HEALTH).removeModifier(healthMod);
-        player.setHealth(player.getHealth()-healthMod.getAmount());
+        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
     }
 
     @Override
@@ -57,6 +57,7 @@ public class Vitality_1 extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+
     }
 
     @Override

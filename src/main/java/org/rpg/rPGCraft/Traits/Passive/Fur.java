@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
