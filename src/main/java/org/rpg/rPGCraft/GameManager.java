@@ -30,6 +30,13 @@ public class GameManager implements Listener {
     float LEGENDARY_MOB_CHANCE = 0.01f;
     int LEGENDARY_MOB_STAT_MULTIPLIER = 4;
 
+    // weapon lists
+    private final List<Material> swordTypes = new ArrayList<>();
+    private final List<Material> axeTypes = new ArrayList<>();
+    private final List<Material> bowTypes = new ArrayList<>();
+    private final List<Material> otherTypes = new ArrayList<>();
+    private final List<Material> weaponTypes = new ArrayList<>();
+
     public GameManager(Main main)
     {
         this.main = main;
@@ -42,6 +49,62 @@ public class GameManager implements Listener {
         main.getCommand("classXp").setTabCompleter(new ClassXPTab());
 
         main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
+    private void GenerateWeaponTypeLists()
+    {
+        // swords
+        swordTypes.add(Material.WOODEN_SWORD);
+        swordTypes.add(Material.STONE_SWORD);
+        swordTypes.add(Material.GOLDEN_SWORD);
+        swordTypes.add(Material.IRON_SWORD);
+        swordTypes.add(Material.DIAMOND_SWORD);
+        swordTypes.add(Material.NETHERITE_SWORD);
+
+        // axes
+        axeTypes.add(Material.WOODEN_AXE);
+        axeTypes.add(Material.STONE_AXE);
+        axeTypes.add(Material.GOLDEN_AXE);
+        axeTypes.add(Material.IRON_AXE);
+        axeTypes.add(Material.DIAMOND_AXE);
+        axeTypes.add(Material.NETHERITE_AXE);
+
+        // bows
+        bowTypes.add(Material.CROSSBOW);
+        bowTypes.add(Material.BOW);
+
+        // others
+        otherTypes.add(Material.TRIDENT);
+        otherTypes.add(Material.MACE);
+
+        // all weapons
+        weaponTypes.addAll(swordTypes);
+        weaponTypes.addAll(axeTypes);
+        weaponTypes.addAll(bowTypes);
+        weaponTypes.addAll(otherTypes);
+    }
+
+    public List<Material> GetSwordTypes()
+    {
+        return swordTypes;
+    }
+
+    public List<Material> GetAxeTypes()
+    {
+        return axeTypes;
+    }
+
+    public List<Material> GetBowTypes()
+    {
+        return bowTypes;
+    }
+
+    public List<Material> GetOtherTypes()
+    {
+        return otherTypes;
+    }
+
+    public List<Material> GetWeaponTypes()
+    {
+        return weaponTypes;
     }
 
     @EventHandler
