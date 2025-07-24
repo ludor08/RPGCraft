@@ -54,6 +54,55 @@ public class GameManager implements Listener {
 
         // Generate weapon type arrays
         GenerateWeaponTypeLists();
+
+        // set up the OnTick scheduler
+        AtomicInteger tick = new AtomicInteger();
+
+        Bukkit.getScheduler().runTaskTimer(main, () -> {
+            if (tick.get() >= 20)
+            {
+                tick.set(0);
+            }
+
+            tick.set(tick.get()+1);
+
+            OnTick(tick.get());
+        }, 20, 5);
+
+    }
+
+    private void OnTick(int tick)
+    {
+        // find all of the legendary mobs
+        List<Entity> legendaryEntities = new ArrayList<>();
+
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 50,50,50))
+            {
+                if (legendaryEntities.contains(entity))
+                {
+                    continue;
+                }
+
+                if (entity.getPersistentDataContainer().has(main.GetLegendaryMobKey())
+                    && entity.getPersistentDataContainer().get(main.GetLegendaryMobKey(), PersistentDataType.BOOLEAN))
+                {
+                    legendaryEntities.add(entity);
+                }
+            }
+        }
+
+        for (Entity entity : legendaryEntities)
+        {
+            Vector3d offset = new Vector3d(Math.cos((Math.PI*2)/((double) tick /20)), tick*0.1, Math.sin((Math.PI*2)/((double) tick /20)));
+            Location location = new Location(entity.getWorld(), entity.getLocation().getX() + offset.x, entity.getLocation().getY() + offset.y, entity.getLocation().getZ() + offset.z);
+
+            entity.getWorld().spawnParticle(Particle.SOUL, location, 10, 0,0,0,0);
+        }
+
+    }
+
     private void GenerateWeaponTypeLists()
     {
         // swords
