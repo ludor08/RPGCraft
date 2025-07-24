@@ -1,7 +1,6 @@
 package org.rpg.rPGCraft;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
@@ -13,14 +12,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.joml.Vector2d;
+import org.joml.Vector3d;
 import org.rpg.rPGCraft.commands.ClassLevelCommand;
 import org.rpg.rPGCraft.commands.ClassXPCommand;
 import org.rpg.rPGCraft.commands.ClassXPTab;
 import org.rpg.rPGCraft.commands.StatSheetCommand;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameManager implements Listener {
 
@@ -49,6 +51,9 @@ public class GameManager implements Listener {
         main.getCommand("classXp").setTabCompleter(new ClassXPTab());
 
         main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
+
+        // Generate weapon type arrays
+        GenerateWeaponTypeLists();
     private void GenerateWeaponTypeLists()
     {
         // swords
@@ -123,11 +128,19 @@ public class GameManager implements Listener {
         main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
         main.statSheetManager.FindStatSheetByPlayer(player).ResetClassPersistent();
 
+        // Check the persistents and add them if needed
+        CheckPersistent(player);
+
+    }
+
+    private void CheckPersistent(Player player)
+    {
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
         if (!player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
         {
             player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
         }
+
         // if the player has not yet chosen a class but has chosen a race when they join the game, give them a prompt to choose a class
         else if (!player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
         {
@@ -154,6 +167,23 @@ public class GameManager implements Listener {
             player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
         }
 
+        // if the player doesn't have an active trait input persistent
+        if (!player.getPersistentDataContainer().has(main.GetActiveTraitInputKey(), PersistentDataType.STRING))
+        {
+            player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+        }
+
+        // if the player doesn't have a mana persistent
+        if (!player.getPersistentDataContainer().has(main.GetManaKey(), PersistentDataType.INTEGER))
+        {
+            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, 100);
+        }
+
+        // if the player doesn't have a max mana persistent
+        if (!player.getPersistentDataContainer().has(main.GetManaMaxKey(), PersistentDataType.INTEGER))
+        {
+            player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, 100);
+        }
     }
 
     @EventHandler
@@ -172,49 +202,52 @@ public class GameManager implements Listener {
                 {
                     LivingEntity livingEntity = (LivingEntity)entity;
 
+                    // generate the level
+                    int level = (int) livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue()  / 4;
+                    String customName = "";
+
                     switch (entity.getType())
                     {
                         case WITHER :
+                            level = 200;
+
                             entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, 200);
-                            entity.setCustomName(ChatColor.BLACK + ChatColor.BOLD.toString() + entity.getName() + ChatColor.RED + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
+                            customName = ChatColor.BLACK + ChatColor.BOLD.toString() + entity.getName() + ChatColor.RED + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]";
                             break;
 
                         case ENDER_DRAGON :
+                            level = 200;
+
                             entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, 200);
-                            entity.setCustomName(ChatColor.DARK_PURPLE + ChatColor.BOLD.toString() + entity.getName() + ChatColor.RED + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
-                            break;
-
-                        default:
-                            // generate the level
-                            int level = (int) livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue()  / 4;
-
-                            // if this mob should be legendary
-                            if (random.nextFloat(0, 1) <= LEGENDARY_MOB_CHANCE)
-                            {
-                                for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage("done");
-
-                                // give it LEGENDARY_MOB_STAT_MULTIPLIER times the damage
-                                livingEntity.getAttribute(Attribute.ATTACK_DAMAGE).addModifier(new AttributeModifier(main.GetLevelStatModKey(), livingEntity.getAttribute(Attribute.ATTACK_DAMAGE).getValue()*LEGENDARY_MOB_STAT_MULTIPLIER-1, AttributeModifier.Operation.ADD_NUMBER));
-
-                                // give it LEGENDARY_MOB_STAT_MULTIPLIER times the hp and LEGENDARY_MOB_STAT_MULTIPLIER times the level
-                                livingEntity.getAttribute(Attribute.MAX_HEALTH).addModifier(new AttributeModifier(main.GetLevelStatModKey(), livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue()*LEGENDARY_MOB_STAT_MULTIPLIER-1, AttributeModifier.Operation.ADD_NUMBER));
-                                livingEntity.setHealth(livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
-                                level *= 4;
-
-                                // make it look legendary
-                                entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
-                                entity.setCustomName(ChatColor.DARK_RED + ChatColor.BOLD.toString() + "LEGENDARY " + entity.getName() + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
-                            }
-                            else
-                            {
-                                entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
-                                entity.setCustomName(entity.getName() + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
-                            }
-
-                            entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
-
+                            customName = ChatColor.DARK_PURPLE + ChatColor.BOLD.toString() + entity.getName() + ChatColor.RED + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]";
                             break;
                     }
+
+                    // if this mob should be legendary
+                    if (random.nextFloat(0, 1) <= LEGENDARY_MOB_CHANCE)
+                    {
+                        // give it LEGENDARY_MOB_STAT_MULTIPLIER times the damage
+                        livingEntity.getAttribute(Attribute.ATTACK_DAMAGE).addModifier(new AttributeModifier(main.GetLevelStatModKey(), livingEntity.getAttribute(Attribute.ATTACK_DAMAGE).getValue()*LEGENDARY_MOB_STAT_MULTIPLIER-1, AttributeModifier.Operation.ADD_NUMBER));
+
+                        // give it LEGENDARY_MOB_STAT_MULTIPLIER times the hp and LEGENDARY_MOB_STAT_MULTIPLIER times the level
+                        livingEntity.getAttribute(Attribute.MAX_HEALTH).addModifier(new AttributeModifier(main.GetLevelStatModKey(), livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue()*LEGENDARY_MOB_STAT_MULTIPLIER-1, AttributeModifier.Operation.ADD_NUMBER));
+                        livingEntity.setHealth(livingEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
+                        level *= 4;
+
+                        // make it look legendary
+                        entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
+                        entity.getPersistentDataContainer().set(main.GetLegendaryMobKey(), PersistentDataType.BOOLEAN, true);
+
+                        if (customName.isEmpty()) entity.setCustomName(ChatColor.DARK_RED + ChatColor.BOLD.toString() + "LEGENDARY " + entity.getName() + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
+                        else entity.setCustomName(ChatColor.DARK_RED + ChatColor.BOLD.toString() + "LEGENDARY " + customName);
+                    }
+                    else
+                    {
+                        entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
+                        if (customName.isEmpty()) entity.setCustomName(entity.getName() + " [lvl:" + entity.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER) + "]");
+                    }
+
+                    entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
                 }
             }
         }
