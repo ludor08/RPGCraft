@@ -33,6 +33,11 @@ public abstract class ActiveTrait extends Trait
 
             player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetCost());
         }
+        // if not
+        else
+        {
+            player.sendMessage(ChatColor.RED + "You do not have enough mana to use " + name + ChatColor.RED + ". " + "You need " + cost + " mana");
+        }
     }
 
     public abstract void TriggerActiveEvent(Player player);
