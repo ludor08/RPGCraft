@@ -3,6 +3,8 @@ package org.rpg.rPGCraft;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -14,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Trait
 {
@@ -28,7 +31,7 @@ public abstract class Trait
     boolean tickTrait;
 
     // main
-    Main main;
+    public Main main;
 
     public Trait(String name, String name_id, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
     {
@@ -41,6 +44,62 @@ public abstract class Trait
         this.main = main;
 
         this.tickTrait = tickTrait;
+    }
+
+    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player)
+    {
+        AttributeModifier attributeModifierWithKey = null;
+
+        for (AttributeModifier modifier : Objects.requireNonNull(player.getAttribute(attribute)).getModifiers())
+        {
+            // if the player has an attribute modifier with the same key
+            if (modifier.getKey().equals(attributeModifier.getKey()))
+            {
+                attributeModifierWithKey = modifier;
+            }
+        }
+
+        if (attributeModifierWithKey != null)
+        {
+            // remove the old attributeModifier
+            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+            // create a new AttributeModifier with the same key and the amount added together and add it
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
+        }
+        else
+        {
+            // add the attribute modifier normally
+            player.getAttribute(attribute).addModifier(attributeModifier);
+        }
+    }
+
+    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player)
+    {
+        AttributeModifier attributeModifierWithKey = null;
+
+        for (AttributeModifier modifier : Objects.requireNonNull(player.getAttribute(attribute)).getModifiers())
+        {
+            // if the player has an attribute modifier with the same key
+            if (modifier.getKey().equals(attributeModifier.getKey()))
+            {
+                attributeModifierWithKey = modifier;
+            }
+        }
+
+        if (!attributeModifierWithKey.equals(attributeModifier))
+        {
+            // remove the old attributeModifier
+            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+            // create a new AttributeModifier with the same key and the amount added together and add it
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
+        }
+        else
+        {
+            // add the attribute modifier normally
+            player.getAttribute(attribute).removeModifier(attributeModifier);
+        }
     }
 
     public ItemStack GetTraitIcon()
@@ -75,12 +134,17 @@ public abstract class Trait
         // add the name to the lore
         itemLore.add(ChatColor.AQUA.toString() + "- " + name + " :");
 
-        // go through every lore
-        for (int i = 0; i < lore.size(); i++)
+        // if this is an Active trait
+        if (this instanceof ActiveTrait activeTrait)
         {
-            // add the lore
-            itemLore.add(lore.get(i));
+            itemLore.add(ChatColor.BLUE + "Input Sequence : " +  main.statSheetManager.GenerateInputSequenceActionBar(activeTrait.GetInputSequence(), ChatColor.BLUE));
+            itemLore.add(ChatColor.BLUE + "Cost : " + activeTrait.GetCost());
+            itemLore.add(" ");
+            itemLore.add(ChatColor.AQUA + "On Activation :");
         }
+
+        // add the lore
+        itemLore.addAll(lore);
 
         // return item lore
         return itemLore;
