@@ -24,10 +24,14 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey levelKey = new NamespacedKey(this, "level");
     private final NamespacedKey classXPKey = new NamespacedKey(this, "class_xp");
     private final NamespacedKey treeProgressionKey = new NamespacedKey(this, "tree_progression");
+    private final NamespacedKey activeTraitInputKey = new NamespacedKey(this, "active_trait_input");
+    private final NamespacedKey manaKey = new NamespacedKey(this, "mana");
+    private final NamespacedKey manaMaxKey = new NamespacedKey(this, "mana_max");
 
     private final NamespacedKey weaponTypeKey = new NamespacedKey(this, "weapon_type");
     private final NamespacedKey customMobKey = new NamespacedKey(this, "custom_mob");
     private final NamespacedKey levelStatModKey = new NamespacedKey(this, "level_hp_mod");
+    private final NamespacedKey legendaryMobKey = new NamespacedKey(this, "legendary_mob");
 
     // choose able races
     private final List<Race> chooseAbleRaces = List.of(new Furoid(this));
@@ -39,6 +43,21 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetRaceKey()
     {
         return raceKey;
+    }
+
+    public NamespacedKey GetManaKey()
+    {
+        return manaKey;
+    }
+
+    public NamespacedKey GetManaMaxKey()
+    {
+        return manaMaxKey;
+    }
+
+    public NamespacedKey GetActiveTraitInputKey()
+    {
+        return activeTraitInputKey;
     }
 
     public NamespacedKey GetSubraceKey()
@@ -89,6 +108,11 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetTreeProgressionKey()
     {
         return treeProgressionKey;
+    }
+
+    public NamespacedKey GetLegendaryMobKey()
+    {
+        return legendaryMobKey;
     }
 
     public List<Race> GetChooseAbleRaces()
