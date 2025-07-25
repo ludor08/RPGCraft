@@ -13,6 +13,8 @@ public class StatSheet
     private UUID playerUUID;
     private Main main;
 
+    public BukkitTask manaTimer;
+
     public Player GetPlayer()
     {
         return Bukkit.getPlayer(playerUUID);
@@ -22,6 +24,22 @@ public class StatSheet
     {
         this.playerUUID = playerUUID;
         this.main = main;
+
+        // Check the mana
+        manaTimer = Bukkit.getScheduler().runTaskTimer(main, () ->
+        {
+            Player player = GetPlayer();
+
+            // if there's not a player
+            if (Bukkit.getOnlinePlayers().contains(player))
+            {
+                // if the player has less than their max mana
+                if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER))
+                {
+                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+1);
+                }
+            }
+        }, 20, 20);
     }
 
     public void AddTraits(Race race)
