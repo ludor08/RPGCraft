@@ -32,21 +32,40 @@ public class Node
         return translatedCoordinates;
     }
 
-    public ItemStack GetNodeIcon(int level, boolean showLevel)
+    public ItemStack GetNodeIcon(int level, boolean hasLevel)
     {
         // generates the icon for this trait
         ItemStack nodeIcon = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
         ItemMeta traitIconMeta = nodeIcon.getItemMeta();
 
-        if (showLevel) traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name + " " + level);
-        else traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name);
+        traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(traits.get(level-1).main.GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id);
+        traitIconMeta.getPersistentDataContainer().set(traits.get(level-1).main.GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id + id);
 
         // add the description
         List<String> lore = traits.get(level-1).GetTraitLore();
-        lore.set(0, "Max Level " + traits.size());
+
+        if (hasLevel) lore.set(0, ChatColor.GRAY + "Level " + level + ChatColor.DARK_GRAY + "/" + traits.size());
+        else lore.set(0, ChatColor.GRAY + "Level " + 0 + ChatColor.DARK_GRAY + "/" + traits.size());
+
+        // if there are more levels and it has a level
+        if (traits.size() > level && hasLevel)
+        {
+            lore.add(" ");
+            lore.add(ChatColor.GREEN + "====[NEXT LEVEL]====");
+
+            lore.add(ChatColor.GRAY + "Level " + (level+1) + ChatColor.DARK_GRAY + "/" + traits.size());
+
+            List<String> upgradeLore = traits.get(level).GetTraitLore();
+            upgradeLore.removeFirst();
+
+            for (String loreBit : upgradeLore)
+            {
+                lore.add(loreBit);
+            }
+
+        }
 
         traitIconMeta.setLore(lore);
 
