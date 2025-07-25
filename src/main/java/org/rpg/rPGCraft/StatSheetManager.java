@@ -108,6 +108,61 @@ public class StatSheetManager implements Listener
         Bukkit.getPluginManager().registerEvents(this,main);
     }
 
+    public String GenerateInputSequenceActionBar(String inputSequence, ChatColor color)
+    {
+        StringBuilder actionBar = new StringBuilder();
+
+        for (String part : inputSequence.split(""))
+        {
+            // if the actionBar is empty
+            if (actionBar.toString().isEmpty())
+            {
+                if (part.equals("0"))
+                {
+                    actionBar.append("[LEFT]");
+                }
+                // if the click was a right click
+                else if (part.equals("1"))
+                {
+                    actionBar.append("[RIGHT]");
+                }
+            }
+            // if it's not
+            else
+            {
+                if (part.equals("0"))
+                {
+                    actionBar.append(" [LEFT]");
+                }
+                // if the click was a right click
+                else if (part.equals("1"))
+                {
+                    actionBar.append(" [RIGHT]");
+                }
+            }
+        }
+
+        // add the blank inputs
+        if (3 - inputSequence.length() > 0)
+        {
+            actionBar.append(" [___]".repeat(Math.max(0, 3 - inputSequence.length())));
+        }
+
+        return color + actionBar.toString();
+    }
+
+    @EventHandler
+    public void OnPlayerInteract(PlayerInteractEvent e)
+    {
+        // if they clicked with a weapon
+        if (e.getHand() == EquipmentSlot.HAND
+            && main.gameManager.GetWeaponTypes().contains(e.getPlayer().getInventory().getItem(e.getHand()).getType()))
+        {
+            // update the input sequence with the new action
+            FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(e.getAction());
+        }
+    }
+
     @EventHandler
     public void OnRespawn(PlayerRespawnEvent e)
     {
