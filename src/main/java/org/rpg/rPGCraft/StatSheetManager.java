@@ -1,12 +1,8 @@
 package org.rpg.rPGCraft;
 
-import com.google.common.eventbus.DeadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
@@ -15,7 +11,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -284,4 +283,14 @@ public class StatSheetManager implements Listener
         }
     }
 
+    @EventHandler
+    public void OnLeaveEvent(PlayerQuitEvent e)
+    {
+        FindStatSheetByPlayer(e.getPlayer()).manaTimer.cancel();
+    }
+
+    public String GenerateManaActionBar(int mana, int maxMana)
+    {
+        return ChatColor.AQUA.toString() + mana + "/" + maxMana;
+    }
 }
