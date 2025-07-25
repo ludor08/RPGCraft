@@ -14,12 +14,14 @@ import java.util.List;
 public class Node
 {
     List<Trait> traits;
+    String id;
     Vector2d coordinates;
 
-    public Node(Vector2d coordinates, List<Trait> traits)
+    public Node(Vector2d coordinates, List<Trait> traits, String id)
     {
         this.coordinates = coordinates;
         this.traits = traits;
+        this.id = id;
     }
 
     public int GetTranslatedCoordinates(int fullRowSize, Vector2d offset)
@@ -61,9 +63,7 @@ public class Node
 
         for (Trait nodeTrait : traits)
         {
-            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(nodeTrait.name_id);
-
-            if (nodeTrait.name_id.equals(traitName))
+            if (nodeTrait.name_id.equals(traitName.replace(id, "")))
             {
                 trait = traits.get(traits.indexOf(nodeTrait));
             }
