@@ -1,10 +1,13 @@
 package org.rpg.rPGCraft;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.Action;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -49,7 +52,7 @@ public class StatSheet
         // Add the on add effects to the player
         for (Trait trait : traits)
         {
-            trait.OnGainTraitBuff(Bukkit.getPlayer(playerUUID));
+            trait.OnGainTraitBuff(GetPlayer());
         }
     }
 
@@ -59,7 +62,7 @@ public class StatSheet
         List<Trait> traits = new ArrayList<>();
 
         // the player
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // if the player has a parent race
         if (player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
@@ -97,13 +100,13 @@ public class StatSheet
         if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
         {
             // get the traits from said nodes
-            for (String traitName : Arrays.stream(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+            for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
             {
                 for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
                 {
                     for (Trait trait : node.traits)
                     {
-                        if (traitName.equals(trait.name))
+                        if (traitName.equals(trait.name_id+node.id))
                         {
                             traits.add(trait);
                         }
@@ -122,7 +125,7 @@ public class StatSheet
         // Add the on add effects to the player
         for (Trait trait : traits)
         {
-            trait.OnRemoveTraitBuff(Bukkit.getPlayer(playerUUID));
+            trait.OnRemoveTraitBuff(GetPlayer());
         }
     }
 
@@ -132,13 +135,13 @@ public class StatSheet
         List<Trait> selectedNodes = new ArrayList<>();
 
         // get the traits from said nodes
-        for (String traitName : Arrays.stream(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+        for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
         {
             for (Node node : playableClass.traitTree.nodes)
             {
                 for (Trait trait : node.traits)
                 {
-                    if (traitName.equals(trait.name_id))
+                    if (traitName.equals(trait.name_id+node.id))
                     {
                         selectedNodes.add(trait);
                     }
@@ -149,14 +152,72 @@ public class StatSheet
         // remove the traits from the player
         for (Trait removeTrait : selectedNodes)
         {
-            removeTrait.OnRemoveTraitBuff(Bukkit.getPlayer(playerUUID));
+            removeTrait.OnRemoveTraitBuff(GetPlayer());
         }
+    }
+
+    public void UpdateInputSequence(Action action)
+    {
+        Player player = GetPlayer();
+
+        // if the click was a left click
+        if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK))
+        {
+            player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetActiveTraitInputKey(), PersistentDataType.STRING) + "0");
+        }
+        // if the click was a right click
+        else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK))
+        {
+            player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetActiveTraitInputKey(), PersistentDataType.STRING) + "1");
+        }
+
+        // get the players action bar data
+        String inputSequence = player.getPersistentDataContainer().get(main.GetActiveTraitInputKey(), PersistentDataType.STRING);
+        int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+        int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+
+
+        // create the action bar
+        TextComponent actionBar = new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +
+                main.statSheetManager.GenerateManaActionBar(mana, maxMana));
+
+        player.sendMessage(ChatMessageType.ACTION_BAR, actionBar);
+
+        // if the player has less than 3 inputs store return
+        if (inputSequence.length() < 3)
+        {
+            return;
+        }
+
+        // go though and check the players traits
+        for (Trait trait : GetTraits())
+        {
+            // check if the trait is an instanceof ActiveTrait
+            if (trait instanceof ActiveTrait activeTrait)
+            {
+                // if the activeTraits input sequence is the same as the input sequence of the player
+                if (activeTrait.GetInputSequence().equals(inputSequence))
+                {
+                    activeTrait.OnInputSequence(player);
+
+                    // reset the input sequence
+                    player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
+                            main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
+                    player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+                    return;
+                }
+            }
+        }
+
+        // if none of the traits have the same input sequence as the players input sequence
+        player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+
     }
 
     public void SetClassPersistent(String playableClass)
     {
         // the player
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // Find the parent race script
         PlayableClass classOfClass = main.statSheetManager.FindClass(playableClass);
@@ -175,7 +236,7 @@ public class StatSheet
     public void SetRacePersistent(String subrace, String parentRace)
     {
         // the player
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // Find the parent race script
         Race raceOfParent = main.statSheetManager.FindRace(parentRace);
@@ -211,7 +272,7 @@ public class StatSheet
     public void ResetRacePersistent()
     {
         // the player
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // if the player has a race persistent
         if (player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
@@ -252,7 +313,7 @@ public class StatSheet
     public void ResetClassPersistent()
     {
         // the player
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // if the player has a race persistent
         if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
@@ -277,10 +338,10 @@ public class StatSheet
 
     public void GiveXP(int value)
     {
-        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
-        int currentXp = Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER);
+        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+        int currentXp = GetPlayer().getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER);
 
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // check if the players xp is more or equal to the xp needed to level up
         if (currentXp + value >= levelXpNeeded)
@@ -305,9 +366,9 @@ public class StatSheet
 
     public void SetXP(int value)
     {
-        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(Bukkit.getPlayer(playerUUID).getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
 
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = GetPlayer();
 
         // check if the players xp is more or equal to the xp needed to level up
         if (value >= levelXpNeeded)
@@ -328,5 +389,34 @@ public class StatSheet
         }
 
 
+    }
+
+    public int GetAvailableTraitPoints()
+    {
+        int traitPoints = GetPlayer().getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER);
+
+        List<String> selectedTraits = Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+        PlayableClass playableClass = main.statSheetManager.FindClass(GetPlayer().getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
+
+        // if the player has a class
+        if (playableClass != null)
+        {
+            // get the traits from said nodes
+            for (String traitName : selectedTraits)
+            {
+                for (Node node : playableClass.traitTree.nodes)
+                {
+                    for (Trait trait : node.traits)
+                    {
+                        if (traitName.equals(trait.name_id))
+                        {
+                            traitPoints -= node.traits.indexOf(trait)+1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return traitPoints;
     }
 }
