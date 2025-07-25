@@ -1,5 +1,7 @@
 package org.rpg.rPGCraft;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -12,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.commands.ClassLevelCommand;
 import org.rpg.rPGCraft.commands.ClassXPCommand;
@@ -73,11 +74,22 @@ public class GameManager implements Listener {
 
     private void OnTick(int tick)
     {
-        // find all of the legendary mobs
         List<Entity> legendaryEntities = new ArrayList<>();
 
         for (Player player : Bukkit.getOnlinePlayers())
         {
+            // show the players input sequence and mana
+            String inputSequence = player.getPersistentDataContainer().get(main.GetActiveTraitInputKey(), PersistentDataType.STRING);
+            int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+            int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+
+            TextComponent actionBar = new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +
+                    main.statSheetManager.GenerateManaActionBar(mana, maxMana));
+
+            player.sendMessage(ChatMessageType.ACTION_BAR, actionBar);
+
+
+            // find all of the legendary mobs that need to be given visuals
             for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 50,50,50))
             {
                 if (legendaryEntities.contains(entity))
