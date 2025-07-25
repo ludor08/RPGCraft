@@ -31,15 +31,14 @@ public class Vitality_1 extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MAX_HEALTH).addModifier(healthMod);
-        player.setHealth(player.getHealth()+healthMod.getAmount());
+        SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MAX_HEALTH).removeModifier(healthMod);
-        player.setHealth(player.getHealth()-healthMod.getAmount());
+        SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
+        if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
     }
 
     @Override
