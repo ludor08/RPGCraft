@@ -16,5 +16,6 @@ public class Insectoid extends Race
     public Insectoid(Main main)
     {
         super("Insectoid", ChatColor.GRAY, Material.ARMADILLO_SCUTE, List.of(new Size_Change_Tiny(main)),null);
+
     }
 }
