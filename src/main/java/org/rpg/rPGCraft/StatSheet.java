@@ -16,7 +16,7 @@ public class StatSheet
     private UUID playerUUID;
     private Main main;
 
-    public BukkitTask manaTimer;
+    public BukkitTask tickTimer;
 
     public Player GetPlayer()
     {
@@ -29,17 +29,22 @@ public class StatSheet
         this.main = main;
 
         // Check the mana
-        manaTimer = Bukkit.getScheduler().runTaskTimer(main, () ->
+        tickTimer = Bukkit.getScheduler().runTaskTimer(main, () ->
         {
             Player player = GetPlayer();
 
-            // if there's not a player
-            if (Bukkit.getOnlinePlayers().contains(player))
+            // if the player has less than their max mana
+            if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER))
             {
-                // if the player has less than their max mana
-                if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER))
+                player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+1);
+            }
+
+            // check if any of the trait are tick trait
+            for (Trait trait : GetTraits())
+            {
+                if (trait.tickTrait)
                 {
-                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+1);
+                    trait.OnTick(player);
                 }
             }
         }, 20, 20);

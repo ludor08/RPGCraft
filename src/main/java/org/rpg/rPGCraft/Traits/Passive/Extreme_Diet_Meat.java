@@ -7,19 +7,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class AbnormalDiet_Berries extends Trait
+public class Extreme_Diet_Meat extends Trait
 {
 
-    public AbnormalDiet_Berries(Main main) {
+    public Extreme_Diet_Meat(Main main) {
         // add the name and lore
-        super("Abnormal Diet:Berries", "abnormal diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Food other then berries only gives 0.75% saturation.",
-                ChatColor.AQUA.toString() + "   - Berries also give 2.5x the saturation."
+        super("Extreme Diet:Meat", "extreme diet:meat", ChatColor.AQUA, Material.MUTTON, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Do not gain saturation from foods other than meat",
+                ChatColor.AQUA.toString() + "   - Meat also gives 1.5x the saturation."
         ));
     }
 
@@ -63,26 +64,23 @@ public class AbnormalDiet_Berries extends Trait
         // if the player ate
         if (e.getItem() != null)
         {
-            float GOOD_FOOD_MULTIPLYER = 2.5f;
-            float BAD_FOOD_MULTIPLYER = 0.75f;
-
+            float GOOD_FOOD_MULTIPLYER = 1.5f;
 
             Player player = (Player) e.getEntity();
 
             // the change in food level
             int levelChange = e.getFoodLevel() - player.getFoodLevel();
 
-            // if they ate berry
-            if (e.getItem().getType().equals(Material.SWEET_BERRIES) ||
-                    e.getItem().getType().equals(Material.GLOW_BERRIES)) {
+            // if they ate raw fish
+            if (main.gameManager.GetMeatTypes().contains(e.getItem().getType())) {
                 // multiply the food gained by the GOOD_FOOD_MULTIPLYER
                 e.setFoodLevel((int) (levelChange * GOOD_FOOD_MULTIPLYER) + player.getFoodLevel());
             }
             // if not
             else
             {
-                // multiply the food gained by the BAD_FOOD_MULTIPLYER
-                e.setFoodLevel((int) (levelChange * BAD_FOOD_MULTIPLYER) + player.getFoodLevel());
+                // cancel the event
+                e.setCancelled(true);
             }
         }
     }

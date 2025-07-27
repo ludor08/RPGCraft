@@ -38,6 +38,11 @@ public class Pounce extends Trait
     }
 
     @Override
+    public void OnTick(Player player) {
+
+    }
+
+    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(jumpMod);

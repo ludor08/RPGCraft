@@ -31,6 +31,11 @@ public class Fur extends Trait
     }
 
     @Override
+    public void OnTick(Player player) {
+
+    }
+
+    @Override
     public void OnRemoveTraitBuff(Player player)
     {
 

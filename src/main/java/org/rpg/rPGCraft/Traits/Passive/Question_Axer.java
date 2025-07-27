@@ -14,6 +14,7 @@ import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Question_Axer extends Trait
 {
@@ -31,6 +32,12 @@ public class Question_Axer extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
+    }
+
+    @Override
+    public void OnTick(Player player)
+    {
+
     }
 
     @Override
@@ -53,16 +60,16 @@ public class Question_Axer extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-        float AXE_DAMAGE_MOD = 1.10f;
+        float DAMAGE_MOD = 1.10f;
 
         ItemStack weapon = ((Player) e.getDamager()).getInventory().getItem(EquipmentSlot.HAND);
 
         // if the player was using an axe or its name contains the word "axe"
-        if (weapon.getType().equals(Material.WOODEN_AXE) || weapon.getType().equals(Material.STONE_AXE) || weapon.getType().equals(Material.GOLDEN_AXE) || weapon.getType().equals(Material.IRON_AXE) || weapon.getType().equals(Material.DIAMOND_AXE) || weapon.getType().equals(Material.NETHERITE_AXE) ||
-                weapon.getPersistentDataContainer().get(main.GetWeaponTypeKey(), PersistentDataType.STRING).equals("axe"))
+        if (main.gameManager.GetAxeTypes().contains(weapon.getType()) ||
+                Objects.equals(weapon.getPersistentDataContainer().get(main.GetWeaponTypeKey(), PersistentDataType.STRING), "axe"))
         {
             // do AXE_DAMAGE_MOD times more damage
-            e.setDamage(e.getDamage()*AXE_DAMAGE_MOD);
+            e.setDamage(e.getDamage()*DAMAGE_MOD);
         }
     }
 

@@ -28,7 +28,7 @@ public abstract class Trait
     public List<String> lore;
 
     // type of buffs
-    boolean tickTrait;
+    public boolean tickTrait;
 
     // main
     public Main main;
@@ -153,19 +153,19 @@ public abstract class Trait
     // Add the buffs that need to be applied when you gain this trait
     public abstract void OnGainTraitBuff(Player player);
 
+    // Add the buffs that need to be applied when you gain this trait
+    public abstract void OnTick(Player player);
+
     // Cleanup the buffs that need to be removed when you lose this trait
     public abstract void OnRemoveTraitBuff(Player player);
 
     // Re add buffs that you lose when you die
     public abstract void OnRespawnBuffs(PlayerRespawnEvent e);
 
-    // Re add buffs that you lose when you die
     public abstract void OnTakeDamage(EntityDamageEvent e);
 
-    // Re add buffs that you lose when you die
     public abstract void OnDealDamage(EntityDamageByEntityEvent e);
 
-    // Re add buffs that you lose when you die
     public abstract void OnFoodLevelChange(FoodLevelChangeEvent e);
 
 

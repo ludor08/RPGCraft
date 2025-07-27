@@ -20,10 +20,10 @@ import org.rpg.rPGCraft.commands.ClassXPCommand;
 import org.rpg.rPGCraft.commands.ClassXPTab;
 import org.rpg.rPGCraft.commands.StatSheetCommand;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameManager implements Listener {
 
@@ -33,12 +33,16 @@ public class GameManager implements Listener {
     float LEGENDARY_MOB_CHANCE = 0.01f;
     int LEGENDARY_MOB_STAT_MULTIPLIER = 4;
 
-    // weapon lists
-    private final List<Material> swordTypes = new ArrayList<>();
-    private final List<Material> axeTypes = new ArrayList<>();
-    private final List<Material> bowTypes = new ArrayList<>();
-    private final List<Material> otherTypes = new ArrayList<>();
-    private final List<Material> weaponTypes = new ArrayList<>();
+    // type lists
+    private final List<Material> meatTypes = Arrays.asList(new Material[]{Material.COOKED_RABBIT, Material.RABBIT, Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON,
+            Material.TROPICAL_FISH, Material.PUFFERFISH, Material.RABBIT_STEW, Material.BEEF, Material.COOKED_BEEF, Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.MUTTON, Material.COOKED_MUTTON,
+            Material.CHICKEN, Material.COOKED_CHICKEN, Material.ROTTEN_FLESH});
+
+    private final List<Material> swordTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD});
+    private final List<Material> axeTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
+    private final List<Material> bowTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
+    private final List<Material> otherTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
+    private final List<Material> weaponTypes = Stream.of(swordTypes, axeTypes, bowTypes, otherTypes).flatMap(Collection::stream).collect(Collectors.toList());
 
     public GameManager(Main main)
     {
@@ -52,9 +56,6 @@ public class GameManager implements Listener {
         main.getCommand("classXp").setTabCompleter(new ClassXPTab());
 
         main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
-
-        // Generate weapon type arrays
-        GenerateWeaponTypeLists();
 
         // set up the OnTick scheduler
         AtomicInteger tick = new AtomicInteger();
@@ -115,42 +116,14 @@ public class GameManager implements Listener {
 
     }
 
-    private void GenerateWeaponTypeLists()
-    {
-        // swords
-        swordTypes.add(Material.WOODEN_SWORD);
-        swordTypes.add(Material.STONE_SWORD);
-        swordTypes.add(Material.GOLDEN_SWORD);
-        swordTypes.add(Material.IRON_SWORD);
-        swordTypes.add(Material.DIAMOND_SWORD);
-        swordTypes.add(Material.NETHERITE_SWORD);
-
-        // axes
-        axeTypes.add(Material.WOODEN_AXE);
-        axeTypes.add(Material.STONE_AXE);
-        axeTypes.add(Material.GOLDEN_AXE);
-        axeTypes.add(Material.IRON_AXE);
-        axeTypes.add(Material.DIAMOND_AXE);
-        axeTypes.add(Material.NETHERITE_AXE);
-
-        // bows
-        bowTypes.add(Material.CROSSBOW);
-        bowTypes.add(Material.BOW);
-
-        // others
-        otherTypes.add(Material.TRIDENT);
-        otherTypes.add(Material.MACE);
-
-        // all weapons
-        weaponTypes.addAll(swordTypes);
-        weaponTypes.addAll(axeTypes);
-        weaponTypes.addAll(bowTypes);
-        weaponTypes.addAll(otherTypes);
-    }
-
     public List<Material> GetSwordTypes()
     {
         return swordTypes;
+    }
+
+    public List<Material> GetMeatTypes()
+    {
+        return meatTypes;
     }
 
     public List<Material> GetAxeTypes()
@@ -181,7 +154,6 @@ public class GameManager implements Listener {
         // if there is no stat sheet assigned to a player when they join
         if (main.statSheetManager.FindStatSheetByPlayer(player) == null)
         {
-            player.sendMessage("added stat sheet");
             main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId(), main));
         }
 

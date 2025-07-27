@@ -2,38 +2,35 @@ package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class AnimalAgility extends Trait
+public class Claws extends Trait
 {
-    private AttributeModifier speedMod;
+    Main main;
 
-    public AnimalAgility(Main main)
-    {
+    public Claws(Main main) {
         // add the name and lore
-        super("Animal Agility", "animal agility", ChatColor.AQUA, Material.SUGAR, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain more walking speed."
+        super("Claws", "claws", ChatColor.AQUA, Material.GHAST_TEAR, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Does 3x the damage with hands."
         ));
 
-        speedMod = new AttributeModifier(new NamespacedKey(main, "animal_agility"), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
-
+        this.main = main;
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(speedMod);
     }
 
     @Override
@@ -44,7 +41,6 @@ public class AnimalAgility extends Trait
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
     }
 
     @Override
@@ -62,7 +58,16 @@ public class AnimalAgility extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+        float DAMAGE_MOD = 3f;
 
+        ItemStack weapon = ((Player) e.getDamager()).getInventory().getItem(EquipmentSlot.HAND);
+
+        // if the player was using an axe or its name contains the word "axe"
+        if (weapon.getType().equals(Material.AIR))
+        {
+            // do AXE_DAMAGE_MOD times more damage
+            e.setDamage(e.getDamage()*DAMAGE_MOD);
+        }
     }
 
     @Override
@@ -70,4 +75,6 @@ public class AnimalAgility extends Trait
     {
 
     }
+
+
 }

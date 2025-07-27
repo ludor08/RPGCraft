@@ -35,6 +35,11 @@ public class Vitality_2 extends Trait
     }
 
     @Override
+    public void OnTick(Player player) {
+
+    }
+
+    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);

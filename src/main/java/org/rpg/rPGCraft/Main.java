@@ -34,7 +34,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey legendaryMobKey = new NamespacedKey(this, "legendary_mob");
 
     // choose able races
-    private final List<Race> chooseAbleRaces = List.of(new Furoid(this));
+    private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this));
 
     // choose able classes
     private final List<PlayableClass> chooseAbleClasses = List.of(new Berserker(this));

@@ -2,6 +2,7 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
@@ -23,6 +24,8 @@ import java.util.Objects;
 
 public class StatSheetManager implements Listener
 {
+    public NamespacedKey nineLivesKey;
+
     Main main;
 
     // stat sheets
@@ -105,6 +108,17 @@ public class StatSheetManager implements Listener
     {
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this,main);
+
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            // if there is no stat sheet assigned to a player when they join
+            if (FindStatSheetByPlayer(player) == null)
+            {
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+
+        nineLivesKey = new NamespacedKey(main, "nine_lives");
     }
 
     public String GenerateInputSequenceActionBar(String inputSequence, ChatColor color)
@@ -286,7 +300,7 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnLeaveEvent(PlayerQuitEvent e)
     {
-        FindStatSheetByPlayer(e.getPlayer()).manaTimer.cancel();
+        FindStatSheetByPlayer(e.getPlayer()).tickTimer.cancel();
     }
 
     public String GenerateManaActionBar(int mana, int maxMana)

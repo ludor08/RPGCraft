@@ -15,36 +15,35 @@ import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class AnimalAgility extends Trait
+public class Size_Change_Small extends Trait
 {
-    private AttributeModifier speedMod;
+    private AttributeModifier sizeMod;
 
-    public AnimalAgility(Main main)
-    {
+    public Size_Change_Small(Main main) {
         // add the name and lore
-        super("Animal Agility", "animal agility", ChatColor.AQUA, Material.SUGAR, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain more walking speed."
+        super("Size Change:Small", "size change:small", ChatColor.AQUA, Material.IRON_NUGGET, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Makes the player a little smaller (0.5 blocks)."
         ));
 
-        speedMod = new AttributeModifier(new NamespacedKey(main, "animal_agility"), 0.1d, AttributeModifier.Operation.ADD_NUMBER);
-
+        sizeMod = new AttributeModifier(new NamespacedKey(main, "small"), -0.25d, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(speedMod);
+        player.getAttribute(Attribute.SCALE).addModifier(sizeMod);
     }
 
     @Override
-    public void OnTick(Player player) {
+    public void OnTick(Player player)
+    {
 
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
+        player.getAttribute(Attribute.SCALE).removeModifier(sizeMod);
     }
 
     @Override
@@ -62,7 +61,6 @@ public class AnimalAgility extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-
     }
 
     @Override

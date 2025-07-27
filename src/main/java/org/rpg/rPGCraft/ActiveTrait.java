@@ -48,6 +48,12 @@ public abstract class ActiveTrait extends Trait
     }
 
     @Override
+    public void OnTick(Player player)
+    {
+
+    }
+
+    @Override
     public void OnGainTraitBuff(Player player)
     {
 

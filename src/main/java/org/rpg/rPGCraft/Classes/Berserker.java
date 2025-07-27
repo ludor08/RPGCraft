@@ -20,9 +20,10 @@ public class Berserker extends PlayableClass
     public Berserker(Main main)
     {
         super("Berserker", ChatColor.RED, Material.IRON_AXE, List.of(ChatColor.AQUA + "Close range fight that can take a beating, and give it right back."), new TraitTree(List.of(
-                new Node(new Vector2d(4,0), List.of(new Vitality_1(main), new Vitality_2(main))),
-                new Node(new Vector2d(3,1), List.of(new Question_Axer(main))),
-                new Node(new Vector2d(4,1), List.of(new Rage(main)))
+                new Node(new Vector2d(4,0), List.of(new Vitality_1(main), new Vitality_2(main)), "000"),
+                new Node(new Vector2d(3,1), List.of(new Question_Axer(main)), "000"),
+                new Node(new Vector2d(4,1), List.of(new Rage(main)), "000"),
+                new Node(new Vector2d(3,2), List.of(new Vitality_1(main), new Vitality_2(main)), "001")
         )));
     }
 }
