@@ -2,30 +2,32 @@ package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class FelineAgility extends Trait
+public class Wings extends Trait
 {
-    private AttributeModifier jumpMod;
 
-    public FelineAgility(Main main) {
+    final float flapPower = 0.5f;
+
+    public Wings(Main main) {
         // add the name and lore
-        super("Feline Agility", "feline agility", ChatColor.AQUA, Material.FEATHER, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Takes fall damage as if they fall half as far."
+        super("Wings", "wings", ChatColor.AQUA, Material.ELYTRA, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Sneak to flap wings and get a small burst of velocity up",
+                ChatColor.AQUA.toString() + "   - No fall damage."
         ));
     }
 
@@ -57,12 +59,7 @@ public class FelineAgility extends Trait
     {
         if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL))
         {
-            Player player = (Player) e.getEntity();
-
-            int distance = (int) (player.getFallDistance()/2);
-
-            if (distance-3 < 1) e.setCancelled(true);
-            else e.setDamage(e.getDamage()/2);
+            e.setCancelled(true);
         }
     }
 
@@ -81,6 +78,13 @@ public class FelineAgility extends Trait
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
     {
+        if (!e.getPlayer().isSneaking() && !e.getPlayer().isFlying())
+        {
+            Vector3d currentVelocity = e.getPlayer().getVelocity().toVector3d();
 
+            e.getPlayer().setVelocity(new Vector(currentVelocity.x, flapPower, currentVelocity.z));
+            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_BEE_POLLINATE, 0.5f,0.5f);
+            e.getPlayer().getWorld().spawnParticle(Particle.POOF, e.getPlayer().getLocation(), 20);
+        }
     }
 }

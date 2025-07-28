@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
@@ -80,5 +81,9 @@ public class Arthropod_trait extends Trait
 
     }
 
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
 
+    }
 }

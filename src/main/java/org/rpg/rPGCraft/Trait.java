@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -159,7 +160,6 @@ public abstract class Trait
     // Cleanup the buffs that need to be removed when you lose this trait
     public abstract void OnRemoveTraitBuff(Player player);
 
-    // Re add buffs that you lose when you die
     public abstract void OnRespawnBuffs(PlayerRespawnEvent e);
 
     public abstract void OnTakeDamage(EntityDamageEvent e);
@@ -167,6 +167,8 @@ public abstract class Trait
     public abstract void OnDealDamage(EntityDamageByEntityEvent e);
 
     public abstract void OnFoodLevelChange(FoodLevelChangeEvent e);
+
+    public abstract void OnSneak(PlayerToggleSneakEvent e);
 
 
 }

@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
@@ -83,5 +84,11 @@ public class Extreme_Diet_Meat extends Trait
                 e.setCancelled(true);
             }
         }
+    }
+
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
     }
 }

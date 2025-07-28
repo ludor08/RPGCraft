@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
@@ -87,5 +88,11 @@ public class AbnormalDiet_Raw_Fish extends Trait
                 e.setFoodLevel((int) (levelChange * BAD_FOOD_MULTIPLYER) + player.getFoodLevel());
             }
         }
+    }
+
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
     }
 }

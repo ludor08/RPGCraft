@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
@@ -85,6 +86,12 @@ public abstract class ActiveTrait extends Trait
 
     @Override
     public void OnFoodLevelChange(FoodLevelChangeEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
     {
 
     }

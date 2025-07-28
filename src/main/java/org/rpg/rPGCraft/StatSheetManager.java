@@ -15,6 +15,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -258,6 +259,27 @@ public class StatSheetManager implements Listener
                 // give them one :)
                 AddStatSheet(new StatSheet(player.getUniqueId(), main));
             }
+        }
+    }
+
+    @EventHandler
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(player) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            {
+                trait.OnSneak(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(player.getUniqueId(), main));
         }
     }
 

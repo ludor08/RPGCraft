@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
@@ -84,5 +85,9 @@ public class Fur extends Trait
 
     }
 
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
 
+    }
 }

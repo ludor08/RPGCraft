@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
@@ -145,5 +146,9 @@ public class Pack extends Trait
 
     }
 
+    @Override
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
 
+    }
 }
