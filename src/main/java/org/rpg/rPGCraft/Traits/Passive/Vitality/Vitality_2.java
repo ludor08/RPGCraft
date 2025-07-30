@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive.Vitality;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,7 +27,7 @@ public class Vitality_2 extends Trait
                 ChatColor.AQUA.toString() + "   - Gain one and a half extra hearts."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality_2"), 3, AttributeModifier.Operation.ADD_NUMBER);
+        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 3, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
@@ -72,6 +73,12 @@ public class Vitality_2 extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

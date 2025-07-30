@@ -10,13 +10,15 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatSheet
 {
     private UUID playerUUID;
     private Main main;
 
-    public BukkitTask tickTimer;
+    private BukkitTask tickTimer = null;
+    private final Runnable tickRunnable;
 
     public Player GetPlayer()
     {
@@ -28,13 +30,21 @@ public class StatSheet
         this.playerUUID = playerUUID;
         this.main = main;
 
-        // Check the mana
-        tickTimer = Bukkit.getScheduler().runTaskTimer(main, () ->
+        // set up the tick runnable
+        AtomicInteger tick = new AtomicInteger();
+        tickRunnable = () ->
         {
+            if (tick.get() >= 10)
+            {
+                tick.set(0);
+            }
+
+            tick.set(tick.get()+1);
+
             Player player = GetPlayer();
 
             // if the player has less than their max mana
-            if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER))
+            if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER) && tick.get() == 1)
             {
                 player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+1);
             }
@@ -47,7 +57,32 @@ public class StatSheet
                     trait.OnTick(player);
                 }
             }
-        }, 20, 20);
+        };
+
+        StartTickTimer();
+    }
+
+    public void StartTickTimer()
+    {
+        tickTimer = Bukkit.getScheduler().runTaskTimer(main, tickRunnable, 2, 2);
+    }
+
+    public void StopTickTimer()
+    {
+        if (!tickTimer.isCancelled())
+        {
+            tickTimer.cancel();
+        }
+    }
+
+    public boolean IsTickTimerRunning()
+    {
+        if (tickTimer == null || tickTimer.isCancelled())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public void AddTraits(Race race)

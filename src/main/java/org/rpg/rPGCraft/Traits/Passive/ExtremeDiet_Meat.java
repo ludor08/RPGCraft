@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,16 +9,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Extreme_Diet_Meat extends Trait
+public class ExtremeDiet_Meat extends Trait
 {
 
-    public Extreme_Diet_Meat(Main main) {
+    public ExtremeDiet_Meat(Main main) {
         // add the name and lore
         super("Extreme Diet:Meat", "extreme diet:meat", ChatColor.AQUA, Material.MUTTON, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Do not gain saturation from foods other than meat",
@@ -88,6 +88,12 @@ public class Extreme_Diet_Meat extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

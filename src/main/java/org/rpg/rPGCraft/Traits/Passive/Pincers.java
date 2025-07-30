@@ -1,39 +1,37 @@
-package org.rpg.rPGCraft.Traits.Passive.Vitality;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Vitality_1 extends Trait
+public class Pincers extends Trait
 {
-    private AttributeModifier healthMod;
+    Main main;
 
-    public Vitality_1(Main main) {
+    public Pincers(Main main) {
         // add the name and lore
-        super("Vitality", "vitality 1", ChatColor.AQUA, Material.APPLE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain one extra heart."
+        super("Pincers", "pincers", ChatColor.AQUA, Material.SHEARS, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Does 3x the damage with hands."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        this.main = main;
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
     }
 
     @Override
@@ -44,8 +42,6 @@ public class Vitality_1 extends Trait
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
-        if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
     }
 
     @Override
@@ -63,6 +59,16 @@ public class Vitality_1 extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+        float DAMAGE_MOD = 3f;
+
+        ItemStack weapon = ((Player) e.getDamager()).getInventory().getItem(EquipmentSlot.HAND);
+
+        // if the player was using their hands
+        if (weapon.getType().equals(Material.AIR))
+        {
+            // do DAMAGE_MOD times more damage
+            e.setDamage(e.getDamage()*DAMAGE_MOD);
+        }
     }
 
     @Override

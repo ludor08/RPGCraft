@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -12,10 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -166,7 +164,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnPlayerInteract(PlayerInteractEvent e)
+    public void OnPlayerInteractEvent(PlayerInteractEvent e)
     {
         // if they clicked with a weapon
         if (e.getHand() == EquipmentSlot.HAND
@@ -178,7 +176,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnRespawn(PlayerRespawnEvent e)
+    public void OnRespawnEvent(PlayerRespawnEvent e)
     {
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(e.getPlayer()) != null)
@@ -197,7 +195,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnTakeDamage(EntityDamageEvent e)
+    public void OnTakeDamageEvent(EntityDamageEvent e)
     {
         if (e.getEntity() instanceof Player player)
         {
@@ -219,7 +217,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnDealDamage(EntityDamageByEntityEvent e)
+    public void OnDealDamageEvent(EntityDamageByEntityEvent e)
     {
         if (e.getDamager() instanceof Player player)
         {
@@ -241,7 +239,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnFoodLevelChangeDamage(FoodLevelChangeEvent e)
+    public void OnFoodLevelChangeDamageEvent(FoodLevelChangeEvent e)
     {
         if (e.getEntity() instanceof Player player)
         {
@@ -263,7 +261,7 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
-    public void OnSneak(PlayerToggleSneakEvent e)
+    public void OnSneakEvent(PlayerToggleSneakEvent e)
     {
         Player player = e.getPlayer();
 
@@ -273,6 +271,27 @@ public class StatSheetManager implements Listener
             for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
             {
                 trait.OnSneak(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        }
+    }
+
+    @EventHandler
+    public void OnJumpEvent(PlayerJumpEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(player) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            {
+                trait.OnJump(e);
             }
         }
         // if they do not have one
@@ -322,7 +341,16 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnLeaveEvent(PlayerQuitEvent e)
     {
-        FindStatSheetByPlayer(e.getPlayer()).tickTimer.cancel();
+        FindStatSheetByPlayer(e.getPlayer()).StopTickTimer();
+    }
+
+    @EventHandler
+    public void OnJoinEvent(PlayerJoinEvent e)
+    {
+        if (!FindStatSheetByPlayer(e.getPlayer()).IsTickTimerRunning())
+        {
+            FindStatSheetByPlayer(e.getPlayer()).StartTickTimer();
+        }
     }
 
     public String GenerateManaActionBar(int mana, int maxMana)

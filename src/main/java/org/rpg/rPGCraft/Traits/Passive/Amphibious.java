@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits.Passive.Vitality;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
@@ -6,46 +6,45 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Vitality_1 extends Trait
+public class Amphibious extends Trait
 {
-    private AttributeModifier healthMod;
-
-    public Vitality_1(Main main) {
+    public Amphibious(Main main) {
         // add the name and lore
-        super("Vitality", "vitality 1", ChatColor.AQUA, Material.APPLE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain one extra heart."
+        super("Amphibious", "amphibious", ChatColor.AQUA, Material.POTION, true, main, List.of(
+                ChatColor.AQUA.toString() + "   - Gains the conduit power effect."
         ));
-
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 2, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
+
     }
 
     @Override
-    public void OnTick(Player player) {
-
+    public void OnTick(Player player)
+    {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 50, 0));
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
-        if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
+
     }
 
     @Override
@@ -63,6 +62,7 @@ public class Vitality_1 extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
+
     }
 
     @Override

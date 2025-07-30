@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -84,6 +85,12 @@ public class NineLives extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

@@ -596,6 +596,12 @@ public class MenuManager implements Listener
             // cancel the event so the player can't take items
             e.setCancelled(true);
         }
+        // if the player is in the select subrace inventory
+        else if (ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.BOLD.toString() + "Confirm Subrace?"))
+        {
+            // cancel the event so the player can't take items
+            e.setCancelled(true);
+        }
     }
 
     public Inventory CreateTraitTreeMenu(Player player, PlayableClass playableClass, String title, String origin, Vector2d offset)

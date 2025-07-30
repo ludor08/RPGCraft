@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -84,7 +85,12 @@ public class Wings extends Trait
 
             e.getPlayer().setVelocity(new Vector(currentVelocity.x, flapPower, currentVelocity.z));
             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_BEE_POLLINATE, 0.5f,0.5f);
-            e.getPlayer().getWorld().spawnParticle(Particle.POOF, e.getPlayer().getLocation(), 20);
         }
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
+    {
+
     }
 }

@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits.Passive.Vitality;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
@@ -17,23 +17,23 @@ import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
 
-public class Vitality_1 extends Trait
+public class Exoskeleton extends Trait
 {
-    private AttributeModifier healthMod;
+    private AttributeModifier armorMod;
 
-    public Vitality_1(Main main) {
+    public Exoskeleton(Main main) {
         // add the name and lore
-        super("Vitality", "vitality 1", ChatColor.AQUA, Material.APPLE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain one extra heart."
+        super("Exoskeleton", "exoskeleton", ChatColor.AQUA, Material.CHAINMAIL_CHESTPLATE, false, main, List.of(
+                ChatColor.AQUA.toString() + "   - Gain four extra base armor."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        armorMod = new AttributeModifier(new NamespacedKey(main, "exoskeleton"), 4, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
+        SafeAttributeAdd(Attribute.ARMOR, armorMod, player);
     }
 
     @Override
@@ -44,8 +44,7 @@ public class Vitality_1 extends Trait
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
-        if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
+        SafeAttributeRemove(Attribute.ARMOR, armorMod, player);
     }
 
     @Override

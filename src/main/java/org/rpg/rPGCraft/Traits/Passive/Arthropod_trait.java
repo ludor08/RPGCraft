@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -59,7 +60,7 @@ public class Arthropod_trait extends Trait
         // the damage is coming from an entity
         if ((damageCause.equals(DamageCause.ENTITY_SWEEP_ATTACK) || damageCause.equals(DamageCause.ENTITY_ATTACK) || damageCause.equals(DamageCause.ENTITY_EXPLOSION)))
         {
-            ItemStack weapon = ((LivingEntity)(e.getEntity()).getLastDamageCause().getDamageSource().getCausingEntity()).getEquipment().getItem(EquipmentSlot.HAND);
+            ItemStack weapon = ((LivingEntity)e.getDamageSource().getCausingEntity()).getEquipment().getItem(EquipmentSlot.HAND);
 
             // if the weapon has Bane of Arthropods
             if (weapon.getType() != Material.AIR && weapon.getItemMeta().getEnchants().containsKey(Enchantment.BANE_OF_ARTHROPODS))
@@ -83,6 +84,12 @@ public class Arthropod_trait extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

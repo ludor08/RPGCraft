@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -63,10 +64,10 @@ public class Claws extends Trait
 
         ItemStack weapon = ((Player) e.getDamager()).getInventory().getItem(EquipmentSlot.HAND);
 
-        // if the player was using an axe or its name contains the word "axe"
+        // if the player was using their hands
         if (weapon.getType().equals(Material.AIR))
         {
-            // do AXE_DAMAGE_MOD times more damage
+            // do DAMAGE_MOD times more damage
             e.setDamage(e.getDamage()*DAMAGE_MOD);
         }
     }
@@ -79,6 +80,12 @@ public class Claws extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

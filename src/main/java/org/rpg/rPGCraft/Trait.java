@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -169,6 +170,8 @@ public abstract class Trait
     public abstract void OnFoodLevelChange(FoodLevelChangeEvent e);
 
     public abstract void OnSneak(PlayerToggleSneakEvent e);
+
+    public abstract void OnJump(PlayerJumpEvent e);
 
 
 }

@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,7 +24,7 @@ public class Size_Change_Tiny extends Trait
     public Size_Change_Tiny(Main main) {
         // add the name and lore
         super("Size Change:Tiny", "size change:tiny", ChatColor.AQUA, Material.IRON_NUGGET, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Makes the player a little smaller (1.5 blocks)."
+                ChatColor.AQUA.toString() + "   - Makes the player a lot smaller (1.5 blocks)."
         ));
 
         sizeMod = new AttributeModifier(new NamespacedKey(main, "tiny"), -0.5d, AttributeModifier.Operation.ADD_NUMBER);
@@ -72,6 +73,12 @@ public class Size_Change_Tiny extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }

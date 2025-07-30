@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -31,7 +32,7 @@ public class Pack extends Trait
         super("Pack", "pack", ChatColor.AQUA, Material.BONE, true, main, List.of(
                 ChatColor.AQUA.toString() + "   - For every tamed wolf or a player (these can be any race)",
                 ChatColor.AQUA.toString() + "     within 10 blocks that hasn’t the last damage source, ",
-                ChatColor.AQUA.toString() + "     you gain +2 base defense, and +1 damage,",
+                ChatColor.AQUA.toString() + "     you gain +2 base defense (to a max of +10), and +1 damage (to a max of +5),",
                 ChatColor.AQUA.toString() + "     and the wolf(s) and the player(s) gain resistance one."
         ));
 
@@ -148,6 +149,12 @@ public class Pack extends Trait
 
     @Override
     public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    @Override
+    public void OnJump(PlayerJumpEvent e)
     {
 
     }
