@@ -31,29 +31,6 @@ public class FelineAgility extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
         if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL))
@@ -65,29 +42,5 @@ public class FelineAgility extends Trait
             if (distance-3 < 1) e.setCancelled(true);
             else e.setDamage(e.getDamage()/2);
         }
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

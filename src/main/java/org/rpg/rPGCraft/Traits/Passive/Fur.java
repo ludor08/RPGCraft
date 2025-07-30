@@ -18,35 +18,13 @@ import java.util.List;
 public class Fur extends Trait
 {
 
-    public Fur(Main main) {
+    public Fur(Main main)
+    {
         // add the name and lore
         super("Fur", "fur", ChatColor.AQUA, Material.RABBIT_HIDE, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Takes 0.5x cold damage.",
                 ChatColor.AQUA.toString() + "   - Takes 1.5x damage from fire."
         ));
-    }
-
-    @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
     }
 
     @Override
@@ -72,29 +50,5 @@ public class Fur extends Trait
             if (e.getEntity() instanceof Player player) player.sendMessage("cold damage: " + e.getDamage() + "->" + ((int)e.getDamage() * COLD_DAMAGE_MOD));
             e.setDamage(e.getDamage() * COLD_DAMAGE_MOD);
         }
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

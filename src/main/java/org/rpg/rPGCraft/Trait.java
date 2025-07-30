@@ -153,25 +153,52 @@ public abstract class Trait
     }
 
     // Add the buffs that need to be applied when you gain this trait
-    public abstract void OnGainTraitBuff(Player player);
+    public void OnGainTraitBuff(Player player)
+    {
+
+    }
 
     // Add the buffs that need to be applied when you gain this trait
-    public abstract void OnTick(Player player);
+    public void OnTick(Player player)
+    {
+
+    }
 
     // Cleanup the buffs that need to be removed when you lose this trait
-    public abstract void OnRemoveTraitBuff(Player player);
+    public void OnRemoveTraitBuff(Player player)
+    {
 
-    public abstract void OnRespawnBuffs(PlayerRespawnEvent e);
+    }
 
-    public abstract void OnTakeDamage(EntityDamageEvent e);
+    public void OnRespawnBuffs(PlayerRespawnEvent e)
+    {
 
-    public abstract void OnDealDamage(EntityDamageByEntityEvent e);
+    }
 
-    public abstract void OnFoodLevelChange(FoodLevelChangeEvent e);
+    public void OnTakeDamage(EntityDamageEvent e)
+    {
 
-    public abstract void OnSneak(PlayerToggleSneakEvent e);
+    }
 
-    public abstract void OnJump(PlayerJumpEvent e);
+    public void OnDealDamage(EntityDamageByEntityEvent e)
+    {
+
+    }
+
+    public void OnFoodLevelChange(FoodLevelChangeEvent e)
+    {
+
+    }
+
+    public void OnSneak(PlayerToggleSneakEvent e)
+    {
+
+    }
+
+    public void OnJump(PlayerJumpEvent e)
+    {
+
+    }
 
 
 }

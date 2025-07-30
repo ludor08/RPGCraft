@@ -39,49 +39,8 @@ public class AnimalAgility extends Trait
     }
 
     @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

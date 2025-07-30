@@ -33,47 +33,12 @@ public class Wings extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
         if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL))
         {
             e.setCancelled(true);
         }
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
     }
 
     @Override
@@ -86,11 +51,5 @@ public class Wings extends Trait
             e.getPlayer().setVelocity(new Vector(currentVelocity.x, flapPower, currentVelocity.z));
             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_BEE_POLLINATE, 0.5f,0.5f);
         }
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

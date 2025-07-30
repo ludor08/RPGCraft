@@ -30,29 +30,6 @@ public class Arthropod_trait extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
         DamageCause damageCause = e.getCause();
@@ -68,29 +45,5 @@ public class Arthropod_trait extends Trait
                 e.setDamage(e.getDamage()+(weapon.getItemMeta().getEnchants().get(Enchantment.BANE_OF_ARTHROPODS).byteValue()+1));
             }
         }
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

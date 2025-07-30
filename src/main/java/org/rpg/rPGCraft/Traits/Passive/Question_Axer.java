@@ -32,34 +32,6 @@ public class Question_Axer extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-    }
-
-    @Override
-    public void OnTick(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
         float DAMAGE_MOD = 1.10f;
@@ -73,23 +45,5 @@ public class Question_Axer extends Trait
             // do AXE_DAMAGE_MOD times more damage
             e.setDamage(e.getDamage()*DAMAGE_MOD);
         }
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

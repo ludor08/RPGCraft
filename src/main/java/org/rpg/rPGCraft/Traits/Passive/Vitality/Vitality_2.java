@@ -37,49 +37,9 @@ public class Vitality_2 extends Trait
     }
 
     @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
         if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

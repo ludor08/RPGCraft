@@ -26,40 +26,6 @@ public class AbnormalDiet_Berries extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-    }
-
-    @Override
     public void OnFoodLevelChange(FoodLevelChangeEvent e)
     {
         // if the player ate
@@ -87,17 +53,5 @@ public class AbnormalDiet_Berries extends Trait
                 e.setFoodLevel((int) (levelChange * BAD_FOOD_MULTIPLYER) + player.getFoodLevel());
             }
         }
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

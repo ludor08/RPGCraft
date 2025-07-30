@@ -34,11 +34,6 @@ public class ManyLegs extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-    }
-
-    @Override
     public void OnTick(Player player)
     {
         float offset = 0.25f;
@@ -68,46 +63,5 @@ public class ManyLegs extends Trait
 
 
         }
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

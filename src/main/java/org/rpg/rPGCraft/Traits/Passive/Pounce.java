@@ -40,20 +40,9 @@ public class Pounce extends Trait
     }
 
     @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(jumpMod);
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
     }
 
     @Override
@@ -83,23 +72,5 @@ public class Pounce extends Trait
             // do pounceCritMod more damage
             e.setDamage(e.getDamage()* POUNCE_CRIT_MOD);
         }
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

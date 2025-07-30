@@ -39,11 +39,6 @@ public class NineLives extends Trait
     }
 
     @Override
-    public void OnTick(Player player) {
-
-    }
-
-    @Override
     public void OnRemoveTraitBuff(Player player)
     {
         player.getPersistentDataContainer().remove(main.statSheetManager.nineLivesKey);
@@ -69,29 +64,5 @@ public class NineLives extends Trait
 
             e.getEntity().getPersistentDataContainer().set(main.statSheetManager.nineLivesKey, PersistentDataType.BOOLEAN, false);
         }
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }

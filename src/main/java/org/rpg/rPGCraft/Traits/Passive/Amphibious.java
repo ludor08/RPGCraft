@@ -30,56 +30,8 @@ public class Amphibious extends Trait
     }
 
     @Override
-    public void OnGainTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
     public void OnTick(Player player)
     {
         player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 50, 0));
-    }
-
-    @Override
-    public void OnRemoveTraitBuff(Player player)
-    {
-
-    }
-
-    @Override
-    public void OnRespawnBuffs(PlayerRespawnEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnTakeDamage(EntityDamageEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnDealDamage(EntityDamageByEntityEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
-    {
-
-    }
-
-    @Override
-    public void OnJump(PlayerJumpEvent e)
-    {
-
     }
 }
