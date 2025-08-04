@@ -14,6 +14,7 @@ public final class Main extends JavaPlugin implements Listener
     public MenuManager menuManager;
     public StatSheetManager statSheetManager;
     public GameManager gameManager;
+    public ItemManager itemManager;
 
     // NamespacedKeys
     private final NamespacedKey raceKey = new NamespacedKey(this, "race");
@@ -34,7 +35,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey legendaryMobKey = new NamespacedKey(this, "legendary_mob");
 
     // choose able races
-    private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this));
+    private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this), new Fungoid(this));
 
     // choose able classes
     private final List<PlayableClass> chooseAbleClasses = List.of(new Berserker(this));
@@ -133,5 +134,6 @@ public final class Main extends JavaPlugin implements Listener
         menuManager = new MenuManager(this);
         statSheetManager = new StatSheetManager(this);
         gameManager = new GameManager(this);
+        itemManager = new ItemManager(this);
     }
 }

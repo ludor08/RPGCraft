@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Race;
-import org.rpg.rPGCraft.Traits.Passive.AbnormalDiet_Raw_Fish;
+import org.rpg.rPGCraft.Traits.Passive.Diet.AbnormalDiet_Raw_Fish;
 import org.rpg.rPGCraft.Traits.Passive.Claws;
 import org.rpg.rPGCraft.Traits.Passive.FelineAgility;
 import org.rpg.rPGCraft.Traits.Passive.NineLives;

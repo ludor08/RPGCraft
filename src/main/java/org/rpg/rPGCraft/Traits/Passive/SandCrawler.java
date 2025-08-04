@@ -68,9 +68,7 @@ public class SandCrawler extends Trait
 
         if (footMaterial.equals(Material.WATER) || footMaterial.equals(Material.KELP_PLANT) || footMaterial.equals(Material.SEAGRASS) || footMaterial.equals(Material.TALL_SEAGRASS))
         {
-            Material floorMaterial = player.getWorld().getBlockAt(player.getLocation().add(new Vector(0, -0.1, 0))).getType();
-
-            if (!floorMaterial.equals(Material.AIR) && !floorMaterial.equals(Material.WATER) && !floorMaterial.equals(Material.KELP_PLANT) && !floorMaterial.equals(Material.SEAGRASS) && !floorMaterial.equals(Material.TALL_SEAGRASS))
+            if (player.getWorld().getBlockAt(player.getLocation().add(new Vector(0, -0.1, 0))).isSolid())
             {
                 if (!player.getAttribute(Attribute.WATER_MOVEMENT_EFFICIENCY).getModifiers().contains(waterSpeedMod))
                 {

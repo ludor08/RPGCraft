@@ -1,24 +1,26 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class Trait
 {
@@ -50,16 +52,7 @@ public abstract class Trait
 
     public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player)
     {
-        AttributeModifier attributeModifierWithKey = null;
-
-        for (AttributeModifier modifier : Objects.requireNonNull(player.getAttribute(attribute)).getModifiers())
-        {
-            // if the player has an attribute modifier with the same key
-            if (modifier.getKey().equals(attributeModifier.getKey()))
-            {
-                attributeModifierWithKey = modifier;
-            }
-        }
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
 
         if (attributeModifierWithKey != null)
         {
@@ -76,32 +69,140 @@ public abstract class Trait
         }
     }
 
-    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player)
+    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player, float max)
     {
-        AttributeModifier attributeModifierWithKey = null;
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
 
-        for (AttributeModifier modifier : Objects.requireNonNull(player.getAttribute(attribute)).getModifiers())
-        {
-            // if the player has an attribute modifier with the same key
-            if (modifier.getKey().equals(attributeModifier.getKey()))
-            {
-                attributeModifierWithKey = modifier;
-            }
-        }
-
-        if (!attributeModifierWithKey.equals(attributeModifier))
+        if (attributeModifierWithKey != null)
         {
             // remove the old attributeModifier
             player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
 
             // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
         }
         else
         {
             // add the attribute modifier normally
-            player.getAttribute(attribute).removeModifier(attributeModifier);
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
         }
+    }
+
+    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player, int max)
+    {
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
+
+        if (attributeModifierWithKey != null)
+        {
+            // remove the old attributeModifier
+            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+            // create a new AttributeModifier with the same key and the amount added together and add it
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
+        }
+        else
+        {
+            // add the attribute modifier normally
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
+        }
+    }
+
+    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player)
+    {
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
+
+        if (attributeModifierWithKey != null)
+        {
+            if (!attributeModifierWithKey.equals(attributeModifier))
+            {
+                // remove the old attributeModifier
+                player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+                // create a new AttributeModifier with the same key and the amount added together and add it
+                player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
+            }
+            else
+            {
+                // add the attribute modifier normally
+                player.getAttribute(attribute).removeModifier(attributeModifier);
+            }
+        }
+    }
+
+    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player, float min)
+    {
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
+
+        if (attributeModifierWithKey != null)
+        {
+            // remove the old attributeModifier
+            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+            // create a new AttributeModifier with the same key and the amount added together and add it
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.max(attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), min), AttributeModifier.Operation.ADD_NUMBER));
+        }
+    }
+
+    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player, int min)
+    {
+        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
+
+        if (attributeModifierWithKey != null)
+        {
+            // remove the old attributeModifier
+            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
+
+            // create a new AttributeModifier with the same key and the amount added together and add it
+            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.max(attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), min), AttributeModifier.Operation.ADD_NUMBER));
+        }
+    }
+
+    public Location Recast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks)
+    {
+        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
+
+        for (int i = 0; i < numberOfChecks; i++)
+        {
+            // update the position
+            position.add(direction); // may not be actually updating the variable
+
+            // check if the block at said position is solid and the recast is stopped by solid blocks
+            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
+            {
+                // break out of the loop
+                break;
+            }
+        }
+
+        return new Location(location.getWorld(), position.x, position.y, position.z);
+    }
+
+    public Location Recast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Particle particle, int numberOfParticles)
+    {
+        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
+
+        for (int i = 0; i < numberOfChecks; i++)
+        {
+            // update the position
+            position.add(direction); // may not be actually updating the variable
+
+            // spawn the particle
+            location.getWorld().spawnParticle(particle, location, numberOfParticles);
+
+            for (Player player : Bukkit.getOnlinePlayers())
+            {
+                player.sendMessage(position + "");
+            }
+
+            // check if the block at said position is solid and the recast is stopped by solid blocks
+            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
+            {
+                // break out of the loop
+                break;
+            }
+        }
+
+        return new Location(location.getWorld(), position.x, position.y, position.z);
     }
 
     public ItemStack GetTraitIcon()
@@ -128,7 +229,7 @@ public abstract class Trait
         return traitIcon;
     }
 
-    // get lore as a item lore friendly String List
+    // get lore as an item lore friendly String List
     public List<String> GetTraitLore()
     {
         List<String> itemLore = new ArrayList<>();
@@ -152,13 +253,13 @@ public abstract class Trait
         return itemLore;
     }
 
-    // Add the buffs that need to be applied when you gain this trait
+    // the buffs that need to be applied when you gain this trait
     public void OnGainTraitBuff(Player player)
     {
 
     }
 
-    // Add the buffs that need to be applied when you gain this trait
+    // the buffs that need to be applied when you gain this trait
     public void OnTick(Player player)
     {
 
@@ -169,6 +270,8 @@ public abstract class Trait
     {
 
     }
+
+
 
     public void OnRespawnBuffs(PlayerRespawnEvent e)
     {
@@ -200,5 +303,24 @@ public abstract class Trait
 
     }
 
+    public void OnPlayerItemConsume(PlayerItemConsumeEvent e)
+    {
+
+    }
+
+    public void OnPickUpXP(PlayerPickupExperienceEvent e)
+    {
+
+    }
+
+    public void OnClick(PlayerInteractEvent e)
+    {
+
+    }
+
+    public void OnTargeted(EntityTargetEvent e)
+    {
+
+    }
 
 }

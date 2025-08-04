@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Race;
-import org.rpg.rPGCraft.Traits.Passive.AbnormalDiet_Berries;
+import org.rpg.rPGCraft.Traits.Passive.Diet.AbnormalDiet_Berries;
 import org.rpg.rPGCraft.Traits.Passive.Pounce;
 
 import java.util.List;

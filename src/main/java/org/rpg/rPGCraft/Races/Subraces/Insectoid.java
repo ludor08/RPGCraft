@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Race;
-import org.rpg.rPGCraft.Traits.Passive.AbnormalDiet_Berries;
-import org.rpg.rPGCraft.Traits.Passive.Pounce;
 import org.rpg.rPGCraft.Traits.Passive.Size_Change_Tiny;
 import org.rpg.rPGCraft.Traits.Passive.Wings;
 

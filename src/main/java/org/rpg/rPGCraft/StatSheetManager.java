@@ -1,6 +1,7 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -9,10 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
@@ -299,6 +297,92 @@ public class StatSheetManager implements Listener
         {
             // give them one :)
             AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        }
+    }
+
+    @EventHandler
+    public void OnGainXPEvent(PlayerPickupExperienceEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(player) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            {
+                trait.OnPickUpXP(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        }
+    }
+
+    @EventHandler
+    public void OnItemConsumeEvent(PlayerItemConsumeEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(player) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            {
+                trait.OnPlayerItemConsume(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        }
+    }
+
+    @EventHandler
+    public void OnClickEvent(PlayerInteractEvent e)
+    {
+        Player player = e.getPlayer();
+
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(player) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            {
+                trait.OnClick(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        }
+    }
+
+    @EventHandler
+    public void OnEntityTargetEvent(EntityTargetEvent e)
+    {
+        // if a player is being targeted
+        if (e.getTarget() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                {
+                    trait.OnTargeted(e);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
         }
     }
 
