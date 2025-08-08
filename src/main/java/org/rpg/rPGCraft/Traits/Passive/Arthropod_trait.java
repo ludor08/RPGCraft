@@ -25,7 +25,7 @@ public class Arthropod_trait extends Trait
     public Arthropod_trait(Main main) {
         // add the name and lore
         super("Arthropod", "arthropod trait", ChatColor.AQUA, Material.FERMENTED_SPIDER_EYE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Half weak to Bane of Arthropods."
+                ChatColor.AQUA.toString() + "   - Takes two damage per level of Bane of Arthropods."
         ));
     }
 
@@ -42,7 +42,7 @@ public class Arthropod_trait extends Trait
             // if the weapon has Bane of Arthropods
             if (weapon.getType() != Material.AIR && weapon.getItemMeta().getEnchants().containsKey(Enchantment.BANE_OF_ARTHROPODS))
             {
-                e.setDamage(e.getDamage()+(weapon.getItemMeta().getEnchants().get(Enchantment.BANE_OF_ARTHROPODS).byteValue()+1));
+                e.setDamage(e.getDamage()+((weapon.getItemMeta().getEnchants().get(Enchantment.BANE_OF_ARTHROPODS).byteValue()+1)*2));
             }
         }
     }

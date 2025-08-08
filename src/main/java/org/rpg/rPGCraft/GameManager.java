@@ -38,14 +38,14 @@ public class GameManager implements Listener {
     int LEGENDARY_MOB_STAT_MULTIPLIER = 4;
 
     // type lists
-    private final List<Material> meatTypes = Arrays.asList(new Material[]{Material.COOKED_RABBIT, Material.RABBIT, Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON,
+    private final List<Material> meatTypes = List.of(Material.COOKED_RABBIT, Material.RABBIT, Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON,
             Material.TROPICAL_FISH, Material.PUFFERFISH, Material.RABBIT_STEW, Material.BEEF, Material.COOKED_BEEF, Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.MUTTON, Material.COOKED_MUTTON,
-            Material.CHICKEN, Material.COOKED_CHICKEN, Material.ROTTEN_FLESH});
+            Material.CHICKEN, Material.COOKED_CHICKEN, Material.ROTTEN_FLESH);
 
-    private final List<Material> swordTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD});
-    private final List<Material> axeTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
-    private final List<Material> bowTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
-    private final List<Material> otherTypes = Arrays.asList(new Material[]{Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD});
+    private final List<Material> swordTypes = List.of(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD);
+    private final List<Material> axeTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
+    private final List<Material> bowTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
+    private final List<Material> otherTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
     private final List<Material> weaponTypes = Stream.of(swordTypes, axeTypes, bowTypes, otherTypes).flatMap(Collection::stream).collect(Collectors.toList());
 
     public GameManager(Main main)
@@ -213,6 +213,12 @@ public class GameManager implements Listener {
         if (!player.getPersistentDataContainer().has(main.GetManaKey(), PersistentDataType.INTEGER))
         {
             player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, 100);
+        }
+
+        // if the player doesn't have a mana recharge speed persistent
+        if (!player.getPersistentDataContainer().has(main.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER))
+        {
+            player.getPersistentDataContainer().set(main.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER, 1);
         }
 
         // if the player doesn't have a max mana persistent

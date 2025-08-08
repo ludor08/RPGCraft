@@ -30,7 +30,7 @@ public class StatSheet
         this.playerUUID = playerUUID;
         this.main = main;
 
-        // set up the tick runnable
+        // set up the tick runnable // if this becomes too legging move to StatSheetManger and make work for all player at once
         AtomicInteger tick = new AtomicInteger();
         tickRunnable = () ->
         {
@@ -44,9 +44,20 @@ public class StatSheet
             Player player = GetPlayer();
 
             // if the player has less than their max mana
-            if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) < player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER) && tick.get() == 1)
+            int startingMana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+            int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+            int manaRechargeSpeed = player.getPersistentDataContainer().get(main.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER);
+
+            if (tick.get() == 1 && startingMana < maxMana)
             {
-                player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+1);
+                if (startingMana+manaRechargeSpeed < maxMana)
+                {
+                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, startingMana+manaRechargeSpeed);
+                }
+                else
+                {
+                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, maxMana);
+                }
             }
 
             // check if any of the trait are tick trait

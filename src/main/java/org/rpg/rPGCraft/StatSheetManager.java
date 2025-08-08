@@ -115,6 +115,7 @@ public class StatSheetManager implements Listener
             }
         }
 
+        // set up the trait specific namespacedKeys
         nineLivesKey = new NamespacedKey(main, "nine_lives");
     }
 

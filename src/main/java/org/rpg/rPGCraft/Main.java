@@ -27,6 +27,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey treeProgressionKey = new NamespacedKey(this, "tree_progression");
     private final NamespacedKey activeTraitInputKey = new NamespacedKey(this, "active_trait_input");
     private final NamespacedKey manaKey = new NamespacedKey(this, "mana");
+    private final NamespacedKey manaRechargeSpeedKey = new NamespacedKey(this, "mana_recharge_speed");
     private final NamespacedKey manaMaxKey = new NamespacedKey(this, "mana_max");
 
     private final NamespacedKey weaponTypeKey = new NamespacedKey(this, "weapon_type");
@@ -35,7 +36,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey legendaryMobKey = new NamespacedKey(this, "legendary_mob");
 
     // choose able races
-    private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this), new Fungoid(this));
+    private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this), new Fungoid(this), new Crystalloid(this));
 
     // choose able classes
     private final List<PlayableClass> chooseAbleClasses = List.of(new Berserker(this));
@@ -49,6 +50,11 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetManaKey()
     {
         return manaKey;
+    }
+
+    public NamespacedKey GetManaRechargeSpeedKey()
+    {
+        return manaRechargeSpeedKey;
     }
 
     public NamespacedKey GetManaMaxKey()
