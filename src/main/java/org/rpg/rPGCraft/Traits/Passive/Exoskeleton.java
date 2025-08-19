@@ -13,6 +13,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
@@ -33,12 +34,12 @@ public class Exoskeleton extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.ARMOR, armorMod, player);
+        RPGutils.SafeAttributeAdd(Attribute.ARMOR, armorMod, player);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.ARMOR, armorMod, player);
+        RPGutils.SafeAttributeRemove(Attribute.ARMOR, armorMod, player);
     }
 }

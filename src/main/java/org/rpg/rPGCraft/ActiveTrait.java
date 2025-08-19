@@ -23,7 +23,7 @@ public abstract class ActiveTrait extends Trait
     public void OnInputSequence(Player player)
     {
         // if the player has the needed mana
-        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetCost() > 0)
+        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetCost() >= 0)
         {
             TriggerActiveEvent(player);
 

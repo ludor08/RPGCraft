@@ -66,8 +66,6 @@ public class Piezoelectric extends Trait
             if (player.getPersistentDataContainer().get(storedDamage, PersistentDataType.DOUBLE)-0.1 > 0)
             {
                 player.getPersistentDataContainer().set(storedDamage, PersistentDataType.DOUBLE, player.getPersistentDataContainer().get(storedDamage, PersistentDataType.DOUBLE)-0.1);
-
-                player.sendMessage(player.getPersistentDataContainer().get(storedDamage, PersistentDataType.DOUBLE)+"");
             }
             else
             {

@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.persistence.PersistentDataType;
@@ -42,6 +43,29 @@ public class StatSheet
             tick.set(tick.get()+1);
 
             Player player = GetPlayer();
+
+            // if this player has a input sequence reset delay
+            if (player.getPersistentDataContainer().has(new NamespacedKey(main, "input_sequence_reset_delay")))
+            {
+                // if it is more than 0
+                if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) > 0)
+                {
+                    // remove 1
+                    player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER)-1); // TODO make use a tick in the config file
+
+                    // if it is 0
+                    if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) <= 0)
+                    {
+                        int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+                        int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+
+                        // reset the input sequence
+                        player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
+                                main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
+                        player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+                    }
+                }
+            }
 
             // if the player has less than their max mana
             int startingMana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
@@ -210,6 +234,7 @@ public class StatSheet
     public void UpdateInputSequence(Action action)
     {
         Player player = GetPlayer();
+        player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, 50); // TODO make use a tick in the config file
 
         // if the click was a left click
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK))
@@ -226,7 +251,6 @@ public class StatSheet
         String inputSequence = player.getPersistentDataContainer().get(main.GetActiveTraitInputKey(), PersistentDataType.STRING);
         int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
         int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
-
 
         // create the action bar
         TextComponent actionBar = new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +

@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -13,7 +14,11 @@ import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.commands.ClassLevelCommand;
@@ -43,9 +48,9 @@ public class GameManager implements Listener {
             Material.CHICKEN, Material.COOKED_CHICKEN, Material.ROTTEN_FLESH);
 
     private final List<Material> swordTypes = List.of(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD);
-    private final List<Material> axeTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
-    private final List<Material> bowTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
-    private final List<Material> otherTypes = List.of(Material.WOODEN_SWORD,Material.STONE_SWORD,Material.IRON_SWORD,Material.GOLDEN_SWORD,Material.DIAMOND_SWORD,Material.NETHERITE_SWORD);
+    private final List<Material> axeTypes = List.of(Material.WOODEN_AXE,Material.STONE_AXE,Material.IRON_AXE,Material.GOLDEN_AXE,Material.DIAMOND_AXE,Material.NETHERITE_AXE);
+    private final List<Material> bowTypes = List.of(Material.BOW,Material.CROSSBOW);
+    private final List<Material> otherTypes = List.of(Material.TRIDENT,Material.MACE);
     private final List<Material> weaponTypes = Stream.of(swordTypes, axeTypes, bowTypes, otherTypes).flatMap(Collection::stream).collect(Collectors.toList());
 
     public GameManager(Main main)
@@ -291,6 +296,23 @@ public class GameManager implements Listener {
 
                     entity.getPersistentDataContainer().set(main.GetLevelKey(), PersistentDataType.INTEGER, level);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnBrewEvent(BrewEvent e)
+    {
+        List<ItemStack> results = e.getResults();
+        for (ItemStack result : results)
+        {
+            // if there is a result
+            if (result.getType() != Material.AIR)
+            {
+                ItemMeta resultMeta = result.getItemMeta();
+                resultMeta.getPersistentDataContainer().set(new NamespacedKey(main, "wasJustBrewed"), PersistentDataType.BOOLEAN, true);
+
+                result.setItemMeta(resultMeta);
             }
         }
     }

@@ -1,18 +1,26 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.*;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -28,19 +36,17 @@ public class StatSheetManager implements Listener
     // stat sheets
     private List<StatSheet> statSheets = new ArrayList<>();
 
-    int[] levelXPRequirements = {
-            50,
-            75,
-            115,
-            175,
-            265,
-            400,
-            600
-    };
-
     public int GetLevelXPRequirements(int level)
     {
-        return levelXPRequirements[level-1];
+        // set up the starting xp needed for a level up
+        int neededXp = 50;
+
+        for (int i = 1; i < level; i++)
+        {
+            neededXp += (int) Math.floor(neededXp*1.5);
+        }
+
+        return neededXp;
     }
 
     public StatSheet FindStatSheetByPlayer(Player player)
@@ -165,12 +171,36 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnPlayerInteractEvent(PlayerInteractEvent e)
     {
-        // if they clicked with a weapon
-        if (e.getHand() == EquipmentSlot.HAND
-            && main.gameManager.GetWeaponTypes().contains(e.getPlayer().getInventory().getItem(e.getHand()).getType()))
+        // if they didn't click with a block or an empty hand
+        if (e.getHand() == EquipmentSlot.HAND && !e.isBlockInHand() && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
         {
+            // if they interacted with a block
+            if (e.getClickedBlock() != null)
+            {
+                BlockState state = e.getClickedBlock().getState();
+
+                // if they interacted with an interactable block
+                if (e.getClickedBlock().getType().isInteractable() || (state instanceof InventoryHolder || state instanceof Barrel || state instanceof Beacon || state instanceof Bed || state instanceof Beehive || state instanceof Bell || state instanceof BrewingStand || state instanceof Campfire
+                        || state instanceof Chest || state instanceof ChiseledBookshelf || state instanceof CommandBlock || state instanceof Comparator || state instanceof Container || state instanceof Crafter || state instanceof DaylightDetector || state instanceof Dispenser || state instanceof DoubleChest || state instanceof Dropper
+                        || state instanceof EnchantingTable || state instanceof EnderChest || state instanceof Furnace || state instanceof HangingSign || state instanceof Hopper || state instanceof Jigsaw || state instanceof Jukebox || state instanceof Lockable || state instanceof Sign || state instanceof Smoker))
+                {
+                    return;
+                }
+            }
+
             // update the input sequence with the new action
             FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(e.getAction());
+        }
+    }
+
+    @EventHandler
+    public void OnPlayerInteractEntityEvent(PlayerInteractEntityEvent e)
+    {
+        // if they didn't click with an empty hand
+        if (e.getHand() == EquipmentSlot.HAND && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
+        {
+            // update the input sequence with the new action
+            //FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(Action.RIGHT_CLICK_AIR);
         }
     }
 
@@ -227,6 +257,102 @@ public class StatSheetManager implements Listener
                 {
                     trait.OnDealDamage(e);
                 }
+
+                if (player.getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
+                {
+                    // update the input sequence with the new action
+                    FindStatSheetByPlayer(player).UpdateInputSequence(Action.LEFT_CLICK_AIR);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnProjectileHitEvent(ProjectileHitEvent e)
+    {
+        if (e.getEntity().getShooter() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                {
+                    trait.OnShootProjectileHit(e);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnLaunchProjectileEvent(ProjectileLaunchEvent e)
+    {
+        if (e.getEntity().getShooter() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                {
+                    trait.OnLaunchProjectile(e);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnInventoryClickEvent(InventoryClickEvent e)
+    {
+        if (e.getWhoClicked() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                // if the player clicked in an inventory
+                if (e.getClickedInventory() != null)
+                {
+                    NamespacedKey wasJustBrewed = new NamespacedKey(main, "wasJustBrewed");
+
+                    for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                    {
+                        trait.OnInventoryClick(e);
+                    }
+
+                    // if the player clicked an item
+                    if (e.getClickedInventory().getItem(e.getSlot()) != null)
+                    {
+                        // if the item is newly brewed
+                        if (e.getCurrentItem().getPersistentDataContainer().has(wasJustBrewed))
+                        {
+                            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                            {
+                                trait.OnTakePotionFromBrewingStand(e);
+                            }
+
+                            ItemMeta newlyBrewedMeta = e.getCurrentItem().getItemMeta();
+                            newlyBrewedMeta.getPersistentDataContainer().remove(wasJustBrewed);
+
+                            e.getCurrentItem().setItemMeta(newlyBrewedMeta);
+                        }
+                    }
+                }
             }
             // if they do not have one
             else
@@ -269,7 +395,7 @@ public class StatSheetManager implements Listener
         {
             for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
             {
-                trait.OnSneak(e);
+                trait.OnToggleSneak(e);
             }
         }
         // if they do not have one

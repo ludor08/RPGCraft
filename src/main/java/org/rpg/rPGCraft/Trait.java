@@ -1,15 +1,16 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -48,161 +49,6 @@ public abstract class Trait
         this.main = main;
 
         this.tickTrait = tickTrait;
-    }
-
-    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            // remove the old attributeModifier
-            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-            // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
-        }
-        else
-        {
-            // add the attribute modifier normally
-            player.getAttribute(attribute).addModifier(attributeModifier);
-        }
-    }
-
-    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player, float max)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            // remove the old attributeModifier
-            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-            // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
-        }
-        else
-        {
-            // add the attribute modifier normally
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
-        }
-    }
-
-    public void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player, int max)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            // remove the old attributeModifier
-            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-            // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifierWithKey.getAmount() + attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
-        }
-        else
-        {
-            // add the attribute modifier normally
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.min(attributeModifier.getAmount(), max), AttributeModifier.Operation.ADD_NUMBER));
-        }
-    }
-
-    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            if (!attributeModifierWithKey.equals(attributeModifier))
-            {
-                // remove the old attributeModifier
-                player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-                // create a new AttributeModifier with the same key and the amount added together and add it
-                player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), AttributeModifier.Operation.ADD_NUMBER));
-            }
-            else
-            {
-                // add the attribute modifier normally
-                player.getAttribute(attribute).removeModifier(attributeModifier);
-            }
-        }
-    }
-
-    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player, float min)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            // remove the old attributeModifier
-            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-            // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.max(attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), min), AttributeModifier.Operation.ADD_NUMBER));
-        }
-    }
-
-    public void SafeAttributeRemove(Attribute attribute, AttributeModifier attributeModifier, Player player, int min)
-    {
-        AttributeModifier attributeModifierWithKey = player.getAttribute(attribute).getModifier(attributeModifier.getKey());
-
-        if (attributeModifierWithKey != null)
-        {
-            // remove the old attributeModifier
-            player.getAttribute(attribute).removeModifier(attributeModifierWithKey);
-
-            // create a new AttributeModifier with the same key and the amount added together and add it
-            player.getAttribute(attribute).addModifier(new AttributeModifier(attributeModifier.getKey(), Math.max(attributeModifierWithKey.getAmount() - attributeModifier.getAmount(), min), AttributeModifier.Operation.ADD_NUMBER));
-        }
-    }
-
-    public Location Recast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks)
-    {
-        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
-
-        for (int i = 0; i < numberOfChecks; i++)
-        {
-            // update the position
-            position.add(direction); // may not be actually updating the variable
-
-            // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
-            {
-                // break out of the loop
-                break;
-            }
-        }
-
-        return new Location(location.getWorld(), position.x, position.y, position.z);
-    }
-
-    public Location Recast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Particle particle, int numberOfParticles)
-    {
-        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
-
-        for (int i = 0; i < numberOfChecks; i++)
-        {
-            // update the position
-            position.add(direction); // may not be actually updating the variable
-
-            // spawn the particle
-            location.getWorld().spawnParticle(particle, location, numberOfParticles);
-
-            for (Player player : Bukkit.getOnlinePlayers())
-            {
-                player.sendMessage(position + "");
-            }
-
-            // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
-            {
-                // break out of the loop
-                break;
-            }
-        }
-
-        return new Location(location.getWorld(), position.x, position.y, position.z);
     }
 
     public ItemStack GetTraitIcon()
@@ -288,12 +134,22 @@ public abstract class Trait
 
     }
 
+    public void OnShootProjectileHit(ProjectileHitEvent e)
+    {
+
+    }
+
+    public void OnLaunchProjectile(ProjectileLaunchEvent e)
+    {
+
+    }
+
     public void OnFoodLevelChange(FoodLevelChangeEvent e)
     {
 
     }
 
-    public void OnSneak(PlayerToggleSneakEvent e)
+    public void OnToggleSneak(PlayerToggleSneakEvent e)
     {
 
     }
@@ -314,6 +170,16 @@ public abstract class Trait
     }
 
     public void OnClick(PlayerInteractEvent e)
+    {
+
+    }
+
+    public void OnInventoryClick(InventoryClickEvent e)
+    {
+
+    }
+
+    public void OnTakePotionFromBrewingStand(InventoryClickEvent e)
     {
 
     }

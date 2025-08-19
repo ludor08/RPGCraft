@@ -25,7 +25,7 @@ public class Rage extends ActiveTrait
 
     public Rage(Main main) {
         // add the name and lore
-        super("Signature Ability : " + ChatColor.DARK_RED + ChatColor.BOLD + "Rage", "rage", 60, ChatColor.AQUA, Material.REDSTONE, false, main, List.of(
+        super("Rage", "rage", 60, ChatColor.AQUA, Material.REDSTONE, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Gain resistance and strength one for 30 seconds"
         ));
     }
@@ -33,12 +33,13 @@ public class Rage extends ActiveTrait
     @Override
     public String GetInputSequence()
     {
-        return "000";
+        return "001";
     }
 
     @Override
     public void TriggerActiveEvent(Player player)
     {
+        // TODO make use attributes
         player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
 

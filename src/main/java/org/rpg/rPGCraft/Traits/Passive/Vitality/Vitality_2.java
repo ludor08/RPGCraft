@@ -13,6 +13,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
@@ -33,13 +34,13 @@ public class Vitality_2 extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
+        RPGutils.SafeAttributeAdd(Attribute.MAX_HEALTH, healthMod, player);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
+        RPGutils.SafeAttributeRemove(Attribute.MAX_HEALTH, healthMod, player);
         if (player.getMaxHealth() < player.getHealth()) player.setHealth(player.getHealth()-healthMod.getAmount());
     }
 }

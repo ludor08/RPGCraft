@@ -42,7 +42,7 @@ public class Wings extends Trait
     }
 
     @Override
-    public void OnSneak(PlayerToggleSneakEvent e)
+    public void OnToggleSneak(PlayerToggleSneakEvent e)
     {
         if (!e.getPlayer().isSneaking() && !e.getPlayer().isFlying())
         {

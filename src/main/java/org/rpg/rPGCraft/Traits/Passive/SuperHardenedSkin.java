@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
@@ -37,15 +38,15 @@ public class SuperHardenedSkin extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        SafeAttributeAdd(Attribute.ARMOR,armorMod,player);
-        SafeAttributeAdd(Attribute.ARMOR_TOUGHNESS,armorToughnessMod,player);
+        RPGutils.SafeAttributeAdd(Attribute.ARMOR,armorMod,player);
+        RPGutils.SafeAttributeAdd(Attribute.ARMOR_TOUGHNESS,armorToughnessMod,player);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        SafeAttributeRemove(Attribute.ARMOR,armorMod,player);
-        SafeAttributeRemove(Attribute.ARMOR_TOUGHNESS,armorToughnessMod,player);
+        RPGutils.SafeAttributeRemove(Attribute.ARMOR,armorMod,player);
+        RPGutils.SafeAttributeRemove(Attribute.ARMOR_TOUGHNESS,armorToughnessMod,player);
     }
 
     @Override

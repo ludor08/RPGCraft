@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
 import java.util.List;
@@ -18,7 +19,6 @@ public class SupernaturalGrowth extends Trait
 {
     private final NamespacedKey sizeMod;
     private final NamespacedKey damageMod;
-    private final int timeToHeal = 50; // TODO make configalbe with the tick rate
 
     public SupernaturalGrowth(Main main) {
         // add the name and lore
@@ -40,16 +40,16 @@ public class SupernaturalGrowth extends Trait
         // if they are in water
         if (footMaterial.equals(Material.WATER) || footMaterial.equals(Material.KELP_PLANT) || footMaterial.equals(Material.SEAGRASS) || footMaterial.equals(Material.TALL_SEAGRASS))
         {
-            SafeAttributeAdd(Attribute.SCALE, new AttributeModifier(sizeMod, 0.05, AttributeModifier.Operation.ADD_NUMBER), player, 0.55f);
-            SafeAttributeAdd(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, 0.3, AttributeModifier.Operation.ADD_NUMBER), player, 6);
+            RPGutils.SafeAttributeAdd(Attribute.SCALE, new AttributeModifier(sizeMod, 0.05, AttributeModifier.Operation.ADD_NUMBER), player, 0.55f);
+            RPGutils.SafeAttributeAdd(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, 0.3, AttributeModifier.Operation.ADD_NUMBER), player, 6);
         }
     }
 
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
-        SafeAttributeRemove(Attribute.SCALE, new AttributeModifier(sizeMod, (e.getDamage()/10), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), -0.45f);
-        SafeAttributeRemove(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, (e.getDamage()/60), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), 0);
+        RPGutils.SafeAttributeRemove(Attribute.SCALE, new AttributeModifier(sizeMod, (e.getDamage()/10), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), -0.45f);
+        RPGutils.SafeAttributeRemove(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, (e.getDamage()/60), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), 0);
     }
 
     @Override
