@@ -29,8 +29,6 @@ import java.util.Objects;
 
 public class StatSheetManager implements Listener
 {
-    public NamespacedKey nineLivesKey;
-
     Main main;
 
     // stat sheets
@@ -120,9 +118,6 @@ public class StatSheetManager implements Listener
                 AddStatSheet(new StatSheet(player.getUniqueId(), main));
             }
         }
-
-        // set up the trait specific namespacedKeys
-        nineLivesKey = new NamespacedKey(main, "nine_lives");
     }
 
     public String GenerateInputSequenceActionBar(String inputSequence, ChatColor color)
@@ -210,7 +205,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(e.getPlayer()) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(e.getPlayer()).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(e.getPlayer()).GetActiveTraits())
             {
                 trait.OnRespawnBuffs(e);
             }
@@ -231,7 +226,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnTakeDamage(e);
                 }
@@ -253,7 +248,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnDealDamage(e);
                 }
@@ -281,7 +276,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnShootProjectileHit(e);
                 }
@@ -303,7 +298,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnLaunchProjectile(e);
                 }
@@ -330,7 +325,7 @@ public class StatSheetManager implements Listener
                 {
                     NamespacedKey wasJustBrewed = new NamespacedKey(main, "wasJustBrewed");
 
-                    for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                    for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                     {
                         trait.OnInventoryClick(e);
                     }
@@ -341,7 +336,7 @@ public class StatSheetManager implements Listener
                         // if the item is newly brewed
                         if (e.getCurrentItem().getPersistentDataContainer().has(wasJustBrewed))
                         {
-                            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                             {
                                 trait.OnTakePotionFromBrewingStand(e);
                             }
@@ -371,7 +366,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnFoodLevelChange(e);
                 }
@@ -393,7 +388,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(player) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 trait.OnToggleSneak(e);
             }
@@ -414,7 +409,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(player) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 trait.OnJump(e);
             }
@@ -435,7 +430,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(player) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 trait.OnPickUpXP(e);
             }
@@ -456,7 +451,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(player) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 trait.OnPlayerItemConsume(e);
             }
@@ -477,7 +472,7 @@ public class StatSheetManager implements Listener
         // if the player has a stat sheet
         if (FindStatSheetByPlayer(player) != null)
         {
-            for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+            for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 trait.OnClick(e);
             }
@@ -499,7 +494,7 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetTraits())
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
                     trait.OnTargeted(e);
                 }
