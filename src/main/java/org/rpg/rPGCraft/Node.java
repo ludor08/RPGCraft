@@ -32,7 +32,7 @@ public class Node
         return translatedCoordinates;
     }
 
-    public ItemStack GetNodeIcon(int level, boolean hasLevel)
+    public ItemStack GetNodeIcon(int level, boolean hasLevel, boolean isDisabled)
     {
         // generates the icon for this trait
         ItemStack nodeIcon = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
@@ -46,8 +46,8 @@ public class Node
         // add the description
         List<String> lore = traits.get(level-1).GetTraitLore();
 
-        if (hasLevel) lore.set(0, ChatColor.GRAY + "Level " + level + ChatColor.DARK_GRAY + "/" + traits.size());
-        else lore.set(0, ChatColor.GRAY + "Level " + 0 + ChatColor.DARK_GRAY + "/" + traits.size());
+        if (hasLevel) lore.set(0,ChatColor.GRAY + "Level " + level + ChatColor.DARK_GRAY + "/" + traits.size());
+        else lore.set(0,ChatColor.GRAY + "Level " + 0 + ChatColor.DARK_GRAY + "/" + traits.size());
 
         // if there are more levels and it has a level
         if (traits.size() > level && hasLevel)
@@ -65,6 +65,14 @@ public class Node
                 lore.add(loreBit);
             }
 
+        }
+
+        if (hasLevel)
+        {
+            lore.add(" ");
+
+            if (isDisabled) lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "Disabled.");
+            else lore.add(ChatColor.GREEN.toString() + ChatColor.BOLD + "Enabled.");
         }
 
         traitIconMeta.setLore(lore);

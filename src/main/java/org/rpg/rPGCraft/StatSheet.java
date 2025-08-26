@@ -330,7 +330,7 @@ public class StatSheet
         }
 
         // go though and check the players traits
-        for (Trait trait : GetTraits())
+        for (Trait trait : GetActiveTraits())
         {
             // check if the trait is an instanceof ActiveTrait
             if (trait instanceof ActiveTrait activeTrait)
@@ -458,6 +458,9 @@ public class StatSheet
         // if the player has a race persistent
         if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
         {
+            // clear the deactivated nodes
+            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
+
             // Find the parent race script
             PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
 

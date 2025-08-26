@@ -501,13 +501,13 @@ public class MenuManager implements Listener
 
                 Node node = playableClass.traitTree.GetNodeAtCoordinates(new Vector2d(coordinates.x + offset.x, coordinates.y + offset.y));
 
-                // get the deactivated
+                // get the deactivated node
                 List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
 
                 // get the current level
                 int currentLevelIndex = node.traits.indexOf(node.GetTraitFromString(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)));
 
-                // if this was a left click
+                // if this was a right click
                 if (e.getAction() == InventoryAction.PICKUP_HALF)
                 {
                     // if you have this trait
@@ -516,28 +516,32 @@ public class MenuManager implements Listener
                         // if this trait is turned off
                         if (deactivatedNodes.contains(node.traits.get(currentLevelIndex).name_id + node.id))
                         {
-                            clickedItem.setType(Material.LIME_STAINED_GLASS_PANE);
+                            clickedItem.setItemMeta(node.GetNodeIcon(currentLevelIndex+1,true,false).getItemMeta());
 
                             String newDeactivatedNodes = player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING);
                             newDeactivatedNodes = newDeactivatedNodes.replace("_" + node.traits.get(currentLevelIndex).name_id + node.id, "");
 
+                            // change the material
+                            clickedItem.setType(Material.LIME_STAINED_GLASS_PANE);
+
                             // activate this trait
                             player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING,newDeactivatedNodes);
-                            player.sendMessage(newDeactivatedNodes);
+                            node.traits.get(currentLevelIndex).OnGainTraitBuff(player);
                         }
                         else
                         {
-                            clickedItem.setType(Material.CYAN_STAINED_GLASS_PANE);
+                            clickedItem.setItemMeta(node.GetNodeIcon(currentLevelIndex+1,true,true).getItemMeta());
 
                             String newDeactivatedNodes = player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING);
                             newDeactivatedNodes = newDeactivatedNodes + "_" + node.traits.get(currentLevelIndex).name_id + node.id;
 
+                            // change the material
+                            clickedItem.setType(Material.CYAN_STAINED_GLASS_PANE);
+
                             // deactivate this trait
                             player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING,newDeactivatedNodes);
-                            player.sendMessage(newDeactivatedNodes);
+                            node.traits.get(currentLevelIndex).OnRemoveTraitBuff(player);
                         }
-
-                        player.sendMessage(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING));
 
                     }
                 }
@@ -566,7 +570,7 @@ public class MenuManager implements Listener
                                 currentLevelIndex++;
 
                                 // set the clicked slot to the new node icon
-                                ItemStack newNodeIcon = node.GetNodeIcon(currentLevelIndex + 1, true);
+                                ItemStack newNodeIcon = node.GetNodeIcon(currentLevelIndex + 1, true, false);
                                 newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
 
                                 e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
@@ -606,7 +610,7 @@ public class MenuManager implements Listener
                                     main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.traits.getFirst().name_id + node.id);
 
                             // set the clicked slot to the new node icon
-                            ItemStack newNodeIcon = node.GetNodeIcon(1, true);
+                            ItemStack newNodeIcon = node.GetNodeIcon(1, true, false);
                             newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
 
                             e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
@@ -756,7 +760,7 @@ public class MenuManager implements Listener
                 // if the slot coordinates are the same as a nodes coordinates
                 else if (i == node.GetTranslatedCoordinates(FULL_ROW_SIZE, offset))
                 {
-                    ItemStack nodeIcon = node.GetNodeIcon(1, false);
+                    ItemStack nodeIcon = node.GetNodeIcon(1, false, false);
 
                     // already selected traits
                     List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
@@ -771,7 +775,7 @@ public class MenuManager implements Listener
                         {
                             if (selectedTrait.contains(trait.name_id + node.id))
                             {
-                                nodeIcon = node.GetNodeIcon(node.traits.indexOf(trait)+1, true);
+                                nodeIcon = node.GetNodeIcon(node.traits.indexOf(trait)+1, true, deactivatedNodes.contains(trait.name_id+node.id));
 
                                 if (deactivatedNodes.contains(trait.name_id+node.id))
                                 {
