@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.rpg.rPGCraft.Classes.Archer;
 import org.rpg.rPGCraft.Classes.Berserker;
+import org.rpg.rPGCraft.Classes.Rogue;
 import org.rpg.rPGCraft.Classes.Sage;
 import org.rpg.rPGCraft.Races.*;
 
@@ -27,6 +28,7 @@ public final class Main extends JavaPlugin implements Listener
     private final NamespacedKey levelKey = new NamespacedKey(this, "level");
     private final NamespacedKey classXPKey = new NamespacedKey(this, "class_xp");
     private final NamespacedKey treeProgressionKey = new NamespacedKey(this, "tree_progression");
+    private final NamespacedKey deactivatedNodesKey = new NamespacedKey(this, "deactivated_nodes");
     private final NamespacedKey activeTraitInputKey = new NamespacedKey(this, "active_trait_input");
     private final NamespacedKey manaKey = new NamespacedKey(this, "mana");
     private final NamespacedKey manaRechargeSpeedKey = new NamespacedKey(this, "mana_recharge_speed");
@@ -41,7 +43,7 @@ public final class Main extends JavaPlugin implements Listener
     private final List<Race> chooseAbleRaces = List.of(new Furoid(this), new Arthropod(this), new Fungoid(this), new Crystalloid(this));
 
     // choose able classes
-    private final List<PlayableClass> chooseAbleClasses = List.of(new Berserker(this), new Sage(this), new Archer(this));
+    private final List<PlayableClass> chooseAbleClasses = List.of(new Berserker(this), new Sage(this), new Archer(this), new Rogue(this));
 
     // Getters
     public NamespacedKey GetRaceKey()
@@ -117,6 +119,11 @@ public final class Main extends JavaPlugin implements Listener
     public NamespacedKey GetTreeProgressionKey()
     {
         return treeProgressionKey;
+    }
+
+    public NamespacedKey GetDeactivatedNodesKey()
+    {
+        return deactivatedNodesKey;
     }
 
     public NamespacedKey GetLegendaryMobKey()

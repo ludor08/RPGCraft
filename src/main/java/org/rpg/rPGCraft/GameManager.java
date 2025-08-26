@@ -21,10 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.commands.ClassLevelCommand;
-import org.rpg.rPGCraft.commands.ClassXPCommand;
-import org.rpg.rPGCraft.commands.ClassXPTab;
-import org.rpg.rPGCraft.commands.StatSheetCommand;
+import org.rpg.rPGCraft.commands.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +62,7 @@ public class GameManager implements Listener {
         main.getCommand("classXp").setTabCompleter(new ClassXPTab());
 
         main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
+        main.getCommand("classLevel").setTabCompleter(new ClassLevelTab());
 
         // set up the OnTick scheduler
         AtomicInteger tick = new AtomicInteger();
@@ -206,6 +204,12 @@ public class GameManager implements Listener {
         if (!player.getPersistentDataContainer().has(main.GetTreeProgressionKey(), PersistentDataType.STRING))
         {
             player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
+        }
+
+        // if the player doesn't have a tree progression persistent
+        if (!player.getPersistentDataContainer().has(main.GetDeactivatedNodesKey(), PersistentDataType.STRING))
+        {
+            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
         }
 
         // if the player doesn't have an active trait input persistent
