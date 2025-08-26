@@ -15,12 +15,12 @@ import java.util.List;
 
 public class RPGutils
 {
-    public static Entity EntityRecast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles)
+    public static Entity RecastForEntity(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles)
     {
-        return EntityRecast(numberOfChecks,direction,location,isStoppedBySolidBlocks,shooter,particle,numberOfParticles, new Vector3d(0.5,0.5,0.5));
+        return RecastForEntity(numberOfChecks,direction,location,isStoppedBySolidBlocks,shooter,particle,numberOfParticles, new Vector3d(0.5,0.5,0.5));
     }
 
-    public static Entity EntityRecast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles, Vector3d targetBoxSize)
+    public static Entity RecastForEntity(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles, Vector3d targetBoxSize)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
 
@@ -61,7 +61,7 @@ public class RPGutils
         return null;
     }
 
-    public static List<Entity> EntitiesRecast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles)
+    public static List<Entity> RecastForEntities(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
         List<Entity> entities = new ArrayList<>();
