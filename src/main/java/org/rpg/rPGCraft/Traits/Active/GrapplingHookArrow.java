@@ -2,7 +2,6 @@ package org.rpg.rPGCraft.Traits.Active;
 
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -15,7 +14,6 @@ import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
-import java.util.Objects;
 
 public class GrapplingHookArrow extends ActiveTrait
 {

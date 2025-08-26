@@ -22,7 +22,8 @@ public class Ricochet extends Trait
     public Ricochet(Main main) {
         // add the name and lore
         super("Ricochet", "ricochet", ChatColor.AQUA, Material.BLACK_DYE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Projectiles that hit blocks will rebound towards the nearest entity within five blocks."
+                ChatColor.AQUA.toString() + "   - Projectiles that hit blocks will rebound towards the nearest entity within five blocks.",
+                ChatColor.AQUA.toString() + "   - Costs 10 mana."
         ));
     }
 
@@ -56,7 +57,7 @@ public class Ricochet extends Trait
                         continue;
                     }
 
-                    if (!Objects.equals(RPGutils.EntityRecast(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
+                    if (!Objects.equals(RPGutils.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
                     {
                         continue;
                     }
@@ -66,11 +67,15 @@ public class Ricochet extends Trait
                     e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER, e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
                     e.getEntity().teleport(new Location(e.getEntity().getWorld(),e.getEntity().getLocation().getX()+offset.x, e.getEntity().getLocation().getY()+offset.y, e.getEntity().getLocation().getZ()+offset.z));
 
-                    ((Player)e.getEntity().getShooter()).sendMessage(RPGutils.EntityRecast(20, direction.div(4), e.getEntity().getLocation(), true, e.getEntity(), null, 0, new Vector3d(0.25,0.25,0.25)).getLocation() + "");
+                    ((Player)e.getEntity().getShooter()).sendMessage(RPGutils.RecastForEntity(20, direction.div(4), e.getEntity().getLocation(), true, e.getEntity(), null, 0, new Vector3d(0.25,0.25,0.25)).getLocation() + "");
 
                     Bukkit.getScheduler().runTaskLater(main, () -> {
                         e.getEntity().setVelocity(Vector.fromJOML(direction.mul(5)));
                     }, 2);
+
+                    // take away the mana
+                    ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-10);
+
                     break;
                 }
             }

@@ -3,12 +3,9 @@ package org.rpg.rPGCraft.Traits.Passive;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
@@ -18,8 +15,6 @@ import org.rpg.rPGCraft.Trait;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static org.rpg.rPGCraft.RPGutils.Recast;
 
 public class WeAreOne extends Trait
 {
@@ -56,7 +51,7 @@ public class WeAreOne extends Trait
 
         Player player = e.getPlayer();
 
-        Vector3d direction = new Vector3d(-Math.cos(Math.toRadians(player.getPitch())) * Math.sin(Math.toRadians(player.getYaw())), -Math.sin(Math.toRadians(player.getPitch())), Math.cos(Math.toRadians(player.getPitch())) * Math.cos(Math.toRadians(player.getYaw())));
+        Vector3d direction = RPGutils.getFacingDirection(player);
         Location lookingAt = RPGutils.Recast(100, direction, e.getPlayer().getEyeLocation(), true, null, 0);
 
         // if the block is a sculk

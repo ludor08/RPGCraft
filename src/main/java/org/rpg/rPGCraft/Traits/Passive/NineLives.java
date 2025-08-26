@@ -1,10 +1,7 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -21,40 +18,38 @@ import java.util.List;
 
 public class NineLives extends Trait
 {
-    Main main;
+    NamespacedKey nineLivesKey = new NamespacedKey(main, "nine_lives");
 
     public NineLives(Main main) {
         // add the name and lore
         super("Nine Lives", "nine lives", ChatColor.AQUA, Material.RED_DYE, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Once per life when the Feloid is dropped to 0 hp, they drop to 2 hp instead."
         ));
-
-        this.main = main;
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        player.getPersistentDataContainer().set(main.statSheetManager.nineLivesKey, PersistentDataType.BOOLEAN, true);
+        player.getPersistentDataContainer().set(nineLivesKey, PersistentDataType.BOOLEAN, true);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getPersistentDataContainer().remove(main.statSheetManager.nineLivesKey);
+        player.getPersistentDataContainer().remove(nineLivesKey);
     }
 
     @Override
     public void OnRespawnBuffs(PlayerRespawnEvent e)
     {
-        e.getPlayer().getPersistentDataContainer().set(main.statSheetManager.nineLivesKey, PersistentDataType.BOOLEAN, true);
+        e.getPlayer().getPersistentDataContainer().set(nineLivesKey, PersistentDataType.BOOLEAN, true);
     }
 
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
         if (((Player)e.getEntity()).getHealth()-e.getDamage() < 1 &&
-                e.getEntity().getPersistentDataContainer().get(main.statSheetManager.nineLivesKey, PersistentDataType.BOOLEAN))
+                e.getEntity().getPersistentDataContainer().get(nineLivesKey, PersistentDataType.BOOLEAN))
         {
             e.setCancelled(true);
             ((Player)e.getEntity()).setHealth(2);
@@ -62,7 +57,7 @@ public class NineLives extends Trait
             e.getEntity().getWorld().spawnParticle(Particle.CRIT, e.getEntity().getLocation(), 100, 0,0,0,1);
             ((Player) e.getEntity()).playSound(e.getEntity().getLocation(), Sound.ENTITY_CAT_HISS, 1, 1);
 
-            e.getEntity().getPersistentDataContainer().set(main.statSheetManager.nineLivesKey, PersistentDataType.BOOLEAN, false);
+            e.getEntity().getPersistentDataContainer().set(nineLivesKey, PersistentDataType.BOOLEAN, false);
         }
     }
 }
