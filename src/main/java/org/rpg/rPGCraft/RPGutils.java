@@ -130,6 +130,33 @@ public class RPGutils
         return new Location(location.getWorld(), position.x, position.y, position.z);
     }
 
+    public static Location RecastUntilCollision(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
+    {
+        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
+
+        for (int i = 0; i < numberOfChecks; i++)
+        {
+            // check if the block at said position is solid and the recast is stopped by solid blocks
+            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid())
+            {
+                // break out of the loop
+                break;
+            }
+
+            // update the position
+            position.add(direction);
+
+            // if this is supposed to spawn particles
+            if (particle != null)
+            {
+                // spawn the particle
+                location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
+            }
+        }
+
+        return new Location(location.getWorld(), position.x, position.y, position.z);
+    }
+
     public static void ParticleRecast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Particle particle, int numberOfParticles)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
