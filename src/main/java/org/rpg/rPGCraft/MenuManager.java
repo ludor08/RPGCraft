@@ -6,6 +6,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -490,103 +491,142 @@ public class MenuManager implements Listener
                 // already selected traits
                 List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
 
-                // if the player has enough trait selection points(equal to the players level)
-                if (main.statSheetManager.FindStatSheetByPlayer(player).GetAvailableTraitPoints() >= 1)
+                // get the node
+                int x = (int) (e.getSlot() - (FULL_ROW_SIZE * Math.floor(e.getSlot() / FULL_ROW_SIZE)));
+                int y = Math.abs(((e.getSlot()-x) / FULL_ROW_SIZE)-4);
+
+                Vector2d coordinates = new Vector2d(x, y);
+                Vector2d offset = new Vector2d(e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5))).getPersistentDataContainer().get(xOffsetKey, PersistentDataType.INTEGER),
+                        e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5))).getPersistentDataContainer().get(yOffsetKey, PersistentDataType.INTEGER));
+
+                Node node = playableClass.traitTree.GetNodeAtCoordinates(new Vector2d(coordinates.x + offset.x, coordinates.y + offset.y));
+
+                // get the deactivated
+                List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+
+                // get the current level
+                int currentLevelIndex = node.traits.indexOf(node.GetTraitFromString(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)));
+
+                // if this was a left click
+                if (e.getAction() == InventoryAction.PICKUP_HALF)
                 {
-                    // get the node
-                    int x = (int) (e.getSlot() - (FULL_ROW_SIZE * Math.floor(e.getSlot() / FULL_ROW_SIZE)));
-                    int y = Math.abs(((e.getSlot()-x) / FULL_ROW_SIZE)-4);
-
-                    Vector2d coordinates = new Vector2d(x, y);
-                    Vector2d offset = new Vector2d(e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5))).getPersistentDataContainer().get(xOffsetKey, PersistentDataType.INTEGER),
-                            e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5))).getPersistentDataContainer().get(yOffsetKey, PersistentDataType.INTEGER));
-
-                    Node node = playableClass.traitTree.GetNodeAtCoordinates(new Vector2d(coordinates.x + offset.x, coordinates.y + offset.y));
-
-                    // if the player has already selected this trait
+                    // if you have this trait
                     if (selectedTraits.contains(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
                     {
-                        player.sendMessage(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING));
-
-                        int currentLevelIndex = node.traits.indexOf(node.GetTraitFromString(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)));
-
-                        // check if the node has more levels
-                        if (node.traits.size() > currentLevelIndex + 1)
+                        // if this trait is turned off
+                        if (deactivatedNodes.contains(node.traits.get(currentLevelIndex).name_id + node.id))
                         {
-                            // remove the old trait
-                            node.traits.get(currentLevelIndex).OnRemoveTraitBuff(player);
-                            player.getPersistentDataContainer().set(
-                                    main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).replace("_" + node.traits.get(currentLevelIndex).name_id + node.id, ""));
+                            clickedItem.setType(Material.LIME_STAINED_GLASS_PANE);
 
-                            // add the new trait
-                            node.traits.get(currentLevelIndex + 1).OnGainTraitBuff(player);
-                            player.getPersistentDataContainer().set(
-                                    main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.traits.get(currentLevelIndex + 1).name_id + node.id);
+                            String newDeactivatedNodes = player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING);
+                            newDeactivatedNodes = newDeactivatedNodes.replace("_" + node.traits.get(currentLevelIndex).name_id + node.id, "");
 
-                            // update the level
-                            currentLevelIndex++;
-
-                            // set the clicked slot to the new node icon
-                            ItemStack newNodeIcon = node.GetNodeIcon(currentLevelIndex + 1, true);
-                            newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
-
-                            e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
-
+                            // activate this trait
+                            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING,newDeactivatedNodes);
+                            player.sendMessage(newDeactivatedNodes);
                         }
-                    }
-                    else
-                    {
-                        // if this node is not at y 0
-                        if (node.coordinates.y > 0)
+                        else
                         {
-                            // if the player has already selected an adjacent node
-                            boolean hasAdjacentNode = false;
+                            clickedItem.setType(Material.CYAN_STAINED_GLASS_PANE);
 
-                            for (Node adjacentNode : playableClass.traitTree.GetSurroundingNodes(node))
+                            String newDeactivatedNodes = player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING);
+                            newDeactivatedNodes = newDeactivatedNodes + "_" + node.traits.get(currentLevelIndex).name_id + node.id;
+
+                            // deactivate this trait
+                            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING,newDeactivatedNodes);
+                            player.sendMessage(newDeactivatedNodes);
+                        }
+
+                        player.sendMessage(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING));
+
+                    }
+                }
+                else if (e.getAction() != InventoryAction.HOTBAR_SWAP && !deactivatedNodes.contains(node.traits.get(currentLevelIndex).name_id + node.id))
+                {
+                    // if the player has enough trait selection points(equal to the players level)
+                    if (main.statSheetManager.FindStatSheetByPlayer(player).GetAvailableTraitPoints() >= 1)
+                    {
+                        // if the player has already selected this trait
+                        if (selectedTraits.contains(clickedItem.getItemMeta().getPersistentDataContainer().get(main.GetTraitKey(), PersistentDataType.STRING)))
+                        {
+                            // check if the node has more levels
+                            if (node.traits.size() > currentLevelIndex + 1)
                             {
-                                for (Trait adjacentNodeTrait : adjacentNode.traits)
+                                // remove the old trait
+                                node.traits.get(currentLevelIndex).OnRemoveTraitBuff(player);
+                                player.getPersistentDataContainer().set(
+                                        main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).replace("_" + node.traits.get(currentLevelIndex).name_id + node.id, ""));
+
+                                // add the new trait
+                                node.traits.get(currentLevelIndex + 1).OnGainTraitBuff(player);
+                                player.getPersistentDataContainer().set(
+                                        main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.traits.get(currentLevelIndex + 1).name_id + node.id);
+
+                                // update the level
+                                currentLevelIndex++;
+
+                                // set the clicked slot to the new node icon
+                                ItemStack newNodeIcon = node.GetNodeIcon(currentLevelIndex + 1, true);
+                                newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+
+                                e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
+
+                            }
+                        }
+                        else
+                        {
+                            // if this node is not at y 0
+                            if (node.coordinates.y > 0)
+                            {
+                                // if the player has already selected an adjacent node
+                                boolean hasAdjacentNode = false;
+
+                                for (Node adjacentNode : playableClass.traitTree.GetSurroundingNodes(node))
                                 {
-                                    // if the player has this node
-                                    if (selectedTraits.contains(adjacentNodeTrait.name_id + adjacentNode.id))
+                                    for (Trait adjacentNodeTrait : adjacentNode.traits)
                                     {
-                                        hasAdjacentNode = true;
-                                        break;
+                                        // if the player has this node
+                                        if (selectedTraits.contains(adjacentNodeTrait.name_id + adjacentNode.id))
+                                        {
+                                            hasAdjacentNode = true;
+                                            break;
+                                        }
                                     }
+                                }
+
+                                if (!hasAdjacentNode)
+                                {
+                                    return;
                                 }
                             }
 
-                            if (!hasAdjacentNode)
-                            {
-                                return;
-                            }
+                            // add the new trait
+                            node.traits.getFirst().OnGainTraitBuff(player);
+                            player.getPersistentDataContainer().set(
+                                    main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.traits.getFirst().name_id + node.id);
+
+                            // set the clicked slot to the new node icon
+                            ItemStack newNodeIcon = node.GetNodeIcon(1, true);
+                            newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+
+                            e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
                         }
 
-                        // add the new trait
-                        node.traits.getFirst().OnGainTraitBuff(player);
-                        player.getPersistentDataContainer().set(
-                                main.GetTreeProgressionKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.traits.getFirst().name_id + node.id);
+                        // get the info icon
+                        ItemStack infoIcon = e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5)));
+                        ItemMeta infoIconMeta = infoIcon.getItemMeta();
 
-                        // set the clicked slot to the new node icon
-                        ItemStack newNodeIcon = node.GetNodeIcon(1, true);
-                        newNodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+                        List<String> lore = new ArrayList<>();
+                        lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
+                        lore.add("Available trait points : " + main.statSheetManager.FindStatSheetByPlayer(player).GetAvailableTraitPoints());
 
-                        e.getInventory().setItem(e.getRawSlot(), newNodeIcon);
+                        infoIconMeta.setLore(lore);
+
+                        infoIcon.setItemMeta(infoIconMeta);
+
+                        // add the info
+                        e.getInventory().setItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5)), infoIcon);
                     }
-
-                    // get the info icon
-                    ItemStack infoIcon = e.getInventory().getItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5)));
-                    ItemMeta infoIconMeta = infoIcon.getItemMeta();
-
-                    List<String> lore = new ArrayList<>();
-                    lore.add("Level : " + player.getPersistentDataContainer().get(main.GetLevelKey(), PersistentDataType.INTEGER));
-                    lore.add("Available trait points : " + main.statSheetManager.FindStatSheetByPlayer(player).GetAvailableTraitPoints());
-
-                    infoIconMeta.setLore(lore);
-
-                    infoIcon.setItemMeta(infoIconMeta);
-
-                    // add the info
-                    e.getInventory().setItem((int) (e.getInventory().getSize() - (FULL_ROW_SIZE * 0.5)), infoIcon);
                 }
             }
         }
@@ -721,6 +761,9 @@ public class MenuManager implements Listener
                     // already selected traits
                     List<String> selectedTraits = Arrays.stream(player.getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
 
+                    // get the deactivated
+                    List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+
                     // if the player has this node, light it up
                     for (String selectedTrait : selectedTraits)
                     {
@@ -728,10 +771,16 @@ public class MenuManager implements Listener
                         {
                             if (selectedTrait.contains(trait.name_id + node.id))
                             {
-                                player.sendMessage(node.traits.indexOf(trait)+"");
-
                                 nodeIcon = node.GetNodeIcon(node.traits.indexOf(trait)+1, true);
-                                nodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+
+                                if (deactivatedNodes.contains(trait.name_id+node.id))
+                                {
+                                    nodeIcon.setType(Material.CYAN_STAINED_GLASS_PANE);
+                                }
+                                else
+                                {
+                                    nodeIcon.setType(Material.LIME_STAINED_GLASS_PANE);
+                                }
 
                                 // if the traits max level is more then one
                                 if (node.traits.size() > 1)
