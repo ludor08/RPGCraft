@@ -25,56 +25,63 @@ public class ClassXPCommand implements CommandExecutor
     {
         if (commandSender instanceof Player player)
         {
-            if (args.length == 0)
+            if (player.isOp())
             {
-                player.sendMessage(ChatColor.DARK_RED + "ERROR : No arguments given. Please give a argument");
-                return false;
+                if (args.length == 0)
+                {
+                    player.sendMessage(ChatColor.DARK_RED + "ERROR : No arguments given. Please give a argument");
+                    return false;
+                }
+
+                switch (args[0])
+                {
+                    case "get":
+                        player.sendMessage(player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER).toString());
+                        break;
+
+                    case "set":
+                        if (args.length > 1)
+                        {
+                            try
+                            {
+                                main.statSheetManager.FindStatSheetByPlayer(player).SetXP(Integer.parseInt(args[1]));
+                                player.sendMessage(ChatColor.GREEN + "class xp set to " + Integer.parseInt(args[1]));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                player.sendMessage(ChatColor.DARK_RED + "ERROR : " + Integer.parseInt(args[1]) + " is not a valid integer.");
+                            }
+                        }
+                        else
+                        {
+                            player.sendMessage(ChatColor.DARK_RED + "ERROR : No second argument given. Please give a second argument");
+                        }
+
+                        break;
+
+                    case "add":
+                        if (args.length > 1)
+                        {
+                            try
+                            {
+                                main.statSheetManager.FindStatSheetByPlayer(player).GiveXP(Integer.parseInt(args[1]));
+                                player.sendMessage(ChatColor.GREEN.toString() + Integer.parseInt(args[1]) + " class xp added. your total class xp is now " + player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                player.sendMessage(ChatColor.DARK_RED + "ERROR : " + Integer.parseInt(args[1]) + " is not a valid integer. Please give a valid integer");
+                            }
+                        }
+                        else
+                        {
+                            player.sendMessage(ChatColor.DARK_RED + "ERROR : No second argument given. Please give a second argument");
+                        }
+                        break;
+                }
             }
-
-            switch (args[0])
+            else
             {
-                case "get":
-                    player.sendMessage(player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER).toString());
-                    break;
-
-                case "set":
-                    if (args.length > 1)
-                    {
-                        try
-                        {
-                            main.statSheetManager.FindStatSheetByPlayer(player).SetXP(Integer.parseInt(args[1]));
-                            player.sendMessage(ChatColor.GREEN + "class xp set to " + Integer.parseInt(args[1]));
-                        }
-                        catch (NumberFormatException e)
-                        {
-                            player.sendMessage(ChatColor.DARK_RED + "ERROR : " + Integer.parseInt(args[1]) + " is not a valid integer.");
-                        }
-                    }
-                    else
-                    {
-                        player.sendMessage(ChatColor.DARK_RED + "ERROR : No second argument given. Please give a second argument");
-                    }
-
-                    break;
-
-                case "add":
-                    if (args.length > 1)
-                    {
-                        try
-                        {
-                            main.statSheetManager.FindStatSheetByPlayer(player).GiveXP(Integer.parseInt(args[1]));
-                            player.sendMessage(ChatColor.GREEN.toString() + Integer.parseInt(args[1]) + " class xp added. your total class xp is now " + player.getPersistentDataContainer().get(main.GetClassXPKey(), PersistentDataType.INTEGER));
-                        }
-                        catch (NumberFormatException e)
-                        {
-                            player.sendMessage(ChatColor.DARK_RED + "ERROR : " + Integer.parseInt(args[1]) + " is not a valid integer. Please give a valid integer");
-                        }
-                    }
-                    else
-                    {
-                        player.sendMessage(ChatColor.DARK_RED + "ERROR : No second argument given. Please give a second argument");
-                    }
-                    break;
+                player.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "You do not have permission to use this command.");
             }
         }
 
