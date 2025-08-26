@@ -181,7 +181,72 @@ public class StatSheet
                 {
                     for (Trait trait : node.traits)
                     {
-                        if (traitName.equals(trait.name_id+node.id))
+                        if (traitName.equals((trait.name_id+node.id)))
+                        {
+                            traits.add(trait);
+                        }
+                    }
+                }
+            }
+        }
+
+        return traits;
+    }
+
+    public List<Trait> GetActiveTraits()
+    {
+        // make a list for all of the traits
+        List<Trait> traits = new ArrayList<>();
+
+        // the player
+        Player player = GetPlayer();
+
+        // if the player has a parent race
+        if (player.getPersistentDataContainer().has(main.GetRaceKey(), PersistentDataType.STRING))
+        {
+            // Find the parent race script
+            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetRaceKey(), PersistentDataType.STRING));
+
+            // if there is a parent race
+            if (raceOfParent != null)
+            {
+                // add all of the traits
+                traits.addAll(raceOfParent.traits);
+
+                // if the player has a subrace
+                if (player.getPersistentDataContainer().has(main.GetSubraceKey(), PersistentDataType.STRING))
+                {
+                    // Find the parent race script
+                    Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(main.GetSubraceKey(), PersistentDataType.STRING));
+
+                    // if there is a parent race
+                    if (raceOfSubrace != null)
+                    {
+                        // add all of the traits
+                        traits.addAll(raceOfSubrace.traits);
+                    }
+                }
+            }
+            else
+            {
+                System.out.println("ERROR: invalid parent race");
+            }
+        }
+
+        // get the deactivated
+        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+
+        // if the player has a class
+        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            // get the traits from said nodes
+            for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+            {
+                for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
+                {
+                    for (Trait trait : node.traits)
+                    {
+                        if (traitName.equals(trait.name_id+node.id) && !deactivatedNodes.contains(trait.name_id+node.id))
                         {
                             traits.add(trait);
                         }
