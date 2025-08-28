@@ -37,11 +37,11 @@ public class StatSheetManager implements Listener
     public int GetLevelXPRequirements(int level)
     {
         // set up the starting xp needed for a level up
-        int neededXp = 50;
+        int neededXp = 25;
 
         for (int i = 1; i < level; i++)
         {
-            neededXp += (int) Math.floor(neededXp*1.5);
+            neededXp += (int) Math.floor(neededXp*1.25);
         }
 
         return neededXp;
@@ -188,16 +188,16 @@ public class StatSheetManager implements Listener
         }
     }
 
-    @EventHandler
-    public void OnPlayerInteractEntityEvent(PlayerInteractEntityEvent e)
-    {
-        // if they didn't click with an empty hand
-        if (e.getHand() == EquipmentSlot.HAND && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
-        {
-            // update the input sequence with the new action
-            //FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(Action.RIGHT_CLICK_AIR);
-        }
-    }
+//    @EventHandler
+//    public void OnPlayerInteractEntityEvent(PlayerInteractEntityEvent e)
+//    {
+//        // if they didn't click with an empty hand
+//        if (e.getHand() == EquipmentSlot.HAND && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
+//        {
+//            // update the input sequence with the new action
+//            FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(Action.RIGHT_CLICK_AIR);
+//        }
+//    }
 
     @EventHandler
     public void OnRespawnEvent(PlayerRespawnEvent e)
@@ -486,6 +486,28 @@ public class StatSheetManager implements Listener
     }
 
     @EventHandler
+    public void OnGainEffectEvent(EntityPotionEffectEvent e)
+    {
+        if (e.getEntity() instanceof Player player)
+        {
+            // if the player has a stat sheet
+            if (FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
+                {
+                    trait.OnGainEffect(e);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            }
+        }
+    }
+
+    @EventHandler
     public void OnEntityTargetEvent(EntityTargetEvent e)
     {
         // if a player is being targeted
@@ -517,9 +539,8 @@ public class StatSheetManager implements Listener
             // if the entity has a level
             if (e.getEntity().getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
             {
-
-                // if the entity was a MONSTER
-                if (e.getEntity().getSpawnCategory().equals(SpawnCategory.MONSTER))
+                // if the entity wasn't an MISC entity
+                if (!e.getEntity().getSpawnCategory().equals(SpawnCategory.MISC))
                 {
                     // if the monster is not a custom entity
                     if (!e.getEntity().getPersistentDataContainer().has(main.GetCustomMobKey(), PersistentDataType.STRING))

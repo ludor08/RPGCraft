@@ -189,4 +189,8 @@ public abstract class Trait
 
     }
 
+    public void OnGainEffect(EntityPotionEffectEvent e)
+    {
+
+    }
 }

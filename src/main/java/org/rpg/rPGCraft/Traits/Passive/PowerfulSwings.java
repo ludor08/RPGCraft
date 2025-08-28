@@ -33,7 +33,7 @@ public class PowerfulSwings extends Trait
         float DAMAGE_MOD = 1.10f;
 
         // if the player was using an axe or its name contains the word "axe"
-        if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)
+        if ((e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) && ((Player)e.getDamager()).getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
         {
             // do AXE_DAMAGE_MOD times more damage
             e.setDamage(e.getDamage()*DAMAGE_MOD);

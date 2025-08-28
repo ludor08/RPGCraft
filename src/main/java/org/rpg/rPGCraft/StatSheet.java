@@ -551,7 +551,7 @@ public class StatSheet
                 {
                     for (Trait trait : node.traits)
                     {
-                        if (traitName.equals(trait.name_id))
+                        if (traitName.equals(trait.name_id+node.id))
                         {
                             traitPoints -= node.traits.indexOf(trait)+1;
                         }

@@ -53,6 +53,9 @@ public class GameManager implements Listener {
         main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
         main.getCommand("classLevel").setTabCompleter(new ClassLevelTab());
 
+        main.getCommand("reset").setExecutor(new ResetCommand(main));
+        main.getCommand("reset").setTabCompleter(new ResetTab());
+
         // set up the OnTick scheduler
         AtomicInteger tick = new AtomicInteger();
 
@@ -121,10 +124,6 @@ public class GameManager implements Listener {
         {
             main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId(), main));
         }
-
-        // TODO remove all of this
-        main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
-        main.statSheetManager.FindStatSheetByPlayer(player).ResetClassPersistent();
 
         // Check the persistents and add them if needed
         CheckPersistent(player);
