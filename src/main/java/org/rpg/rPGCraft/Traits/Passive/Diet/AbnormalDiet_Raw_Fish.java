@@ -20,7 +20,7 @@ public class AbnormalDiet_Raw_Fish extends Trait
         // add the name and lore
         super("Abnormal Diet:Raw Fish", "abnormal diet:raw fish", ChatColor.AQUA, Material.SALMON, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Food other then raw fish only gives 75% saturation.",
-                ChatColor.AQUA.toString() + "   - Raw fish also give 5x the saturation."
+                ChatColor.AQUA.toString() + "   - Raw fish also give 3x the saturation."
         ));
     }
 
@@ -64,7 +64,7 @@ public class AbnormalDiet_Raw_Fish extends Trait
         float saturationLevelChange = main.itemManager.GetVanillaFoodSaturation(e.getItem().getType());
 
         float BAD_FOOD_MULTIPLIER = 0.75f;
-        float GOOD_FOOD_MULTIPLIER = 5f;
+        float GOOD_FOOD_MULTIPLIER = 3f;
 
         Player player = e.getPlayer();
 
