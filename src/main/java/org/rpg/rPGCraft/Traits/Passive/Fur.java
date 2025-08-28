@@ -1,15 +1,9 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
@@ -41,13 +35,11 @@ public class Fur extends Trait
             || damageCause.equals(DamageCause.FIRE_TICK)
             || damageCause.equals(DamageCause.LAVA))
         {
-            if (e.getEntity() instanceof Player player) player.sendMessage("fire damage: " + e.getDamage() + "->" + ((int)e.getDamage() * HOT_DAMAGE_MOD));
             e.setDamage(e.getDamage() * HOT_DAMAGE_MOD);
         }
         // if the damage is coming from cold
         else if (damageCause.equals(DamageCause.FREEZE))
         {
-            if (e.getEntity() instanceof Player player) player.sendMessage("cold damage: " + e.getDamage() + "->" + ((int)e.getDamage() * COLD_DAMAGE_MOD));
             e.setDamage(e.getDamage() * COLD_DAMAGE_MOD);
         }
     }
