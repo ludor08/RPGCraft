@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +28,8 @@ public class AbnormalDiet_Death extends Trait
         // add the name and lore
         super("Abnormal Diet:Death", "abnormal diet:death", ChatColor.AQUA, Material.WITHER_ROSE, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Food other then meat and mushroom stew give half as much saturation and nutrition.",
-                ChatColor.AQUA.toString() + "   - Needs to eat half as often."
+                ChatColor.AQUA.toString() + "   - Needs to eat half as often.",
+                ChatColor.AQUA.toString() + "   - Immune to the hunger condition."
         ));
 
         willLoseHunger = new NamespacedKey(main, "abnormal_diet_death_hunger");
@@ -93,10 +95,19 @@ public class AbnormalDiet_Death extends Trait
         Player player = e.getPlayer();
 
         // if they didn't eat meat or mushroom stew
-        if (!main.gameManager.GetMeatTypes().contains(e.getItem().getType()) &&
+        if (!main.itemManager.GetMeatTypes().contains(e.getItem().getType()) &&
                 !e.getItem().getType().equals(Material.MUSHROOM_STEW)) {
             player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
             player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+        }
+    }
+
+    @Override
+    public void OnGainEffect(EntityPotionEffectEvent e)
+    {
+        if (e.getModifiedType() == PotionEffectType.HUNGER)
+        {
+            e.setCancelled(true);
         }
     }
 }
