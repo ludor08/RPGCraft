@@ -12,6 +12,7 @@ import org.rpg.rPGCraft.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dash extends ActiveTrait
@@ -38,6 +39,16 @@ public class Dash extends ActiveTrait
 
         Location location = RPGutils.RecastUntilCollision(10,direction,player.getEyeLocation(), Particle.CRIT, 5);
         List<Entity> entities = RPGutils.RecastForEntities(10,direction,player.getEyeLocation(), true, player, null, 0);
+
+        List<Entity> feetEntities = RPGutils.RecastForEntities(10,direction,player.getLocation(), false, player, null, 0);
+
+        for (Entity entity : feetEntities)
+        {
+            if (!entities.contains(entity))
+            {
+                entities.add(entity);
+            }
+        }
 
         location.setPitch(player.getPitch());
         location.setYaw(player.getYaw());
