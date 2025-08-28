@@ -19,7 +19,7 @@ public class BetterHeadshots extends Trait
 
     public BetterHeadshots(Main main) {
         // add the name and lore
-        super("BetterHeadshots", "better headshots", ChatColor.AQUA, Material.SKELETON_SKULL, false, main, List.of(
+        super("Better Headshots", "better headshots", ChatColor.AQUA, Material.SKELETON_SKULL, false, main, List.of(
                 ChatColor.AQUA.toString() + "   - Makes headshots deal an additional 10% damage."
         ));
     }
