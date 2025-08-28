@@ -56,6 +56,10 @@ public class Ricochet extends Trait
                     {
                         continue;
                     }
+                        if (target == e.getEntity().getShooter())
+                        {
+                            continue;
+                        }
 
                     if (!Objects.equals(RPGutils.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
                     {
