@@ -39,17 +39,6 @@ public class GameManager implements Listener {
     float LEGENDARY_MOB_CHANCE = 0.01f;
     int LEGENDARY_MOB_STAT_MULTIPLIER = 4;
 
-    // type lists
-    private final List<Material> meatTypes = List.of(Material.COOKED_RABBIT, Material.RABBIT, Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON,
-            Material.TROPICAL_FISH, Material.PUFFERFISH, Material.RABBIT_STEW, Material.BEEF, Material.COOKED_BEEF, Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.MUTTON, Material.COOKED_MUTTON,
-            Material.CHICKEN, Material.COOKED_CHICKEN, Material.ROTTEN_FLESH);
-
-    private final List<Material> swordTypes = List.of(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD);
-    private final List<Material> axeTypes = List.of(Material.WOODEN_AXE,Material.STONE_AXE,Material.IRON_AXE,Material.GOLDEN_AXE,Material.DIAMOND_AXE,Material.NETHERITE_AXE);
-    private final List<Material> bowTypes = List.of(Material.BOW,Material.CROSSBOW);
-    private final List<Material> otherTypes = List.of(Material.TRIDENT,Material.MACE);
-    private final List<Material> weaponTypes = Stream.of(swordTypes, axeTypes, bowTypes, otherTypes).flatMap(Collection::stream).collect(Collectors.toList());
-
     public GameManager(Main main)
     {
         this.main = main;
@@ -120,36 +109,6 @@ public class GameManager implements Listener {
             entity.getWorld().spawnParticle(Particle.SOUL, location, 10, 0,0,0,0);
         }
 
-    }
-
-    public List<Material> GetSwordTypes()
-    {
-        return swordTypes;
-    }
-
-    public List<Material> GetMeatTypes()
-    {
-        return meatTypes;
-    }
-
-    public List<Material> GetAxeTypes()
-    {
-        return axeTypes;
-    }
-
-    public List<Material> GetBowTypes()
-    {
-        return bowTypes;
-    }
-
-    public List<Material> GetOtherTypes()
-    {
-        return otherTypes;
-    }
-
-    public List<Material> GetWeaponTypes()
-    {
-        return weaponTypes;
     }
 
     @EventHandler

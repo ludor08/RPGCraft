@@ -34,7 +34,7 @@ public class ExtremeDiet_Meat extends Trait
         Player player = e.getPlayer();
 
         // if they didn't eat meat
-        if (!main.gameManager.GetMeatTypes().contains(e.getItem().getType())) {
+        if (!main.itemManager.GetMeatTypes().contains(e.getItem().getType())) {
             player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
             player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
         }
