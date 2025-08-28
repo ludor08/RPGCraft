@@ -36,51 +36,60 @@ public class Ricochet extends Trait
     @Override
     public void OnShootProjectileHit(ProjectileHitEvent e)
     {
-        if (e.getHitBlock() != null && e.getEntity().getPersistentDataContainer().has(new NamespacedKey(main,"ricochet_max_ricochets")) && e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER) > 0)
+        if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(main,"ricochet_max_ricochets")) && e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER) > 0)
         {
-            // if the player has at least 10 mana
-            if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= 10)
+            if (e.getHitBlock() != null)
             {
-                // get the nearby entities
-                List<Entity> closeEntities = RPGutils.SortEntityListByDistance(e.getEntity().getNearbyEntities(range,range,range),e.getEntity().getLocation());
-
-                for (Entity target : closeEntities)
+                // if the player has at least 10 mana
+                if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= 10)
                 {
-                    // the way that the arrow needs to move
-                    Vector3d offset = new Vector3d(Math.floor(e.getEntity().getX())-e.getHitBlock().getX(), Math.floor(e.getEntity().getY())-e.getHitBlock().getY(),Math.floor(e.getEntity().getZ()-e.getHitBlock().getZ()));
+                    // get the nearby entities
+                    List<Entity> closeEntities = RPGutils.SortEntityListByDistance(e.getEntity().getNearbyEntities(range,range,range),e.getEntity().getLocation());
 
-                    // get the direction
-                    Vector3d direction = RPGutils.getDirection(new Location(target.getWorld(), target.getX(), target.getY()+(target.getHeight()*0.7), target.getZ()),  e.getEntity().getLocation());
-
-                    if (target.getSpawnCategory() == SpawnCategory.MISC && !(target instanceof Player))
+                    for (Entity target : closeEntities)
                     {
-                        continue;
-                    }
+                        // the way that the arrow needs to move
+                        Vector3d offset = new Vector3d(Math.floor(e.getEntity().getX())-e.getHitBlock().getX(), Math.floor(e.getEntity().getY())-e.getHitBlock().getY(),Math.floor(e.getEntity().getZ()-e.getHitBlock().getZ()));
+
+                        // get the direction
+                        Vector3d direction = RPGutils.getDirection(new Location(target.getWorld(), target.getX(), target.getY()+(target.getHeight()*0.7), target.getZ()),  e.getEntity().getLocation());
+
+                        if (target.getSpawnCategory() == SpawnCategory.MISC && !(target instanceof Player))
+                        {
+                            continue;
+                        }
+
                         if (target == e.getEntity().getShooter())
                         {
                             continue;
                         }
 
-                    if (!Objects.equals(RPGutils.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
-                    {
-                        continue;
-                    }
+                        if (!Objects.equals(RPGutils.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
+                        {
+                            continue;
+                        }
 
-                    e.setCancelled(true);
+                        e.setCancelled(true);
 
-                    e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER, e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
-                    e.getEntity().teleport(new Location(e.getEntity().getWorld(),e.getEntity().getLocation().getX()+offset.x, e.getEntity().getLocation().getY()+offset.y, e.getEntity().getLocation().getZ()+offset.z));
+                        e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER, e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
+                        e.getEntity().teleport(new Location(e.getEntity().getWorld(),e.getEntity().getLocation().getX()+offset.x, e.getEntity().getLocation().getY()+offset.y, e.getEntity().getLocation().getZ()+offset.z));
 
                         Bukkit.getScheduler().runTaskLater(main, () -> {
                             e.getEntity().setVelocity(Vector.fromJOML(direction.mul(5)));
                         }, 2);
 
-                    // take away the mana
-                    ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-10);
+                        // take away the mana
+                        ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-10);
 
-                    break;
+                        break;
+                    }
                 }
             }
+            else
+            {
+                e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER,e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
+            }
         }
+
     }
 }
