@@ -37,7 +37,7 @@ public class ToxicSpores extends Trait
         {
             if (entity instanceof LivingEntity living)
             {
-                living.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 60, 1));
+                living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 1));
             }
         }
 
