@@ -26,7 +26,7 @@ public class DiamondSkin extends Trait
     {
         // add the name and lore
         super("Diamond Skin", "diamond skin", ChatColor.AQUA, Material.DIAMOND_CHESTPLATE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Makes Super Hardened Skin give tow more base defense amd one more armor toughness"
+                ChatColor.AQUA.toString() + "   - Makes Super Hardened Skin give two more base defense amd one more armor toughness"
         ));
 
         armorMod = new AttributeModifier(new NamespacedKey(main, "super_hardened_skin_armor"), 2, AttributeModifier.Operation.ADD_NUMBER);
