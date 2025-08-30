@@ -19,8 +19,8 @@ public class AbnormalDiet_Berries extends Trait
     public AbnormalDiet_Berries(Main main) {
         // add the name and lore
         super("Abnormal Diet:Berries", "abnormal diet:Berries", ChatColor.AQUA, Material.SWEET_BERRIES, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Food other then berries only gives 75% saturation.",
-                ChatColor.AQUA.toString() + "   - Berries also give 2.5x the saturation."
+                ChatColor.AQUA.toString() + "   - Food other then berries only gives 75% saturation and nutrition.",
+                ChatColor.AQUA.toString() + "   - Berries also give 2.5x the nutrition, and 5x the saturation."
         ));
     }
 
@@ -32,20 +32,21 @@ public class AbnormalDiet_Berries extends Trait
         float saturationLevelChange = e.getItem().getItemMeta().getFood().getSaturation();
 
         float BAD_FOOD_MULTIPLIER = 0.75f;
-        float GOOD_FOOD_MULTIPLIER = 2.5f;
+        float GOOD_NUTRITION_MULTIPLIER = 2.5f;
+        float GOOD_SATURATION_MULTIPLIER = 5f;
 
         Player player = e.getPlayer();
 
         // if they didn't eat a berry
         if (!e.getItem().getType().equals(Material.SWEET_BERRIES) &&
                 !e.getItem().getType().equals(Material.GLOW_BERRIES)) {
-            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
-            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
+            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER) + player.getSaturation() - saturationLevelChange);
         }
         else
         {
-            player.setFoodLevel((int) (nutritionLevelChange * GOOD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
-            player.setSaturation((saturationLevelChange * GOOD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+            player.setFoodLevel((int) (nutritionLevelChange * GOOD_NUTRITION_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
+            player.setSaturation((saturationLevelChange * GOOD_SATURATION_MULTIPLIER) + player.getSaturation() - saturationLevelChange);
         }
     }
 }

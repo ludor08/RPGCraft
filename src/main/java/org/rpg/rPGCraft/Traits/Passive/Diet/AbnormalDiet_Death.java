@@ -97,8 +97,8 @@ public class AbnormalDiet_Death extends Trait
         // if they didn't eat meat or mushroom stew
         if (!main.itemManager.GetMeatTypes().contains(e.getItem().getType()) &&
                 !e.getItem().getType().equals(Material.MUSHROOM_STEW)) {
-            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
-            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
+            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER) + player.getSaturation() - saturationLevelChange);
         }
     }
 

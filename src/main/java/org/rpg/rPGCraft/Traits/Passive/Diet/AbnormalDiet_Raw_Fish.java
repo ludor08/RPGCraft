@@ -19,42 +19,10 @@ public class AbnormalDiet_Raw_Fish extends Trait
     public AbnormalDiet_Raw_Fish(Main main) {
         // add the name and lore
         super("Abnormal Diet:Raw Fish", "abnormal diet:raw fish", ChatColor.AQUA, Material.SALMON, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Food other then raw fish only gives 75% saturation.",
-                ChatColor.AQUA.toString() + "   - Raw fish also give 3x the saturation."
+                ChatColor.AQUA.toString() + "   - Food other then raw fish only gives 75% saturation and nutrition.",
+                ChatColor.AQUA.toString() + "   - Raw fish also give 3x the nutrition, and 6x the saturation."
         ));
     }
-
-//    @Override
-//    public void OnFoodLevelChange(FoodLevelChangeEvent e)
-//    {
-//        // if the player ate
-//        if (e.getItem() != null)
-//        {
-//            float GOOD_FOOD_MULTIPLIER = 5f;
-//            float BAD_FOOD_MULTIPLIER = 0.75f;
-//
-//
-//            Player player = (Player) e.getEntity();
-//
-//            // the change in food level
-//            int levelChange = e.getFoodLevel() - player.getFoodLevel();
-//
-//            // if they ate raw fish
-//            if (e.getItem().getType().equals(Material.COD) ||
-//                    e.getItem().getType().equals(Material.SALMON) ||
-//                    e.getItem().getType().equals(Material.PUFFERFISH) ||
-//                    e.getItem().getType().equals(Material.TROPICAL_FISH)) {
-//                // multiply the food gained by the GOOD_FOOD_MULTIPLIER
-//                e.setFoodLevel((int) (levelChange * GOOD_FOOD_MULTIPLIER) + player.getFoodLevel());
-//            }
-//            // if not
-//            else
-//            {
-//                // multiply the food gained by the BAD_FOOD_MULTIPLIER
-//                e.setFoodLevel((int) (levelChange * BAD_FOOD_MULTIPLIER) + player.getFoodLevel());
-//            }
-//        }
-//    }
 
     @Override
     public void OnPlayerItemConsume(PlayerItemConsumeEvent e)
@@ -64,7 +32,8 @@ public class AbnormalDiet_Raw_Fish extends Trait
         float saturationLevelChange = main.itemManager.GetVanillaFoodSaturation(e.getItem().getType());
 
         float BAD_FOOD_MULTIPLIER = 0.75f;
-        float GOOD_FOOD_MULTIPLIER = 3f;
+        float GOOD_NUTRITION_MULTIPLIER = 3f;
+        float GOOD_SATURATION_MULTIPLIER = 6f;
 
         Player player = e.getPlayer();
 
@@ -74,13 +43,13 @@ public class AbnormalDiet_Raw_Fish extends Trait
                     !e.getItem().getType().equals(Material.PUFFERFISH) &&
                     !e.getItem().getType().equals(Material.TROPICAL_FISH))
         {
-            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
-            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+            player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
+            player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER) + player.getSaturation() - saturationLevelChange);
         }
         else
         {
-            player.setFoodLevel((int) (nutritionLevelChange * GOOD_FOOD_MULTIPLIER - nutritionLevelChange) + player.getFoodLevel());
-            player.setSaturation((saturationLevelChange * GOOD_FOOD_MULTIPLIER - saturationLevelChange) + player.getSaturation());
+            player.setFoodLevel((int) (nutritionLevelChange * GOOD_NUTRITION_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
+            player.setSaturation((saturationLevelChange * GOOD_SATURATION_MULTIPLIER) + player.getSaturation() - saturationLevelChange);
         }
     }
 }
