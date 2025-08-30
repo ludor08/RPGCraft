@@ -37,7 +37,7 @@ public class ToxicBite extends Trait
         if (weapon.getType().equals(Material.AIR))
         {
             // if the entity is still alive
-            if (e.getDamager() instanceof LivingEntity living)
+            if (e.getEntity() instanceof LivingEntity living)
             {
                 // give poison
                 living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 1, true, true, true));
