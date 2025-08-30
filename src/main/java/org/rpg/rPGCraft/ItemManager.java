@@ -85,6 +85,14 @@ public class ItemManager
 
     public boolean IsVanillaFood(Material material)
     {
-        return modifyVanillaFoods.contains(material.toString());
+
+         if (modifyVanillaFoods.get("Food." + (material.toString().toUpperCase())) != null)
+         {
+             return true;
+         }
+         else
+         {
+             return false;
+         }
     }
 }
