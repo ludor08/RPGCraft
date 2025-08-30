@@ -1,12 +1,8 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
@@ -181,6 +177,11 @@ public class StatSheetManager implements Listener
                 {
                     return;
                 }
+            }
+
+            if (e.getAction() == Action.LEFT_CLICK_BLOCK)
+            {
+                return;
             }
 
             // update the input sequence with the new action
