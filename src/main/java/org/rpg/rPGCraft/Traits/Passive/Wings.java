@@ -44,11 +44,11 @@ public class Wings extends Trait
     @Override
     public void OnToggleSneak(PlayerToggleSneakEvent e)
     {
-        if (!e.getPlayer().isSneaking() && !e.getPlayer().isFlying())
+        if (e.getPlayer().isSneaking() && !e.getPlayer().isFlying())
         {
-            Vector3d currentVelocity = e.getPlayer().getVelocity().toVector3d();
+            Vector3d direction = new Vector3d(-Math.cos(Math.toRadians(e.getPlayer().getPitch())) * Math.sin(Math.toRadians(e.getPlayer().getYaw())), -Math.sin(Math.toRadians(e.getPlayer().getPitch())), Math.cos(Math.toRadians(e.getPlayer().getPitch())) * Math.cos(Math.toRadians(e.getPlayer().getYaw())));
 
-            e.getPlayer().setVelocity(new Vector(currentVelocity.x, flapPower, currentVelocity.z));
+            e.getPlayer().setVelocity(new Vector((direction.x*flapPower), flapPower, (direction.z*flapPower)));
             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_BEE_POLLINATE, 0.5f,0.5f);
         }
     }
