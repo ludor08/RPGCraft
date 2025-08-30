@@ -167,7 +167,7 @@ public class StatSheetManager implements Listener
     public void OnPlayerInteractEvent(PlayerInteractEvent e)
     {
         // if they didn't click with a block, an empty hand, or food
-        if (e.getHand() == EquipmentSlot.HAND && !e.isBlockInHand() && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR && main.itemManager.IsVanillaFood(e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType()))
+        if (e.getHand() == EquipmentSlot.HAND && !e.isBlockInHand() && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR && !main.itemManager.IsVanillaFood(e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType()))
         {
             // if they interacted with a block
             if (e.getClickedBlock() != null)
