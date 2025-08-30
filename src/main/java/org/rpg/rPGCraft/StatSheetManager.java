@@ -537,7 +537,7 @@ public class StatSheetManager implements Listener
         if (e.getEntity().getKiller() != null)
         {
             // if the entity has a level
-            if (e.getEntity().getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
+            if (e.getEntity().getKiller().getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
             {
                 // if the entity wasn't an MISC entity
                 if (!e.getEntity().getSpawnCategory().equals(SpawnCategory.MISC))
