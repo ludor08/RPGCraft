@@ -1,11 +1,13 @@
 package org.rpg.rPGCraft;
 
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
@@ -43,7 +45,7 @@ public class RPGutils
             }
 
             // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),isStoppedBySolidBlocks))
             {
                 // break out of the loop
                 break;
@@ -85,7 +87,7 @@ public class RPGutils
             }
 
             // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),isStoppedBySolidBlocks))
             {
                 // break out of the loop
                 break;
@@ -112,7 +114,34 @@ public class RPGutils
             position.add(direction);
 
             // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),isStoppedBySolidBlocks))
+            {
+                // break out of the loop
+                break;
+            }
+
+            // if this is supposed to spawn particles
+            if (particle != null)
+            {
+                // spawn the particle
+                location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
+            }
+        }
+
+        return new Location(location.getWorld(), position.x, position.y, position.z);
+    }
+
+    public static Location RecastForAnyBlock(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
+    {
+        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
+
+        for (int i = 0; i < numberOfChecks; i++)
+        {
+            // update the position
+            position.add(direction);
+
+            // check if the block at said position is solid and the recast is stopped by solid blocks
+            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().getType() != Material.AIR)
             {
                 // break out of the loop
                 break;
@@ -136,7 +165,7 @@ public class RPGutils
         for (int i = 0; i < numberOfChecks; i++)
         {
             // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid())
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),true))
             {
                 // break out of the loop
                 break;
@@ -154,26 +183,6 @@ public class RPGutils
         }
 
         return new Location(location.getWorld(), position.x, position.y, position.z);
-    }
-
-    public static void ParticleRecast(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Particle particle, int numberOfParticles)
-    {
-        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
-
-        for (int i = 0; i < numberOfChecks; i++)
-        {
-            // update the position
-            position.add(direction);
-
-            // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (new Location(location.getWorld(), position.x, position.y, position.z).getBlock().isSolid() && isStoppedBySolidBlocks)
-            {
-                return;
-            }
-
-            // spawn the particle
-            location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
-        }
     }
 
     public static void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player)
@@ -334,6 +343,33 @@ public class RPGutils
 
     public static @NotNull Vector3d getFacingDirection(Entity entity) {
         return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch())) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch())), Math.cos(Math.toRadians(entity.getPitch())) * Math.cos(Math.toRadians(entity.getYaw())));
+    }
+
+    public static Block GetBlockCollisionAt(Location location)
+    {
+        RayTraceResult result = location.getWorld().rayTraceBlocks(location, new Vector(0,0.0000000001,0),1, FluidCollisionMode.ALWAYS);
+
+        if (result != null) return location.getWorld().rayTraceBlocks(location, new Vector(0,0.0000000001,0),1, FluidCollisionMode.ALWAYS).getHitBlock();
+        else return null;
+    }
+
+    public static boolean IsBlockCollisionAt(Location location, boolean onlySolidBlockCollisions)
+    {
+        Block block = GetBlockCollisionAt(location);
+
+        if (block != null)
+        {
+            if (block.isSolid())
+            {
+                return true;
+            }
+            else if (!onlySolidBlockCollisions)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
