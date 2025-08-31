@@ -194,17 +194,6 @@ public class StatSheetManager implements Listener
         }
     }
 
-//    @EventHandler
-//    public void OnPlayerInteractEntityEvent(PlayerInteractEntityEvent e)
-//    {
-//        // if they didn't click with an empty hand
-//        if (e.getHand() == EquipmentSlot.HAND && e.getPlayer().getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
-//        {
-//            // update the input sequence with the new action
-//            FindStatSheetByPlayer(e.getPlayer()).UpdateInputSequence(Action.RIGHT_CLICK_AIR);
-//        }
-//    }
-
     @EventHandler
     public void OnRespawnEvent(PlayerRespawnEvent e)
     {
@@ -259,7 +248,7 @@ public class StatSheetManager implements Listener
                     trait.OnDealDamage(e);
                 }
 
-                if (player.getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR)
+                if (player.getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK)
                 {
                     // update the input sequence with the new action
                     FindStatSheetByPlayer(player).UpdateInputSequence(Action.LEFT_CLICK_AIR);
