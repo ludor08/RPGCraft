@@ -5,7 +5,12 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -370,6 +375,21 @@ public class RPGutils
         }
 
         return false;
+    }
+
+    public static void HealWithTraits(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason, Main main)
+    {
+        NamespacedKey boostedHealingDurationKey = new NamespacedKey(main,"boostedHealing_speed_duration");
+        NamespacedKey boostedHealingPowerKey = new NamespacedKey(main,"boostedHealing_speed_power");
+
+        int amountToBeHealed = value;
+
+        if (healer.getPersistentDataContainer().has(boostedHealingDurationKey) && healer.getPersistentDataContainer().has(boostedHealingPowerKey))
+        {
+            target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, healer.getPersistentDataContainer().get(boostedHealingDurationKey, PersistentDataType.INTEGER),healer.getPersistentDataContainer().get(boostedHealingPowerKey, PersistentDataType.INTEGER)));
+        }
+
+        target.heal(amountToBeHealed, regainReason);
     }
 
 }
