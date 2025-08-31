@@ -47,6 +47,11 @@ public class StatSheetManager implements Listener
     {
         for (StatSheet statSheet : statSheets)
         {
+            if (statSheet.GetPlayer() == null)
+            {
+                continue;
+            }
+
             if (statSheet.GetPlayer().equals(player))
             {
                 return statSheet;
