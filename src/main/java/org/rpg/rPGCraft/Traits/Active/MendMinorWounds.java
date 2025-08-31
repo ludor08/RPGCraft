@@ -37,7 +37,7 @@ public class MendMinorWounds extends ActiveTrait
 
         if (lookingAt instanceof LivingEntity livingLookingAt)
         {
-            livingLookingAt.heal(6, EntityRegainHealthEvent.RegainReason.MAGIC);
+            RPGutils.HealWithTraits(player,livingLookingAt,6,EntityRegainHealthEvent.RegainReason.MAGIC,main);
         }
     }
 }
