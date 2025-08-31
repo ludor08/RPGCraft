@@ -90,7 +90,6 @@ public class GrapplingHookArrow extends ActiveTrait
     {
         if (player.getPersistentDataContainer().has(noFallDamageTime))
         {
-
             player.getPersistentDataContainer().remove(noFallDamageTime);
         }
     }
