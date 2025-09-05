@@ -37,6 +37,8 @@ public class ResetCommand implements CommandExecutor
 
                     // pick a new class
                     player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
+
+                    player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, 100); // TODO remove
                     break;
 
                 case "race":
