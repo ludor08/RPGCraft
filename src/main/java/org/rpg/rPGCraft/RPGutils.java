@@ -136,6 +136,39 @@ public class RPGutils
         return new Location(location.getWorld(), position.x, position.y, position.z);
     }
 
+    public static Location RecastForAnything(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
+    {
+        Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
+
+        for (int i = 0; i < numberOfChecks; i++)
+        {
+            // update the position
+            position.add(direction);
+
+            // check if the block at said position is solid and the recast is stopped by solid blocks
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),true))
+            {
+                // break out of the loop
+                break;
+            }
+
+            // check if there are any entities at the given location
+            if (!location.getWorld().getNearbyEntities(new Location(location.getWorld(), position.x, position.y, position.z),0.5,0.5,0.5).isEmpty())
+            {
+                break;
+            }
+
+            // if this is supposed to spawn particles
+            if (particle != null)
+            {
+                // spawn the particle
+                location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
+            }
+        }
+
+        return new Location(location.getWorld(), position.x, position.y, position.z);
+    }
+
     public static Location RecastForAnyBlock(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
@@ -170,7 +203,7 @@ public class RPGutils
         for (int i = 0; i < numberOfChecks; i++)
         {
             // check if the block at said position is solid and the recast is stopped by solid blocks
-            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x, position.y, position.z),true))
+            if (IsBlockCollisionAt(new Location(location.getWorld(), position.x+direction.x, position.y+direction.y, position.z+direction.z),true))
             {
                 // break out of the loop
                 break;
