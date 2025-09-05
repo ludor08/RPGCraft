@@ -8,6 +8,7 @@ import org.rpg.rPGCraft.Traits.Passive.Diet.AbnormalDiet_Raw_Fish;
 import org.rpg.rPGCraft.Traits.Passive.Claws;
 import org.rpg.rPGCraft.Traits.Passive.FelineAgility;
 import org.rpg.rPGCraft.Traits.Passive.NineLives;
+import org.rpg.rPGCraft.Traits.Passive.Size_Change_Small;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public class Feloid extends Race
     // set up the race
     public Feloid(Main main)
     {
-        super("Feloid", ChatColor.WHITE, Material.COD, List.of(new AbnormalDiet_Raw_Fish(main), new Claws(main), new FelineAgility(main), new NineLives(main)),null);
+        super("Feloid", ChatColor.WHITE, Material.COD, List.of(new AbnormalDiet_Raw_Fish(main), new Claws(main), new FelineAgility(main), new NineLives(main), new Size_Change_Small(main)),null);
     }
 }
