@@ -16,8 +16,8 @@ public class Fur extends Trait
     {
         // add the name and lore
         super("Fur", "fur", ChatColor.AQUA, Material.RABBIT_HIDE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Takes 0.5x cold damage.",
-                ChatColor.AQUA.toString() + "   - Takes 1.5x damage from fire."
+                ChatColor.AQUA.toString() + "   - Takes 50% less cold damage.",
+                ChatColor.AQUA.toString() + "   - Takes 50% more fire damage."
         ));
     }
 
