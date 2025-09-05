@@ -23,6 +23,9 @@ public class RebukeOfTheFlame extends Trait
     private final NamespacedKey rebukeDamageKey = new NamespacedKey(main, "rebuke_of_the_flame_damage");
     private final int rebukeDamage = 5;
 
+    private final NamespacedKey rebukeCostKey = new NamespacedKey(main, "rebuke_of_the_flame_cost");
+    private final int baseCost = 10;
+
     public RebukeOfTheFlame(Main main) {
         // add the name and lore
         super("Rebuke Of The Flame", "rebuke of the flame", ChatColor.AQUA, Material.FLINT_AND_STEEL, false, main, List.of(
@@ -35,7 +38,7 @@ public class RebukeOfTheFlame extends Trait
     {
         Player player = (Player) e.getEntity();
 
-        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= 10)
+        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER))
         {
             if (e.getDamageSource().getCausingEntity() == null)
             {
@@ -46,6 +49,11 @@ public class RebukeOfTheFlame extends Trait
             {
                 living.damage(rebukeDamage, player);
 
+                if (player.getPersistentDataContainer().has(new NamespacedKey(main, "rebuke_of_the_flame_set_on_fire")) && player.getPersistentDataContainer().get(new NamespacedKey(main, "rebuke_of_the_flame_set_on_fire"),PersistentDataType.BOOLEAN))
+                {
+                    living.setFireTicks(100);
+                }
+
                 for (int i = 1; i < 20; i++)
                 {
                     Vector3d offset = new Vector3d(Math.cos((Math.PI*2)/((double) i /20)), i*0.1, Math.sin((Math.PI*2)/((double) i /20)));
@@ -55,7 +63,7 @@ public class RebukeOfTheFlame extends Trait
                 }
             }
 
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-10);
+            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER));
         }
     }
 
@@ -65,6 +73,11 @@ public class RebukeOfTheFlame extends Trait
         if (player.getPersistentDataContainer().has(rebukeDamageKey))
         {
             player.getPersistentDataContainer().set(rebukeDamageKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(rebukeDamageKey, PersistentDataType.INTEGER) - rebukeDamage);
+        }
+
+        if (player.getPersistentDataContainer().has(rebukeCostKey))
+        {
+            player.getPersistentDataContainer().set(rebukeCostKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER) - baseCost);
         }
     }
 
@@ -78,6 +91,15 @@ public class RebukeOfTheFlame extends Trait
         else
         {
             player.getPersistentDataContainer().set(rebukeDamageKey, PersistentDataType.INTEGER, rebukeDamage);
+        }
+
+        if (player.getPersistentDataContainer().has(rebukeCostKey))
+        {
+            player.getPersistentDataContainer().set(rebukeCostKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER) + baseCost);
+        }
+        else
+        {
+            player.getPersistentDataContainer().set(rebukeCostKey, PersistentDataType.INTEGER, baseCost);
         }
     }
 }
