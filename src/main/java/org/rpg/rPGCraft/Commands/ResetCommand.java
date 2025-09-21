@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.commands;
+package org.rpg.rPGCraft.Commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

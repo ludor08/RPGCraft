@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.commands;
+package org.rpg.rPGCraft.Commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ResetTab implements TabCompleter
+public class ClassXPTab implements TabCompleter
 {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args)
     {
         if (args.length == 1)
         {
-            return StringUtil.copyPartialMatches(args[0], Arrays.asList("class", "race"), new ArrayList<>());
+            return StringUtil.copyPartialMatches(args[0], Arrays.asList("get", "set", "add"), new ArrayList<>());
         }
 
         return List.of();
