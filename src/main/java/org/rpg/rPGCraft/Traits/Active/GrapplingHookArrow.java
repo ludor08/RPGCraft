@@ -22,7 +22,7 @@ public class GrapplingHookArrow extends ActiveTrait
 
     public GrapplingHookArrow(Main main) {
         // add the name and lore
-        super("Grappling Hook Arrow", "grappling hook arrow", 15, ChatColor.RED, Material.LEAD, true, main, List.of(
+        super("Grappling Hook Arrow", "grappling hook arrow", 40, ChatColor.RED, Material.LEAD, true, main, List.of(
                 ChatColor.AQUA.toString() + "   - Upon activating this trait while holding a bow or crossbow, you will fire",
                 ChatColor.AQUA.toString() + "     an arrow that upon hitting a block or entity will launch towards what it hit."
         ));
@@ -52,17 +52,25 @@ public class GrapplingHookArrow extends ActiveTrait
     }
 
     @Override
-    public void OnShootProjectileHit(ProjectileHitEvent e)
+    public void OnShotProjectileHit(ProjectileHitEvent e)
     {
         if (e.getEntity().getPersistentDataContainer().has(grapplingSpeedReduction))
         {
             Player player = ((Player)e.getEntity().getShooter());
-            Vector3d direction = RPGutils.getDirection(e.getEntity().getLocation(), player.getLocation());
-            direction.div(2);
-            direction.mul(RPGutils.getDistance(player.getLocation(), e.getEntity().getLocation())/e.getEntity().getPersistentDataContainer().get(grapplingSpeedReduction, PersistentDataType.FLOAT));
 
-            player.setVelocity(Vector.fromJOML(direction));
-            player.getPersistentDataContainer().set(noFallDamageTime, PersistentDataType.INTEGER, 50);
+            if (player.getPersistentDataContainer().has(new NamespacedKey(main, "teleporting_grapple")))
+            {
+                player.teleport(e.getEntity().getLocation());
+            }
+            else
+            {
+                Vector3d direction = RPGutils.getDirection(e.getEntity().getLocation(), player.getLocation());
+                direction.div(2);
+                direction.mul(RPGutils.getDistance(player.getLocation(), e.getEntity().getLocation())/e.getEntity().getPersistentDataContainer().get(grapplingSpeedReduction, PersistentDataType.FLOAT));
+
+                player.setVelocity(Vector.fromJOML(direction));
+                player.getPersistentDataContainer().set(noFallDamageTime, PersistentDataType.INTEGER, 50);
+            }
 
             e.setCancelled(true);
             e.getEntity().remove();
