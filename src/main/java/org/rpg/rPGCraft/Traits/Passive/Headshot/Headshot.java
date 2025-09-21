@@ -3,6 +3,7 @@ package org.rpg.rPGCraft.Traits.Passive.Headshot;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class Headshot extends Trait
 {
+    private final NamespacedKey headshotDamageModKey = new NamespacedKey(main, "headshot_damage_mod");
     float headshotDamageMod = 1.15f;
 
     public Headshot(Main main) {
@@ -22,11 +24,11 @@ public class Headshot extends Trait
     }
 
     @Override
-    public void OnShootProjectileHit(ProjectileHitEvent e)
+    public void OnShotProjectileHit(ProjectileHitEvent e)
     {
-        if (e.getHitEntity() != null)
+        if (e.getHitEntity() != null && e.getHitEntity() instanceof LivingEntity livingEntity)
         {
-            double distance = RPGutils.getDistance(e.getEntity().getLocation(), new Location(e.getHitEntity().getWorld(), e.getHitEntity().getX(), e.getHitEntity().getY()+(e.getHitEntity().getHeight()*0.9), e.getHitEntity().getZ()));
+            double distance = RPGutils.getDistance(e.getEntity().getLocation(), livingEntity.getEyeLocation());
 
             double generalHeadSize = Math.max(e.getHitEntity().getBoundingBox().getWidthX(), e.getHitEntity().getBoundingBox().getWidthZ());
 
@@ -47,6 +49,28 @@ public class Headshot extends Trait
                     spectralArrow.setDamage(spectralArrow.getDamage()*headshotDamageMod);
                 }
             }
+        }
+    }
+
+    @Override
+    public void OnRemoveTraitBuff(Player player)
+    {
+        if (player.getPersistentDataContainer().has(headshotDamageModKey))
+        {
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, player.getPersistentDataContainer().get(headshotDamageModKey, PersistentDataType.FLOAT) - headshotDamageMod);
+        }
+    }
+
+    @Override
+    public void OnGainTraitBuff(Player player)
+    {
+        if (player.getPersistentDataContainer().has(headshotDamageModKey))
+        {
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, player.getPersistentDataContainer().get(headshotDamageModKey, PersistentDataType.FLOAT) + headshotDamageMod);
+        }
+        else
+        {
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, headshotDamageMod);
         }
     }
 }
