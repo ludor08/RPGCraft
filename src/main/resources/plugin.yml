@@ -1,5 +1,5 @@
 name: RPGCraft
-version: '1.2.2-BETA'
+version: '1.3-BETA'
 main: org.rpg.rPGCraft.Main
 api-version: '1.21'
 prefix: RPGCraft
@@ -13,5 +13,3 @@ commands:
   classLevel:
 
   reset:
-
-
