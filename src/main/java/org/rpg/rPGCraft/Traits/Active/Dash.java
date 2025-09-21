@@ -38,9 +38,9 @@ public class Dash extends ActiveTrait
         Vector3d direction = RPGutils.getFacingDirection(player);
 
         Location location = RPGutils.RecastUntilCollision(10,direction,player.getEyeLocation(), Particle.CRIT, 5);
-        List<Entity> entities = RPGutils.RecastForEntities(10,direction,player.getEyeLocation(), true, player, null, 0);
+        List<Entity> entities = RPGutils.RecastForEntities(10,direction,player.getEyeLocation(), true, player, null, 0,new Vector3d(0.5,0.5,0.5));
 
-        List<Entity> feetEntities = RPGutils.RecastForEntities(10,direction,player.getLocation(), false, player, null, 0);
+        List<Entity> feetEntities = RPGutils.RecastForEntities(10,direction,player.getLocation(), false, player, null, 0,new Vector3d(0.5,0.5,0.5));
 
         for (Entity entity : feetEntities)
         {
