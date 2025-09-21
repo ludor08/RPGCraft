@@ -274,7 +274,7 @@ public class StatSheetManager implements Listener
             {
                 for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
                 {
-                    trait.OnShootProjectileHit(e);
+                    trait.OnShotProjectileHit(e);
                 }
             }
             // if they do not have one
