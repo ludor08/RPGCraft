@@ -1,20 +1,21 @@
 package org.rpg.rPGCraft.Traits.Active;
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Debug;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class SteadyAim extends ActiveTrait
 {
     NamespacedKey damageModKey = new NamespacedKey(main, "steady_aim_damage_bonus");
     float damageMod = 1.75f;
+
+    private final NamespacedKey laserDamageKey = new NamespacedKey(main, "laser_shot_damage");
 
     AttributeModifier speedMod = new AttributeModifier(new NamespacedKey(main, "steady_aim_speed_mod"), -10, AttributeModifier.Operation.ADD_NUMBER);
 
@@ -63,7 +66,7 @@ public class SteadyAim extends ActiveTrait
             player.sendMessage("You must be sneaking to activate this trait.");
         }
 
-        player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetCost());
+        player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
     }
 
     @Override
@@ -73,6 +76,25 @@ public class SteadyAim extends ActiveTrait
 
         if (player.getPersistentDataContainer().has(damageModKey))
         {
+            if (player.getPersistentDataContainer().has(laserDamageKey))
+            {
+                e.setCancelled(true);
+
+                Vector3d direction = RPGutils.getFacingDirection(player).mul(0.1);
+                Location location = player.getEyeLocation();
+
+                ShootLaser(direction, location, player);
+
+                Bukkit.getScheduler().runTaskLater(main, () -> {
+                    ShootLaser(direction, location, player);
+                }, 20);
+
+                Bukkit.getScheduler().runTaskLater(main, () -> {
+                    ShootLaser(direction, location, player);
+                }, 40);
+                return;
+            }
+
             if (e.getEntity() instanceof Arrow arrow)
             {
                 arrow.setDamage(arrow.getDamage()*player.getPersistentDataContainer().get(damageModKey, PersistentDataType.FLOAT));
@@ -100,6 +122,19 @@ public class SteadyAim extends ActiveTrait
             {
                 e.getPlayer().getPersistentDataContainer().remove(damageModKey);
                 e.getPlayer().getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
+            }
+        }
+    }
+
+    public void ShootLaser(Vector3d direction, Location location, Player player)
+    {
+        List<Entity> entities = RPGutils.RecastForEntities(250, direction, location, true, player, Particle.HAPPY_VILLAGER, 5,new Vector3d(0.5,0.5,0.5));
+
+        for (Entity entity : entities)
+        {
+            if (entity instanceof LivingEntity living)
+            {
+                living.damage(player.getPersistentDataContainer().get(new NamespacedKey(main, "laser_shot_damage"), PersistentDataType.DOUBLE), DamageSource.builder(DamageType.ARROW).build());
             }
         }
     }
