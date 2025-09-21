@@ -85,7 +85,7 @@ public class StatSheet
             }
 
             // check if any of the trait are tick trait
-            for (Trait trait : GetTraits())
+            for (Trait trait : GetActiveTraits())
             {
                 if (trait.tickTrait)
                 {
