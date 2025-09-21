@@ -38,7 +38,7 @@ public class BackStab extends Trait
             Location middleBackLocation = new Location(e.getEntity().getWorld(), e.getEntity().getLocation().getX(), e.getEntity().getLocation().getY() + (e.getEntity().getHeight()/2), e.getEntity().getLocation().getZ());
 
             // get the entities behind the damaged entity
-            List<Entity> entities = RPGutils.RecastForEntities(10, rotation.mul(-1), middleBackLocation, false, e.getEntity(), Particle.CRIT, 5);
+            List<Entity> entities = RPGutils.RecastForEntities(10, rotation.mul(-1), middleBackLocation, false, e.getEntity(), Particle.CRIT, 5,new Vector3d(0.5,0.5,0.5));
 
             // if the damager is behind the damaged
             if (entities.contains(e.getDamager()))
