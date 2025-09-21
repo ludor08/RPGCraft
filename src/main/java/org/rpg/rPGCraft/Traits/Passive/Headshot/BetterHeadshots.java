@@ -3,10 +3,13 @@ package org.rpg.rPGCraft.Traits.Passive.Headshot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.SpectralArrow;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
@@ -15,7 +18,8 @@ import java.util.List;
 
 public class BetterHeadshots extends Trait
 {
-    float headshotDamageMod = 1.10f;
+    private final NamespacedKey headshotDamageModKey = new NamespacedKey(main, "headshot_damage_mod");
+    float headshotDamageMod = 0.10f;
 
     public BetterHeadshots(Main main) {
         // add the name and lore
@@ -25,29 +29,24 @@ public class BetterHeadshots extends Trait
     }
 
     @Override
-    public void OnShootProjectileHit(ProjectileHitEvent e)
+    public void OnRemoveTraitBuff(Player player)
     {
-        if (e.getHitEntity() != null)
+        if (player.getPersistentDataContainer().has(headshotDamageModKey))
         {
-            double distance = RPGutils.getDistance(e.getEntity().getLocation(), new Location(e.getHitEntity().getWorld(), e.getHitEntity().getX(), e.getHitEntity().getY()+(e.getHitEntity().getHeight()*0.9), e.getHitEntity().getZ()));
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, player.getPersistentDataContainer().get(headshotDamageModKey, PersistentDataType.FLOAT) - headshotDamageMod);
+        }
+    }
 
-            double generalHeadSize = Math.max(e.getHitEntity().getBoundingBox().getWidthX(), e.getHitEntity().getBoundingBox().getWidthZ());
-
-            if (distance < generalHeadSize*1.5)
-            {
-                if (e.getEntity() instanceof Arrow arrow)
-                {
-                    arrow.setDamage(arrow.getDamage()*headshotDamageMod);
-                }
-                else if (e.getEntity() instanceof Trident trident)
-                {
-                    trident.setDamage(trident.getDamage()*headshotDamageMod);
-                }
-                else if (e.getEntity() instanceof SpectralArrow spectralArrow)
-                {
-                    spectralArrow.setDamage(spectralArrow.getDamage()*headshotDamageMod);
-                }
-            }
+    @Override
+    public void OnGainTraitBuff(Player player)
+    {
+        if (player.getPersistentDataContainer().has(headshotDamageModKey))
+        {
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, player.getPersistentDataContainer().get(headshotDamageModKey, PersistentDataType.FLOAT) + headshotDamageMod);
+        }
+        else
+        {
+            player.getPersistentDataContainer().set(headshotDamageModKey, PersistentDataType.FLOAT, headshotDamageMod);
         }
     }
 }
