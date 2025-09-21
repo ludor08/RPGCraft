@@ -34,7 +34,7 @@ public class Ricochet extends Trait
     }
 
     @Override
-    public void OnShootProjectileHit(ProjectileHitEvent e)
+    public void OnShotProjectileHit(ProjectileHitEvent e)
     {
         if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(main,"ricochet_max_ricochets")) && e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER) > 0)
         {
