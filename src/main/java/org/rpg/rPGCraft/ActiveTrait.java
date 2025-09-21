@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class ActiveTrait extends Trait
 {
-    private int cost;
+    private final int cost;
 
     public ActiveTrait(String name, String name_id, int cost, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
     {
@@ -23,16 +23,16 @@ public abstract class ActiveTrait extends Trait
     public void OnInputSequence(Player player)
     {
         // if the player has the needed mana
-        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetCost() >= 0)
+        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player) >= 0)
         {
             TriggerActiveEvent(player);
 
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetCost());
+            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player));
         }
         // if not
         else
         {
-            player.sendMessage(ChatColor.RED + "You do not have enough mana to use " + name + ChatColor.RED + ". " + "You need " + cost + " mana");
+            player.sendMessage(ChatColor.RED + "You do not have enough mana to use " + name + ChatColor.RED + ". " + "You need " + GetModifiedCost(player) + " mana");
         }
     }
 
@@ -41,5 +41,21 @@ public abstract class ActiveTrait extends Trait
     public int GetCost()
     {
         return cost;
+    }
+
+    public int GetModifiedCost(Player player)
+    {
+        // get the modifier price
+        int newCost = cost;
+
+        for (Trait trait : main.statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
+        {
+            if (trait instanceof CostModifierTrait costModifier && costModifier.GetModifiedTraitID().equals(name_id))
+            {
+                newCost += costModifier.GetCostModifier();
+            }
+        }
+
+        return newCost;
     }
 }
