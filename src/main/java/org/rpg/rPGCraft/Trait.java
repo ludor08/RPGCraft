@@ -1,13 +1,8 @@
 package org.rpg.rPGCraft;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,7 +13,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,8 +111,6 @@ public abstract class Trait
 
     }
 
-
-
     public void OnRespawnBuffs(PlayerRespawnEvent e)
     {
 
@@ -134,7 +126,7 @@ public abstract class Trait
 
     }
 
-    public void OnShootProjectileHit(ProjectileHitEvent e)
+    public void OnShotProjectileHit(ProjectileHitEvent e)
     {
 
     }
