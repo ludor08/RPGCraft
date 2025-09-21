@@ -67,7 +67,7 @@ public class RPGutils
         return null;
     }
 
-    public static List<Entity> RecastForEntities(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles)
+    public static List<Entity> RecastForEntities(int numberOfChecks, Vector3d direction, Location location, boolean isStoppedBySolidBlocks, Entity shooter, Particle particle, int numberOfParticles, Vector3d collisionBox)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
         List<Entity> entities = new ArrayList<>();
@@ -78,7 +78,7 @@ public class RPGutils
             position.add(direction);
 
             // check if the ray has hit an entity
-            List<Entity> nearbyEntities = new ArrayList<>(location.getWorld().getNearbyEntities(new Location(location.getWorld(), position.x, position.y, position.z), 0.5, 0.5, 0.5).stream().toList());
+            List<Entity> nearbyEntities = new ArrayList<>(location.getWorld().getNearbyEntities(new Location(location.getWorld(), position.x, position.y, position.z), collisionBox.x, collisionBox.y, collisionBox.z).stream().toList());
 
             if (nearbyEntities.contains(shooter))
             {
