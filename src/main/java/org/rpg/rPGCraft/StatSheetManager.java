@@ -37,7 +37,7 @@ public class StatSheetManager implements Listener
 
         for (int i = 1; i < level; i++)
         {
-            neededXp += (int) Math.floor(neededXp*1.25);
+            neededXp = (int) Math.floor(neededXp*1.25);
         }
 
         return neededXp;
