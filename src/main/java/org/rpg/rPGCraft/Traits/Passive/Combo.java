@@ -3,12 +3,15 @@ package org.rpg.rPGCraft.Traits.Passive;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.ItemManager;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Trait;
 
@@ -16,13 +19,18 @@ import java.util.List;
 
 public class Combo extends Trait
 {
+    NamespacedKey lacerate = new NamespacedKey(main, "lacerate");
+
     NamespacedKey comboCount = new NamespacedKey(main, "combo_count");
     NamespacedKey comboTimer = new NamespacedKey(main, "combo_timer");
+
+    NamespacedKey comboDamageScalerKey = new NamespacedKey(main, "combo_damage_scaler");
+    int baseComboDamageScaler = 1;
 
     public Combo(Main main) {
         // add the name and lore
         super("Combo", "combo", ChatColor.AQUA, Material.CHAIN, true, main, List.of(
-                ChatColor.AQUA.toString() + "   - Every time you hit a creature you gain one combo.",
+                ChatColor.AQUA.toString() + "   - Every time you hit a creature with a weapon you gain one combo.",
                 ChatColor.AQUA.toString() + "   - You do plus 1% for every combo that you have.",
                 ChatColor.AQUA.toString() + "   - Your combo reset when you take damage or if you go 3 seconds without gaining more combo."
         ));
@@ -48,11 +56,28 @@ public class Combo extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-        e.setDamage(e.getDamage() * (1 + (e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) / 100)));
+        if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE || main.itemManager.GetWeaponTypes().contains(((Player)e.getDamager()).getInventory().getItem(EquipmentSlot.HAND).getType()))
+        {
+            e.setDamage(e.getDamage() * (1 + (e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) / 100)));
 
-        e.getDamager().getPersistentDataContainer().set(comboTimer, PersistentDataType.FLOAT, 3f);
-        e.getDamager().getPersistentDataContainer().set(comboCount, PersistentDataType.INTEGER, e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER)+1);
-        e.getDamager().sendMessage("Combo : " + e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER));
+            e.getDamager().getPersistentDataContainer().set(comboTimer, PersistentDataType.FLOAT, 3f);
+            e.getDamager().getPersistentDataContainer().set(comboCount, PersistentDataType.INTEGER, e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER)+1);
+            e.getDamager().sendMessage("Combo : " + e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER));
+
+            if (e.getDamager().getPersistentDataContainer().has(lacerate))
+            {
+                if (e.getEntity() instanceof LivingEntity living)
+                {
+                    if (e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) % 3 == 0)
+                    {
+                        int lacerateDamage = (int) Math.min(10, Math.floor(living.getAttribute(Attribute.MAX_HEALTH).getValue()/10));
+
+                        living.damage(lacerateDamage, e.getDamager());
+                    }
+                }
+
+            }
+        }
     }
 
     @Override
@@ -72,6 +97,15 @@ public class Combo extends Trait
     {
         player.getPersistentDataContainer().set(comboTimer, PersistentDataType.FLOAT, 0f);
         player.getPersistentDataContainer().set(comboCount, PersistentDataType.INTEGER, 0);
+
+        if (player.getPersistentDataContainer().has(comboDamageScalerKey))
+        {
+            player.getPersistentDataContainer().set(comboDamageScalerKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(comboDamageScalerKey, PersistentDataType.INTEGER) + baseComboDamageScaler);
+        }
+        else
+        {
+            player.getPersistentDataContainer().set(comboDamageScalerKey, PersistentDataType.INTEGER, baseComboDamageScaler);
+        }
     }
 
     @Override
@@ -79,5 +113,10 @@ public class Combo extends Trait
     {
         player.getPersistentDataContainer().remove(comboTimer);
         player.getPersistentDataContainer().remove(comboCount);
+
+        if (player.getPersistentDataContainer().has(comboDamageScalerKey))
+        {
+            player.getPersistentDataContainer().set(comboDamageScalerKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(comboDamageScalerKey, PersistentDataType.INTEGER) - baseComboDamageScaler);
+        }
     }
 }
