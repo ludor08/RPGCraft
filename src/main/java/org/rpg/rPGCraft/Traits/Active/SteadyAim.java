@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Debug;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
@@ -128,7 +129,7 @@ public class SteadyAim extends ActiveTrait
 
     public void ShootLaser(Vector3d direction, Location location, Player player)
     {
-        List<Entity> entities = RPGutils.RecastForEntities(250, direction, location, true, player, Particle.HAPPY_VILLAGER, 5,new Vector3d(0.5,0.5,0.5));
+        List<Entity> entities = RPGraycast.RecastForEntities(250, direction, location, true, player, Particle.HAPPY_VILLAGER, 5,new Vector3d(0.5,0.5,0.5));
 
         for (Entity entity : entities)
         {

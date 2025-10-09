@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
@@ -51,6 +52,11 @@ public class CorrectiveWindResistance extends Trait
                         continue;
                     }
 
+                    if (projectile.getPersistentDataContainer().has(new NamespacedKey(main,"corrective_wind_resistance_done_homing")))
+                    {
+                        continue;
+                    }
+
                     if (target instanceof LivingEntity livingTarget)
                     {
                         // get the current direction
@@ -69,7 +75,7 @@ public class CorrectiveWindResistance extends Trait
                             continue;
                         }
 
-                        if (!Objects.equals(RPGutils.RecastForEntity((int) range, direction, projectile.getLocation(), true, projectile, null, 0), livingTarget))
+                        if (!Objects.equals(RPGraycast.RecastForEntity((int) range, direction, projectile.getLocation(), true, projectile, null, 0), livingTarget))
                         {
                             continue;
                         }
@@ -77,6 +83,8 @@ public class CorrectiveWindResistance extends Trait
                         Vector3d correction = (direction.sub(currentDirection)).div(accuracy);
                         
                         projectile.setVelocity(Vector.fromJOML(currentDirection.add(correction)));
+
+                        projectile.getPersistentDataContainer().set(new NamespacedKey(main,"corrective_wind_resistance_done_homing"), PersistentDataType.BOOLEAN, true);
                         break;
                     }
                 }

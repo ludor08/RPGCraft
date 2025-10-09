@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
@@ -64,7 +65,7 @@ public class Ricochet extends Trait
                             continue;
                         }
 
-                        if (!Objects.equals(RPGutils.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
+                        if (!Objects.equals(RPGraycast.RecastForEntity(20, direction, e.getEntity().getLocation(), true, e.getEntity(), null, 0), target))
                         {
                             continue;
                         }

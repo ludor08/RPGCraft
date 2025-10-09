@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
@@ -43,7 +44,7 @@ public class WindShot extends Trait
 
             if (player.getPersistentDataContainer().has(new NamespacedKey(main, "high_power_wind_shot")))
             {
-                List<Entity> entities = RPGutils.RecastForEntities(100,RPGutils.getFacingDirection(player), player.getEyeLocation(),true,player,null,0,new Vector3d(3,3,3));
+                List<Entity> entities = RPGraycast.RecastForEntities(100,RPGutils.getFacingDirection(player), player.getEyeLocation(),true,player,null,0,new Vector3d(3,3,3));
 
                 for (Entity entity : entities)
                 {

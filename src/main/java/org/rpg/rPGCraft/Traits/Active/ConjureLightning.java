@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class ConjureLightning extends ActiveTrait
         player.getWorld().setThunderDuration(5800);
 
         // spawn the lightning
-        player.getWorld().spawn(RPGutils.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
-        player.getWorld().spawn(RPGutils.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
-        player.getWorld().spawn(RPGutils.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
+        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
+        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
+        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Trait;
 
@@ -52,7 +53,7 @@ public class WeAreOne extends Trait
         Player player = e.getPlayer();
 
         Vector3d direction = RPGutils.getFacingDirection(player);
-        Location lookingAt = RPGutils.Recast(100, direction, e.getPlayer().getEyeLocation(), true, null, 0);
+        Location lookingAt = RPGraycast.Recast(100, direction, e.getPlayer().getEyeLocation(), true, null, 0);
 
         // if the block is a sculk
         if (sculkBlocks.contains(lookingAt.getBlock().getType()))
