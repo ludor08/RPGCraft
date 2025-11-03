@@ -38,7 +38,7 @@ public class Claws extends Trait
         ItemStack weapon = ((Player) e.getDamager()).getInventory().getItem(EquipmentSlot.HAND);
 
         // if the player was using their hands
-        if (weapon.getType().equals(Material.AIR))
+        if (weapon.getType().equals(Material.AIR) && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK)
         {
             // do DAMAGE_MOD times more damage
             e.setDamage(e.getDamage()*DAMAGE_MOD);
