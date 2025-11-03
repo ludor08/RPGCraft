@@ -16,8 +16,8 @@ public class SecretTechnique extends CostModifierTrait
 
     public SecretTechnique(Main main) {
         // add the name and lore
-        super("Secret Technique", "secret technique", -15, "smoke bomb", ChatColor.AQUA, Material.GUNPOWDER, main, List.of(
-                ChatColor.AQUA.toString() + "   - Makes Smoke Bomb 15 mana cheaper.",
+        super("Secret Technique", "secret technique", 5, "smoke bomb", ChatColor.AQUA, Material.GUNPOWDER, main, List.of(
+                ChatColor.AQUA.toString() + "   - Makes Smoke Bomb cost 5 more mana.",
                 ChatColor.AQUA.toString() + "   - Using Smoke Bomb while sneaking will teleport you where you're looking."
         ));
     }
