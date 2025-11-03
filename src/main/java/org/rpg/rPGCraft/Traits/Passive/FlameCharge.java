@@ -17,7 +17,7 @@ public class FlameCharge extends Trait
     public FlameCharge(Main main) {
         // add the name and lore
         super("Flame Charge", "flame charge", ChatColor.AQUA, Material.BLAZE_POWDER, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Makes Flame Charge light enemies a flame."
+                ChatColor.AQUA.toString() + "   - Makes Flame Charge light enemies aflame."
         ));
     }
 
