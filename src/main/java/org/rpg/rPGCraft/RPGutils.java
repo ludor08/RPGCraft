@@ -181,7 +181,8 @@ public class RPGutils
         return new Vector3d((startLocation.getX() - endLocation.getX()), startLocation.getY() - endLocation.getY(), (startLocation.getZ() - endLocation.getZ())).normalize();
     }
 
-    public static @NotNull Vector3d getFacingDirection(Entity entity) {
+    public static @NotNull Vector3d getFacingDirection(Entity entity)
+    {
         return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch())) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch())), Math.cos(Math.toRadians(entity.getPitch())) * Math.cos(Math.toRadians(entity.getYaw())));
     }
 
@@ -239,20 +240,24 @@ public class RPGutils
         }
     }
 
-    public static void SetNamespacedKeyValue(Entity entity, NamespacedKey namespacedKey, boolean bool)
+    public static void SetNamespacedKeyValue(Entity entity, NamespacedKey namespacedKey, boolean value)
     {
-        if (!entity.getPersistentDataContainer().has(namespacedKey))
-        {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.BOOLEAN, bool);
-        }
+        entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.BOOLEAN, value);
+    }
+
+    public static void SetNamespacedKeyValue(Entity entity, NamespacedKey namespacedKey, float value)
+    {
+        entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, value);
+    }
+
+    public static void SetNamespacedKeyValue(Entity entity, NamespacedKey namespacedKey, double value)
+    {
+        entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.DOUBLE, value);
     }
 
     public static void SetNamespacedKeyValue(Entity entity, NamespacedKey namespacedKey, int value)
     {
-        if (!entity.getPersistentDataContainer().has(namespacedKey))
-        {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, value);
-        }
+        entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, value);
     }
 
     public static void AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, int baseLevel, int amountToBeAdded)
@@ -264,6 +269,18 @@ public class RPGutils
         else
         {
             entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, baseLevel + amountToBeAdded);
+        }
+    }
+
+    public static void AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, float baseLevel, float amountToBeAdded)
+    {
+        if (entity.getPersistentDataContainer().has(namespacedKey))
+        {
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, entity.getPersistentDataContainer().get(namespacedKey, PersistentDataType.FLOAT) + amountToBeAdded);
+        }
+        else
+        {
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, baseLevel + amountToBeAdded);
         }
     }
 
