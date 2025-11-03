@@ -20,7 +20,7 @@ public class SneakAttack extends Trait
     public SneakAttack(Main main) {
         // add the name and lore
         super("Sneak Attack", "sneak attack", ChatColor.AQUA, Material.REDSTONE, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Attacking while invisible and crouching will consume invisibility, but deal 150% more."
+                ChatColor.AQUA.toString() + "   - Attacking while invisible and crouching will consume invisibility, but deal 50% more."
         ));
 
         this.main = main;
