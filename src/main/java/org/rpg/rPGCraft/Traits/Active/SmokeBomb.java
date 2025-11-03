@@ -58,22 +58,12 @@ public class SmokeBomb extends ActiveTrait
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        if (player.getPersistentDataContainer().has(durationKey))
-        {
-            player.getPersistentDataContainer().set(durationKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(durationKey, PersistentDataType.INTEGER) - baseDuration);
-        }
+        RPGutils.AddToNamespacedKey(player, durationKey, 0, -baseDuration);
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        if (player.getPersistentDataContainer().has(durationKey))
-        {
-            player.getPersistentDataContainer().set(durationKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(durationKey, PersistentDataType.INTEGER) + baseDuration);
-        }
-        else
-        {
-            player.getPersistentDataContainer().set(durationKey, PersistentDataType.INTEGER, baseDuration);
-        }
+        RPGutils.AddToNamespacedKey(player, durationKey, 0, baseDuration);
     }
 }
