@@ -27,6 +27,8 @@ public class StatSheetManager implements Listener
 {
     Main main;
 
+    NamespacedKey attackInputCanceledKey;
+
     // stat sheets
     private List<StatSheet> statSheets = new ArrayList<>();
 
@@ -110,6 +112,8 @@ public class StatSheetManager implements Listener
     {
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this,main);
+
+        attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
 
         for (Player player : Bukkit.getOnlinePlayers())
         {
@@ -244,15 +248,19 @@ public class StatSheetManager implements Listener
             // if the player has a stat sheet
             if (FindStatSheetByPlayer(player) != null)
             {
-                for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
+                if (!InputCanceled(player))
                 {
-                    trait.OnDealDamage(e);
-                }
+                    for (Trait trait : FindStatSheetByPlayer(player).GetActiveTraits())
+                    {
+                        trait.OnDealDamage(e);
+                    }
 
-                if (player.getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK)
-                {
-                    // update the input sequence with the new action
-                    FindStatSheetByPlayer(player).UpdateInputSequence(Action.LEFT_CLICK_AIR);
+                    if (player.getInventory().getItem(EquipmentSlot.HAND).getType() != Material.AIR && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK)
+                    {
+                        // update the input sequence with the new action
+                        FindStatSheetByPlayer(player).UpdateInputSequence(Action.LEFT_CLICK_AIR);
+
+                    }
                 }
             }
             // if they do not have one
@@ -262,6 +270,16 @@ public class StatSheetManager implements Listener
                 AddStatSheet(new StatSheet(player.getUniqueId(), main));
             }
         }
+    }
+
+    private boolean InputCanceled(Player player)
+    {
+        if (player.getPersistentDataContainer().has(attackInputCanceledKey))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     @EventHandler
