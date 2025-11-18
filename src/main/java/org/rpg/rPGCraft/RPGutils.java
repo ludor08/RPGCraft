@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RPGutils
 {
-    // attribute
+    /// attribute
 
     public static void SafeAttributeAdd(Attribute attribute, AttributeModifier attributeModifier, Player player)
     {
@@ -130,7 +130,7 @@ public class RPGutils
         }
     }
 
-    // spatial
+    /// spatial
 
     public static double getDistance(Location location1, Location location2)
     {
@@ -186,6 +186,53 @@ public class RPGutils
         return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch())) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch())), Math.cos(Math.toRadians(entity.getPitch())) * Math.cos(Math.toRadians(entity.getYaw())));
     }
 
+    public static @NotNull Vector3d getFacingUpDirection(Entity entity)
+    {
+        return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch() + ((Math.PI)/2))) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch()) + ((Math.PI)/2)), Math.cos(Math.toRadians(entity.getPitch()) + ((Math.PI)/2)) * Math.cos(Math.toRadians(entity.getYaw())));
+    }
+
+    public static @NotNull Vector3d getBodyFacingDirection(Entity entity)
+    {
+        return new Vector3d(-Math.cos(Math.toRadians(0)) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(0)), Math.cos(Math.toRadians(0)) * Math.cos(Math.toRadians(entity.getYaw())));
+    }
+
+    public static @NotNull Vector3d getBodyRightDirection(Entity entity)
+    {
+        return new Vector3d(-Math.cos(Math.toRadians(0)) * Math.sin(Math.toRadians(entity.getYaw()) + ((Math.PI)/2)), -Math.sin(Math.toRadians(0)), Math.cos(Math.toRadians(0)) * Math.cos(Math.toRadians(entity.getYaw()) + ((Math.PI)/2)));
+    }
+
+    public static @NotNull Vector3d getOffsetBodyDirection(Entity entity, Location loc, float forward, float sides, float up)
+    {
+        Vector3d position = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
+
+        // move it forward
+        position.add(getBodyFacingDirection(entity).mul(forward));
+
+        // move it to the sides (right being positive)
+        position.add(getBodyRightDirection(entity).mul(sides));
+
+        // move it up
+        position.add(new Vector3d(0, 1, 0).mul(up));
+
+        return position;
+    }
+
+    public static @NotNull Vector3d getOffsetFacingDirection(Entity entity, Location loc, float forward, float sides, float up)
+    {
+        Vector3d position = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
+
+        // move it forward
+        position.add(getFacingDirection(entity).mul(forward));
+
+        // move it to the sides (right being positive)
+        position.add(getBodyRightDirection(entity).mul(sides));
+
+        // move it up
+        position.add(getFacingUpDirection(entity).mul(up));
+
+        return position;
+    }
+
     public static Block GetBlockCollisionAt(Location location)
     {
         RayTraceResult result = location.getWorld().rayTraceBlocks(location, new Vector(0,0.0000000001,0),1, FluidCollisionMode.ALWAYS);
@@ -213,7 +260,7 @@ public class RPGutils
         return false;
     }
 
-    // traits
+    /// traits
 
     public static void HealWithTraits(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason, Main main)
     {
@@ -230,7 +277,7 @@ public class RPGutils
         target.heal(amountToBeHealed, regainReason);
     }
 
-    // namespacedKeys
+    /// namespacedKeys
 
     public static void RemoveNamespacedKey(Entity entity, NamespacedKey namespacedKey)
     {
