@@ -1,24 +1,20 @@
-package org.rpg.rPGCraft.Traits.Passive.Diet;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class AbnormalDiet_Raw_Fish extends Trait
 {
 
-    public AbnormalDiet_Raw_Fish(Main main) {
+    public AbnormalDiet_Raw_Fish() {
         // add the name and lore
-        super("Abnormal Diet:Raw Fish", "abnormal diet:raw fish", ChatColor.AQUA, Material.SALMON, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Abnormal Diet:Raw Fish", "abnormal diet:raw fish", Material.SALMON, false, List.of(
                 ChatColor.AQUA.toString() + "   - Food other then raw fish only gives 75% saturation and nutrition.",
                 ChatColor.AQUA.toString() + "   - Raw fish also give 3x the nutrition, and 6x the saturation."
         ));
@@ -28,8 +24,8 @@ public class AbnormalDiet_Raw_Fish extends Trait
     public void OnPlayerItemConsume(PlayerItemConsumeEvent e)
     {
         // the change in food level
-        int nutritionLevelChange = main.itemManager.GetVanillaFoodNutrition(e.getItem().getType());
-        float saturationLevelChange = main.itemManager.GetVanillaFoodSaturation(e.getItem().getType());
+        int nutritionLevelChange = Main.GetInstance().itemManager.GetVanillaFoodNutrition(e.getItem().getType());
+        float saturationLevelChange = Main.GetInstance().itemManager.GetVanillaFoodSaturation(e.getItem().getType());
 
         float BAD_FOOD_MULTIPLIER = 0.75f;
         float GOOD_NUTRITION_MULTIPLIER = 3f;

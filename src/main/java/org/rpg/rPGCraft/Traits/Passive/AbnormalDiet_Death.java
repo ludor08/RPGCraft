@@ -1,38 +1,30 @@
-package org.rpg.rPGCraft.Traits.Passive.Diet;
+package org.rpg.rPGCraft.Traits.Passive;
 
-import io.papermc.paper.datacomponent.item.FoodProperties;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class AbnormalDiet_Death extends Trait
 {
-    private final NamespacedKey willLoseHunger;
+    private final NamespacedKey willLoseHunger = new NamespacedKey(Main.GetInstance(), "abnormal_diet_death_hunger");
 
-    public AbnormalDiet_Death(Main main) {
+    public AbnormalDiet_Death() {
         // add the name and lore
-        super("Abnormal Diet:Death", "abnormal diet:death", ChatColor.AQUA, Material.WITHER_ROSE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Abnormal Diet:Death", "abnormal diet:death", Material.WITHER_ROSE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Food other then meat and mushroom stew give half as much saturation and nutrition.",
                 ChatColor.AQUA.toString() + "   - Needs to eat half as often.",
                 ChatColor.AQUA.toString() + "   - Immune to the hunger condition."
         ));
-
-        willLoseHunger = new NamespacedKey(main, "abnormal_diet_death_hunger");
     }
 
     @Override
@@ -95,7 +87,7 @@ public class AbnormalDiet_Death extends Trait
         Player player = e.getPlayer();
 
         // if they didn't eat meat or mushroom stew
-        if (!main.itemManager.GetMeatTypes().contains(e.getItem().getType()) &&
+        if (!Main.GetInstance().itemManager.GetMeatTypes().contains(e.getItem().getType()) &&
                 !e.getItem().getType().equals(Material.MUSHROOM_STEW)) {
             player.setFoodLevel((int) (nutritionLevelChange * BAD_FOOD_MULTIPLIER) + player.getFoodLevel() - nutritionLevelChange);
             player.setSaturation((saturationLevelChange * BAD_FOOD_MULTIPLIER) + player.getSaturation() - saturationLevelChange);

@@ -1,7 +1,6 @@
-package org.rpg.rPGCraft.Traits.Passive.Diet;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,12 +9,9 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -23,14 +19,14 @@ public class AbnormalDiet_Souls extends Trait
 {
     private final NamespacedKey willLoseHunger;
 
-    public AbnormalDiet_Souls(Main main) {
+    public AbnormalDiet_Souls() {
         // add the name and lore
-        super("Abnormal Diet:Souls", "abnormal diet:souls", ChatColor.AQUA, Material.ECHO_SHARD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Abnormal Diet:Souls", "abnormal diet:souls", Material.ECHO_SHARD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Gain nutrition, saturation, and health from XP at a 3 to 1 ratio. Foods give half as much nutrition and saturation",
                 ChatColor.AQUA.toString() + "   - Needs to eat half as often."
         ));
 
-        willLoseHunger = new NamespacedKey(main, "abnormal_diet_souls_hunger");
+        willLoseHunger = new NamespacedKey(Main.GetInstance(), "abnormal_diet_souls_hunger");
     }
 
     @Override
