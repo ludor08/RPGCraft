@@ -1,0 +1,100 @@
+[
+  {
+    "name":"Lesser detoxifying charm",
+    "lore":["Gives you immunity to the poison effect when held."],
+    "material":"STRING",
+    "maxStackSize":1,
+    "itemID":"lesser_detoxifying_charm",
+    "customModelData":1,
+
+    "itemEnhancements":
+    [
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"cancel main hand block interaction"}
+      },
+      {
+        "useCase":"InOffHand",
+        "trait":{"name_id":"cancel off hand block interaction"}
+      },
+      {
+        "useCase":"InAnyHand",
+        "trait":{"name_id":"mithridatim"}
+      }
+    ],
+
+    "itemAttributes":[],
+
+    "itemEnchantments": []
+  },
+  {
+    "name":"Poison gland",
+    "lore":[],
+    "material":"FERMENTED_SPIDER_EYE",
+    "maxStackSize":64,
+    "itemID":"poison_gland",
+    "customModelData":1,
+
+    "itemEnhancements":[],
+
+    "itemAttributes":[],
+
+    "itemEnchantments":[]
+  },
+  {
+    "name":"Purified poison gland",
+    "lore":[],
+    "material":"GLISTERING_MELON_SLICE",
+    "maxStackSize":64,
+    "itemID":"purified_poison_gland",
+    "customModelData":1,
+
+    "itemEnhancements":[],
+
+    "itemAttributes":[],
+
+    "itemEnchantments": []
+  },
+  {
+    "name":"Reinforced twig wand",
+    "lore":["Gives you +25 max mana when held in the main hand."],
+    "material":"NAME_TAG",
+    "maxStackSize":1,
+    "itemID":"reinforced_twig_wand",
+    "customModelData":1,
+
+    "itemEnhancements":
+    [
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"greater capacity 1"}
+      },
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"cancel main hand entity interaction"}
+      },
+      {
+        "useCase":"InOffHand",
+        "trait":{"name_id":"cancel off hand entity interaction"}
+      }
+    ],
+
+    "itemAttributes":[],
+
+    "itemEnchantments":[]
+  },
+  {
+    "name":"Reinforced twig",
+    "lore":[],
+    "material":"STICK",
+    "maxStackSize":64,
+    "itemID":"reinforced_twig",
+    "customModelData":1,
+
+    "itemEnhancements":[],
+
+    "itemAttributes":[],
+
+    "itemEnchantments": []
+  }
+]

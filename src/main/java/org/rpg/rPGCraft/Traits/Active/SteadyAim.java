@@ -62,10 +62,25 @@ public class SteadyAim extends ActiveTrait
             player.sendMessage("You must be sneaking to activate this trait.");
         }
 
-        player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
         player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
     }
 
+    @Override
+    public void OnTick(Player player)
+    {
+        for (Entity entity : player.getWorld().getEntities())
+        {
+            if (entity instanceof Projectile projectile)
+            {
+                if (projectile.getShooter() == player)
+                {
+                    if (projectile.getPersistentDataContainer().has(hasSteadyAimKey))
+                    {
+                        RPGparticles.SpawnParticle(player.getWorld(), 50, projectile.getLocation(), new Vector3d(0,0,0), Particle.ASH, 0);
+                    }
+                }
+            }
+        }
     }
 
     @Override
