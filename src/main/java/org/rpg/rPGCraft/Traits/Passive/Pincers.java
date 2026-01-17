@@ -1,18 +1,13 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -20,9 +15,9 @@ public class Pincers extends Trait
 {
     Main main;
 
-    public Pincers(Main main) {
+    public Pincers() {
         // add the name and lore
-        super("Pincers", "pincers", ChatColor.AQUA, Material.SHEARS, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Pincers", "pincers", Material.SHEARS, false, List.of(
                 ChatColor.AQUA.toString() + "   - Does 3x the damage with hands."
         ));
 

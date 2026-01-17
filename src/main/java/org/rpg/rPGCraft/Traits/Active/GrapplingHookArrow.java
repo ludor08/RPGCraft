@@ -9,20 +9,21 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
 
 public class GrapplingHookArrow extends ActiveTrait
 {
-    NamespacedKey grapplingSpeedReduction = new NamespacedKey(main, "grappling_hook_speed_reduction");
-    NamespacedKey noFallDamageTime = new NamespacedKey(main, "grappling_hook_no_fall_damage_time");
+    NamespacedKey grapplingSpeedReduction = new NamespacedKey(Main.GetInstance(), "grappling_hook_speed_reduction");
+    NamespacedKey noFallDamageTime = new NamespacedKey(Main.GetInstance(), "grappling_hook_no_fall_damage_time");
 
-    public GrapplingHookArrow(Main main) {
+    public GrapplingHookArrow() {
         // add the name and lore
-        super("Grappling Hook Arrow", "grappling hook arrow", 40, ChatColor.RED, Material.LEAD, true, main, List.of(
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Grappling Hook Arrow", "grappling hook arrow", 40, Material.LEAD, true, List.of(
                 ChatColor.AQUA.toString() + "   - Upon activating this trait while holding a bow or crossbow, you will fire",
                 ChatColor.AQUA.toString() + "     an arrow that upon hitting a block or entity will launch towards what it hit."
         ));
@@ -47,7 +48,7 @@ public class GrapplingHookArrow extends ActiveTrait
         else
         {
             player.sendMessage("You must be using a bow or crossbow to use this trait.");
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetCost());
+            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetCost());
         }
     }
 
@@ -58,7 +59,7 @@ public class GrapplingHookArrow extends ActiveTrait
         {
             Player player = ((Player)e.getEntity().getShooter());
 
-            if (player.getPersistentDataContainer().has(new NamespacedKey(main, "teleporting_grapple")))
+            if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "teleporting_grapple")))
             {
                 player.teleport(e.getEntity().getLocation());
             }

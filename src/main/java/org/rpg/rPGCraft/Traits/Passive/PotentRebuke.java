@@ -2,23 +2,22 @@ package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class PotentRebuke extends Trait
 {
-    private final NamespacedKey rebukeCostKey = new NamespacedKey(main, "rebuke_of_the_flame_cost");
+    private final NamespacedKey rebukeCostKey = new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_cost");
     private final int extraCost = 10;
 
-    private final NamespacedKey setOnFireKey = new NamespacedKey(main, "rebuke_of_the_flame_set_on_fire");
+    private final NamespacedKey setOnFireKey = new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_set_on_fire");
 
-    public PotentRebuke(Main main) {
+    public PotentRebuke() {
         // add the name and lore
-        super("Potent Rebuke", "potent rebuke", ChatColor.AQUA, Material.FLINT_AND_STEEL, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Potent Rebuke", "potent rebuke", Material.FLINT_AND_STEEL, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Rebuke Of The Flame sets enemies on fire for five seconds, but also cost five more mana."
         ));
     }

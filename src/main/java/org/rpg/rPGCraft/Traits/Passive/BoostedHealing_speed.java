@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft.Traits.Passive.Boosted.Healing;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -6,22 +6,22 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class BoostedHealing_speed extends Trait
 {
-    private final NamespacedKey boostedHealingDurationKey = new NamespacedKey(main,"boostedHealing_speed_duration");
-    private final NamespacedKey boostedHealingPowerKey = new NamespacedKey(main,"boostedHealing_speed_power");
+    private final NamespacedKey boostedHealingDurationKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_duration");
+    private final NamespacedKey boostedHealingPowerKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_power");
 
     int boostedHealingDuration = 100;
     int boostedHealingPower = 0;
 
-    public BoostedHealing_speed(Main main)
+    public BoostedHealing_speed()
     {
         // add the name and lore
-        super("Boosted Healing:Speed", "boosted healing speed", ChatColor.AQUA, Material.SUGAR, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Boosted Healing:Speed", "boosted healing speed", Material.SUGAR, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes all healing traits give speed one for five seconds."
         ));
 

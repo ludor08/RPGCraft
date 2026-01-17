@@ -8,18 +8,18 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Squashable extends Trait
 {
-    private final AttributeModifier maxHealthMod = new AttributeModifier(new NamespacedKey(main, "squashable_max_health"), -10, AttributeModifier.Operation.ADD_NUMBER);
+    private final AttributeModifier maxHealthMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "squashable_max_health"), -10, AttributeModifier.Operation.ADD_NUMBER);
 
-    public Squashable(Main main)
+    public Squashable()
     {
         // add the name and lore
-        super("Squashable", "squashable", ChatColor.AQUA, Material.REDSTONE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Squashable", "squashable", Material.REDSTONE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Sets your base max health to 10."
         ));
 

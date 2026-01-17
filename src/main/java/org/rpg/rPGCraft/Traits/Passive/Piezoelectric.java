@@ -3,19 +3,12 @@ package org.rpg.rPGCraft.Traits.Passive;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
-import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -25,10 +18,10 @@ public class Piezoelectric extends Trait
     private final List<EntityDamageEvent.DamageCause> physicalDamageCauses = List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityDamageEvent.DamageCause.FALL, EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
             EntityDamageEvent.DamageCause.FALLING_BLOCK, EntityDamageEvent.DamageCause.CONTACT, EntityDamageEvent.DamageCause.FLY_INTO_WALL, EntityDamageEvent.DamageCause.PROJECTILE, EntityDamageEvent.DamageCause.THORNS);
 
-    public Piezoelectric(Main main)
+    public Piezoelectric()
     {
         // add the name and lore
-        super("Piezoelectric", "toxic spores", ChatColor.AQUA, Material.FIREWORK_STAR, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Piezoelectric", "toxic spores", Material.FIREWORK_STAR, true, List.of(
                 ChatColor.AQUA.toString() + "   - Upon being hit by a physical attack, half of the",
                 ChatColor.AQUA.toString() + "     damage will be stored within you. If you hit a",
                 ChatColor.AQUA.toString() + "     creature well crouching, all of this stored",
@@ -36,7 +29,7 @@ public class Piezoelectric extends Trait
                 ChatColor.AQUA.toString() + "     This stored damage will slowly fade."
         ));
 
-        storedDamage = new NamespacedKey(main, "piezoelectric_stored_damage");
+        storedDamage = new NamespacedKey(Main.GetInstance(), "piezoelectric_stored_damage");
     }
 
     @Override

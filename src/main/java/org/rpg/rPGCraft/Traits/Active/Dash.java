@@ -1,29 +1,24 @@
 package org.rpg.rPGCraft.Traits.Active;
 
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Dash extends ActiveTrait
 {
-    NamespacedKey distanceKey = new NamespacedKey(main, "dash_distance");
+    NamespacedKey distanceKey = new NamespacedKey(Main.GetInstance(), "dash_distance");
     int baseDistance = 5;
 
-    public Dash(Main main) {
+    public Dash() {
         // add the name and lore
-        super("Dash", "dash", 35, ChatColor.WHITE, Material.SUGAR, false, main, List.of(
+        super(ChatColor.WHITE + ChatColor.BOLD.toString() + "Dash", "dash", 35, Material.SUGAR, false, List.of(
                 ChatColor.AQUA.toString() + "   - Dash forward 5 blocks, hitting any entities you collide with."
         ));
 
@@ -39,7 +34,9 @@ public class Dash extends ActiveTrait
     @Override
     public void TriggerActiveEvent(Player player)
     {
-        Vector3d direction = RPGutils.getFacingDirection(player);
+        Main main = Main.GetInstance();
+
+        float mul = 4;
 
         Location location = RPGraycast.RecastUntilCollision(player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER),direction,player.getEyeLocation(), Particle.CRIT, 5);
         List<Entity> entities = RPGraycast.RecastForEntities(player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER),direction,player.getEyeLocation(), true, player, null, 0,new Vector3d(0.5,0.5,0.5));

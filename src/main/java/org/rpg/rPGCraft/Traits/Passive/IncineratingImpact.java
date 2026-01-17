@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class IncineratingImpact extends Trait
 {
-    NamespacedKey incineratingImpactKey = new NamespacedKey(main, "incinerating_impact");
+    NamespacedKey incineratingImpactKey = new NamespacedKey(Main.GetInstance(), "incinerating_impact");
 
-    public IncineratingImpact(Main main) {
+    public IncineratingImpact() {
         // add the name and lore
-        super("Incinerating Impact", "incinerating impact", ChatColor.AQUA, Material.FIRE_CHARGE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Incinerating Impact", "incinerating impact", Material.FIRE_CHARGE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Giants Leap create an impact that lights enemies alight."
         ));
     }

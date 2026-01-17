@@ -1,34 +1,28 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.RPGutils;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class RebukeOfTheFlame extends Trait
 {
-    private final NamespacedKey rebukeDamageKey = new NamespacedKey(main, "rebuke_of_the_flame_damage");
+    private final NamespacedKey rebukeDamageKey = new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_damage");
     private final int rebukeDamage = 5;
 
-    private final NamespacedKey rebukeCostKey = new NamespacedKey(main, "rebuke_of_the_flame_cost");
+    private final NamespacedKey rebukeCostKey = new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_cost");
     private final int baseCost = 10;
 
-    public RebukeOfTheFlame(Main main) {
+    public RebukeOfTheFlame() {
         // add the name and lore
-        super("Rebuke Of The Flame", "rebuke of the flame", ChatColor.AQUA, Material.FLINT_AND_STEEL, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Rebuke Of The Flame", "rebuke of the flame", Material.FLINT_AND_STEEL, false, List.of(
                 ChatColor.AQUA.toString() + "   - Upon being hit cause fire to envelope your enemy, dealing five damage at the cost of 10 mana."
         ));
     }
@@ -49,7 +43,7 @@ public class RebukeOfTheFlame extends Trait
             {
                 living.damage(rebukeDamage, player);
 
-                if (player.getPersistentDataContainer().has(new NamespacedKey(main, "rebuke_of_the_flame_set_on_fire")) && player.getPersistentDataContainer().get(new NamespacedKey(main, "rebuke_of_the_flame_set_on_fire"),PersistentDataType.BOOLEAN))
+                if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_set_on_fire")) && player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_set_on_fire"),PersistentDataType.BOOLEAN))
                 {
                     living.setFireTicks(100);
                 }
@@ -63,7 +57,7 @@ public class RebukeOfTheFlame extends Trait
                 }
             }
 
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER));
+            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER)-player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER));
         }
     }
 

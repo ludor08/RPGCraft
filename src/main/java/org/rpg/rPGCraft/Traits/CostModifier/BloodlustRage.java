@@ -4,8 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.rpg.rPGCraft.CostModifierTrait;
+import org.rpg.rPGCraft.Traits.CostModifierTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
@@ -13,11 +12,11 @@ import java.util.List;
 
 public class BloodlustRage extends CostModifierTrait
 {
-    NamespacedKey bloodlustRageKey = new NamespacedKey(main, "bloodlust_rage");
+    NamespacedKey bloodlustRageKey = new NamespacedKey(Main.GetInstance(), "bloodlust_rage");
 
-    public BloodlustRage(Main main) {
+    public BloodlustRage() {
         // add the name and lore
-        super("Bloodlust Rage", "bloodlust rage", 15, "oath of rage", ChatColor.AQUA, Material.LEAD, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Bloodlust Rage", "bloodlust rage", 15, "oath of rage", Material.LEAD, List.of(
                 ChatColor.AQUA.toString() + "   - Adds a 10% life stealing effect while raging.",
                 ChatColor.AQUA.toString() + "   - Makes Oath of Rage cost 10 more mana."
         ));

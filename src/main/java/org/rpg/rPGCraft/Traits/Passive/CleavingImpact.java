@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class CleavingImpact extends Trait
 {
-    NamespacedKey cleavingImpactKey = new NamespacedKey(main, "cleaving_impact");
+    NamespacedKey cleavingImpactKey = new NamespacedKey(Main.GetInstance(), "cleaving_impact");
 
-    public CleavingImpact(Main main) {
+    public CleavingImpact() {
         // add the name and lore
-        super("Cleaving Impact", "cleaving impact", ChatColor.AQUA, Material.ANVIL, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Cleaving Impact", "cleaving impact", Material.ANVIL, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Giants Leap create an impact that deals damage based on the weapon in your main hand."
         ));
     }

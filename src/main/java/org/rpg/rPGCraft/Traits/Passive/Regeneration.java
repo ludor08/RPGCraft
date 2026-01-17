@@ -7,7 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,13 +17,13 @@ public class Regeneration extends Trait
     private final NamespacedKey healTimer;
     private final int timeToHeal = 50; // TODO make configalbe with the tick rate
 
-    public Regeneration(Main main) {
+    public Regeneration() {
         // add the name and lore
-        super("Regeneration", "regeneration", ChatColor.AQUA, Material.MANGROVE_PROPAGULE, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Regeneration", "regeneration", Material.MANGROVE_PROPAGULE, true, List.of(
                 ChatColor.AQUA.toString() + "   - Regenerates half a heart every 5 seconds."
         ));
 
-        healTimer = new NamespacedKey(main, "regeneration_heal_timer");
+        healTimer = new NamespacedKey(Main.GetInstance(), "regeneration_heal_timer");
     }
 
     @Override

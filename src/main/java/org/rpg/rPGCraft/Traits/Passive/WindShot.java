@@ -3,28 +3,25 @@ package org.rpg.rPGCraft.Traits.Passive;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.RPGraycast;
-import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class WindShot extends Trait
 {
-    private final NamespacedKey neededShotsKey = new NamespacedKey(main, "wind_shot_needed_shots");
+    private final NamespacedKey neededShotsKey = new NamespacedKey(Main.GetInstance(), "wind_shot_needed_shots");
     private final int neededShots = 3;
 
-    private final NamespacedKey shotsKey = new NamespacedKey(main, "wind_shot_shots");
+    private final NamespacedKey shotsKey = new NamespacedKey(Main.GetInstance(), "wind_shot_shots");
 
-    public WindShot(Main main) {
+    public WindShot() {
         // add the name and lore
-        super("Wind Shot", "wind shot", ChatColor.AQUA, Material.WIND_CHARGE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Wind Shot", "wind shot", Material.WIND_CHARGE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Every third shot fires two times faster."
         ));
     }
@@ -42,13 +39,13 @@ public class WindShot extends Trait
 
             player.getPersistentDataContainer().set(shotsKey, PersistentDataType.INTEGER, 0);
 
-            if (player.getPersistentDataContainer().has(new NamespacedKey(main, "high_power_wind_shot")))
+            if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "high_power_wind_shot")))
             {
                 List<Entity> entities = RPGraycast.RecastForEntities(100,RPGutils.getFacingDirection(player), player.getEyeLocation(),true,player,null,0,new Vector3d(3,3,3));
 
                 for (Entity entity : entities)
                 {
-                    entity.setVelocity(entity.getVelocity().add(e.getEntity().getVelocity()));
+                    entity.setVelocity(entity.getVelocity().add(e.getEntity().getVelocity().divide(new Vector(4,4,4))));
                 }
             }
         }

@@ -10,7 +10,7 @@ import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +20,9 @@ public class Ricochet extends Trait
     float range = 5f;
     int maxRicochets = 1;
 
-    public Ricochet(Main main) {
+    public Ricochet() {
         // add the name and lore
-        super("Ricochet", "ricochet", ChatColor.AQUA, Material.BLACK_DYE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Ricochet", "ricochet", Material.BLACK_DYE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Projectiles that hit blocks will rebound towards the nearest entity within five blocks.",
                 ChatColor.AQUA.toString() + "   - Costs 10 mana."
         ));
@@ -31,18 +31,18 @@ public class Ricochet extends Trait
     @Override
     public void OnLaunchProjectile(ProjectileLaunchEvent e)
     {
-        e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER, maxRicochets);
+        e.getEntity().getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER, maxRicochets);
     }
 
     @Override
     public void OnShotProjectileHit(ProjectileHitEvent e)
     {
-        if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(main,"ricochet_max_ricochets")) && e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER) > 0)
+        if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets")) && e.getEntity().getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER) > 0)
         {
             if (e.getHitBlock() != null)
             {
                 // if the player has at least 10 mana
-                if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= 10)
+                if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) >= 10)
                 {
                     // get the nearby entities
                     List<Entity> closeEntities = RPGutils.SortEntityListByDistance(e.getEntity().getNearbyEntities(range,range,range),e.getEntity().getLocation());
@@ -72,15 +72,15 @@ public class Ricochet extends Trait
 
                         e.setCancelled(true);
 
-                        e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER, e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
+                        e.getEntity().getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER, e.getEntity().getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
                         e.getEntity().teleport(new Location(e.getEntity().getWorld(),e.getEntity().getLocation().getX()+offset.x, e.getEntity().getLocation().getY()+offset.y, e.getEntity().getLocation().getZ()+offset.z));
 
-                        Bukkit.getScheduler().runTaskLater(main, () -> {
+                        Bukkit.getScheduler().runTaskLater(Main.GetInstance(), () -> {
                             e.getEntity().setVelocity(Vector.fromJOML(direction.mul(5)));
                         }, 2);
 
                         // take away the mana
-                        ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)-10);
+                        ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER)-10);
 
                         break;
                     }
@@ -88,7 +88,7 @@ public class Ricochet extends Trait
             }
             else
             {
-                e.getEntity().getPersistentDataContainer().set(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER,e.getEntity().getPersistentDataContainer().get(new NamespacedKey(main,"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
+                e.getEntity().getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER,e.getEntity().getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(),"ricochet_max_ricochets"), PersistentDataType.INTEGER)-1);
             }
         }
 

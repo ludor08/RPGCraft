@@ -1,40 +1,39 @@
-package org.rpg.rPGCraft.Traits.Passive.GreaterCapacity;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
-public class GreaterCapacity_1 extends Trait
+public class GreaterCapacity_2 extends Trait
 {
-    private final int maxManaMod = 25;
+    private final int maxManaMod = 50;
 
-    public GreaterCapacity_1(Main main) {
+    public GreaterCapacity_2() {
         // add the name and lore
-        super("Greater Capacity", "greater capacity 1", ChatColor.AQUA, Material.DRAGON_BREATH, false, main, List.of(
-                ChatColor.AQUA.toString() + "   - Gain +25 max mana."
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Greater Capacity", "greater capacity 2", Material.DRAGON_BREATH, false, List.of(
+                ChatColor.AQUA.toString() + "   - Gain +50 max mana."
         ));
     }
 
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        if (player.getPersistentDataContainer().has(main.GetManaMaxKey()))
+        if (player.getPersistentDataContainer().has(Main.GetInstance().GetManaMaxKey()))
         {
-            player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER) + maxManaMod);
+            player.getPersistentDataContainer().set(Main.GetInstance().GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaMaxKey(), PersistentDataType.INTEGER) + maxManaMod);
         }
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
+        Main main = Main.GetInstance();
+
         if (player.getPersistentDataContainer().has(main.GetManaMaxKey()))
         {
             player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER) - maxManaMod);

@@ -5,15 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -22,15 +17,15 @@ public class DiamondSkin extends Trait
     private final AttributeModifier armorMod;
     private final AttributeModifier armorToughnessMod;
 
-    public DiamondSkin(Main main)
+    public DiamondSkin()
     {
         // add the name and lore
-        super("Diamond Skin", "diamond skin", ChatColor.AQUA, Material.DIAMOND_CHESTPLATE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Diamond Skin", "diamond skin", Material.DIAMOND_CHESTPLATE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Super Hardened Skin give two more base defense amd one more armor toughness"
         ));
 
-        armorMod = new AttributeModifier(new NamespacedKey(main, "super_hardened_skin_armor"), 2, AttributeModifier.Operation.ADD_NUMBER);
-        armorToughnessMod = new AttributeModifier(new NamespacedKey(main, "super_hardened_skin_armor_toughness"), 1, AttributeModifier.Operation.ADD_NUMBER);
+        armorMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "super_hardened_skin_armor"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        armorToughnessMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "super_hardened_skin_armor_toughness"), 1, AttributeModifier.Operation.ADD_NUMBER);
 
     }
 

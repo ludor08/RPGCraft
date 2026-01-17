@@ -1,43 +1,31 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class SandCrawler extends Trait
 {
-    private final AttributeModifier badLandSpeedMod;
-    private final AttributeModifier goodLandSpeedMod;
-    private final AttributeModifier waterSpeedMod;
-    private final AttributeModifier gravityMod;
+    private final AttributeModifier badLandSpeedMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "bad_land_sc"), -0.10d, AttributeModifier.Operation.ADD_SCALAR);;
+    private final AttributeModifier goodLandSpeedMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "good_land_sc"), 2, AttributeModifier.Operation.ADD_SCALAR);;
+    private final AttributeModifier waterSpeedMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "water_sc"), 1, AttributeModifier.Operation.ADD_NUMBER);;
+    private final AttributeModifier gravityMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "gravity_sc"), 15, AttributeModifier.Operation.ADD_NUMBER);;
 
-    public SandCrawler(Main main) {
+    public SandCrawler() {
         // add the name and lore
-        super("Sand Crawler", "sand crawler", ChatColor.AQUA, Material.SAND, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Sand Crawler", "sand crawler", Material.SAND, true, List.of(
                 ChatColor.AQUA.toString() + "   - Move 25% slower on land.",
                 ChatColor.AQUA.toString() + "   - Move 2x faster when walking on the sea floor.",
                 ChatColor.AQUA.toString() + "   - Fall faster in water when sneaking."
         ));
-
-        badLandSpeedMod = new AttributeModifier(new NamespacedKey(main, "bad_land_sc"), -0.10d, AttributeModifier.Operation.ADD_SCALAR);
-        goodLandSpeedMod = new AttributeModifier(new NamespacedKey(main, "good_land_sc"), 2, AttributeModifier.Operation.ADD_SCALAR);
-        waterSpeedMod = new AttributeModifier(new NamespacedKey(main, "water_sc"), 1, AttributeModifier.Operation.ADD_NUMBER);
-        gravityMod = new AttributeModifier(new NamespacedKey(main, "gravity_sc"), 15, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override

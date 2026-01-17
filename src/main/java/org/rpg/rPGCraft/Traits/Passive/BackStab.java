@@ -9,19 +9,18 @@ import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
-import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class BackStab extends Trait
 {
-    NamespacedKey backStabDamageScalerKey = new NamespacedKey(main, "back_stab_damage_scaler");
+    NamespacedKey backStabDamageScalerKey = new NamespacedKey(Main.GetInstance(), "back_stab_damage_scaler");
     float baseBackStabDamageScalerMod = 1.2f;
 
-    public BackStab(Main main) {
+    public BackStab() {
         // add the name and lore
-        super("Back Stab", "back stab", ChatColor.AQUA, Material.IRON_SWORD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Back Stab", "back stab", Material.IRON_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Does 20% more damage when back stabbing an entity."
         ));
     }

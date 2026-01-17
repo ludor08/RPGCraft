@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.rpg.rPGCraft.CostModifierTrait;
+import org.rpg.rPGCraft.Traits.CostModifierTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
@@ -12,16 +12,16 @@ import java.util.List;
 
 public class PoisonKunai extends CostModifierTrait
 {
-    NamespacedKey poisonKunaiKey = new NamespacedKey(main, "kunai_poison");
-    NamespacedKey poisonLevelKey = new NamespacedKey(main, "kunai_poison_level");
-    NamespacedKey poisonDurationKey = new NamespacedKey(main, "kunai_poison_duration");
+    NamespacedKey poisonKunaiKey = new NamespacedKey(Main.GetInstance(), "kunai_poison");
+    NamespacedKey poisonLevelKey = new NamespacedKey(Main.GetInstance(), "kunai_poison_level");
+    NamespacedKey poisonDurationKey = new NamespacedKey(Main.GetInstance(), "kunai_poison_duration");
 
     int basePoisonLevel = 2;
     int basePoisonDuration = 100;
 
-    public PoisonKunai(Main main) {
+    public PoisonKunai() {
         // add the name and lore
-        super("Poison Kunai", "poison kunai", 15, "kunai", ChatColor.AQUA, Material.STONE_SWORD, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Poison Kunai", "poison kunai", 15, "kunai", Material.STONE_SWORD, List.of(
                 ChatColor.AQUA.toString() + "   - Your kunais now apply poison on hit,",
                 ChatColor.AQUA.toString() + "     and cost 15 more mana."
         ));

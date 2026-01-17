@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class LingeringRage extends Trait
 {
-    NamespacedKey rageDurationKey = new NamespacedKey(main, "rage_duration");
+    NamespacedKey rageDurationKey = new NamespacedKey(Main.GetInstance(), "rage_duration");
 
-    public LingeringRage(Main main) {
+    public LingeringRage() {
         // add the name and lore
-        super("Lingering Rage", "lingering rage", ChatColor.AQUA, Material.BLAZE_ROD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Lingering Rage", "lingering rage", Material.BLAZE_ROD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Make Oath of Rage last twice as long as base."
         ));
     }

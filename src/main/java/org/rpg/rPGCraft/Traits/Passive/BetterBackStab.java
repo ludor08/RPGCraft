@@ -6,19 +6,19 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class BetterBackStab extends Trait
 {
-    NamespacedKey backStabDamageScalerKey = new NamespacedKey(main, "back_stab_damage_scaler");
+    NamespacedKey backStabDamageScalerKey = new NamespacedKey(Main.GetInstance(), "back_stab_damage_scaler");
     float backStabDamageScalerMod = 0.15f;
 
-    public BetterBackStab(Main main)
+    public BetterBackStab()
     {
         // add the name and lore
-        super("Better Back Stab", "better back stab", ChatColor.AQUA, Material.IRON_SWORD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Better Back Stab", "better back stab", Material.IRON_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Add 15% to back stab's damage modifier."
         ));
     }

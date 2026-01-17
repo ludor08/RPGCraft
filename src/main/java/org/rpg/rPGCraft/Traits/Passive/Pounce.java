@@ -1,6 +1,5 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,27 +9,22 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Pounce extends Trait
 {
-    private AttributeModifier jumpMod;
+    private AttributeModifier jumpMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "pounce"), 0.2d, AttributeModifier.Operation.ADD_NUMBER);;
 
-    public Pounce(Main main) {
+    public Pounce() {
         // add the name and lore
-        super("Pounce", "pounce", ChatColor.AQUA, Material.RABBIT_FOOT, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Pounce", "pounce", Material.RABBIT_FOOT, false, List.of(
                 ChatColor.AQUA.toString() + "   - Crits deal 15% more damage.",
                 ChatColor.AQUA.toString() + "   - Gain more jump strength."
         ));
-
-        jumpMod = new AttributeModifier(new NamespacedKey(main, "pounce"), 0.2d, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override

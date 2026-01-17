@@ -8,10 +8,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,9 +18,9 @@ import java.util.Objects;
 
 public class WeAreOne extends Trait
 {
-    public WeAreOne(Main main) {
+    public WeAreOne() {
         // add the name and lore
-        super("We Are One", "we are one", ChatColor.AQUA, Material.SCULK_CATALYST, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "We Are One", "we are one", Material.SCULK_CATALYST, false, List.of(
                 ChatColor.AQUA.toString() + "   - Sneak left check with an empty hand when standing on any skulk blocks to teleport to other skulk blocks."
         ));
     }

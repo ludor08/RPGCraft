@@ -11,29 +11,29 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Charge extends Trait
 {
-    NamespacedKey attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
-    NamespacedKey momentumKey = new NamespacedKey(main, "charge_momentum");
-    NamespacedKey chargeDamageKey = new NamespacedKey(main, "charge_damage");
+    NamespacedKey attackInputCanceledKey = new NamespacedKey(Main.GetInstance(), "attack_input_canceled");
+    NamespacedKey momentumKey = new NamespacedKey(Main.GetInstance(), "charge_momentum");
+    NamespacedKey chargeDamageKey = new NamespacedKey(Main.GetInstance(), "charge_damage");
     int baseChargeDamage = 2;
 
-    NamespacedKey speedModKey = new NamespacedKey(main, "charge_speed_mod");
+    NamespacedKey speedModKey = new NamespacedKey(Main.GetInstance(), "charge_speed_mod");
 
-    NamespacedKey shieldChargeDamageModKey = new NamespacedKey(main, "shield_charge_damage_mod");
-    NamespacedKey flameChargeKey = new NamespacedKey(main, "flame_charge");
+    NamespacedKey shieldChargeDamageModKey = new NamespacedKey(Main.GetInstance(), "shield_charge_damage_mod");
+    NamespacedKey flameChargeKey = new NamespacedKey(Main.GetInstance(), "flame_charge");
 
-    public Charge(Main main) {
+    public Charge() {
         // add the name and lore
-        super("Charge", "charge", ChatColor.AQUA, Material.BLAZE_POWDER, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Charge", "charge", Material.BLAZE_POWDER, true, List.of(
                 ChatColor.AQUA.toString() + "   - After sprinting forward for 3 seconds, start charging",
                 ChatColor.AQUA.toString() + "     dealing 2 damage to any entity that you run into and move 10% faster."
         ));
@@ -50,6 +50,8 @@ public class Charge extends Trait
     @Override
     public void OnTick(Player player)
     {
+        Main main = Main.GetInstance();
+
         if (player.getForwardsMovement() == 1 && player.isSprinting())
         {
             RPGutils.AddToNamespacedKey(player, momentumKey, 0f, 1f);

@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class HighPowerWindShot extends Trait
 {
-    private final NamespacedKey highPowerKey = new NamespacedKey(main, "high_power_wind_shot");
+    private final NamespacedKey highPowerKey = new NamespacedKey(Main.GetInstance(), "high_power_wind_shot");
 
-    public HighPowerWindShot(Main main) {
+    public HighPowerWindShot() {
         // add the name and lore
-        super("High Power Wind Shot", "high power wind shot", ChatColor.AQUA, Material.WIND_CHARGE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "High Power Wind Shot", "high power wind shot", Material.WIND_CHARGE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Wind Shot pushback entities."
         ));
     }

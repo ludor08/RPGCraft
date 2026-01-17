@@ -6,19 +6,19 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class LungingDash extends Trait
 {
-    NamespacedKey distanceKey = new NamespacedKey(main, "dash_distance");
+    NamespacedKey distanceKey = new NamespacedKey(Main.GetInstance(), "dash_distance");
     int distanceMod = 3;
 
-    public LungingDash(Main main)
+    public LungingDash()
     {
         // add the name and lore
-        super("Lunging Dash", "lunging dash", ChatColor.AQUA, Material.WOODEN_SWORD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Lunging Dash", "lunging dash", Material.WOODEN_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Dash travel three more blocks."
         ));
     }

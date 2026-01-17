@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class WeakeningSiphon extends Trait {
-    NamespacedKey weaknessLevelKey = new NamespacedKey(main, "aura_of_weakness_level");
+    NamespacedKey weaknessLevelKey = new NamespacedKey(Main.GetInstance(), "aura_of_weakness_level");
     int extraLevel = 1;
 
-    public WeakeningSiphon(Main main) {
+    public WeakeningSiphon() {
         // add the name and lore
-        super("Weakening Siphon", "weakening siphon", ChatColor.AQUA, Material.GRAY_DYE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Weakening Siphon", "weakening siphon", Material.GRAY_DYE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Mana Siphon weaken enemies."
         ));
     }

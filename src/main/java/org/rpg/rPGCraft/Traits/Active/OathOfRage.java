@@ -3,6 +3,7 @@ package org.rpg.rPGCraft.Traits.Active;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -11,28 +12,29 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
 
 public class OathOfRage extends ActiveTrait
 {
-    AttributeModifier damageMod = new AttributeModifier(new NamespacedKey(main, "power_of_the_oak_queen_size_mod"), 1.2, AttributeModifier.Operation.ADD_SCALAR);
-    AttributeModifier armorMod = new AttributeModifier(new NamespacedKey(main, "power_of_the_oak_queen_damage_mod"), 2, AttributeModifier.Operation.ADD_NUMBER);
+    AttributeModifier damageMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_size_mod"), 1.2, AttributeModifier.Operation.ADD_SCALAR);
+    AttributeModifier armorMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_damage_mod"), 2, AttributeModifier.Operation.ADD_NUMBER);
 
-    NamespacedKey rageTimerKey = new NamespacedKey(main, "rage_timer");
+    NamespacedKey rageTimerKey = new NamespacedKey(Main.GetInstance(), "rage_timer");
 
-    NamespacedKey rageDurationKey = new NamespacedKey(main, "rage_duration");
+    NamespacedKey rageDurationKey = new NamespacedKey(Main.GetInstance(), "rage_duration");
     int baseRageDuration = 300;
 
-    NamespacedKey rejuvenatingRageKey = new NamespacedKey(main, "rejuvenating_rage");
-    NamespacedKey bloodlustRageKey = new NamespacedKey(main, "bloodlust_rage");
+    NamespacedKey rejuvenatingRageKey = new NamespacedKey(Main.GetInstance(), "rejuvenating_rage");
+    NamespacedKey bloodlustRageKey = new NamespacedKey(Main.GetInstance(), "bloodlust_rage");
 
-    public OathOfRage(Main main) {
+    public OathOfRage() {
         // add the name and lore
-        super("Oath of Rage","oath of rage", 60, ChatColor.AQUA, Material.REDSTONE, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Oath of Rage","oath of rage", 60, Material.REDSTONE, true, List.of(
                 ChatColor.AQUA.toString() + "   - Gain two more armor and boost your damage by 20% for 30 seconds"
         ));
     }
@@ -68,7 +70,7 @@ public class OathOfRage extends ActiveTrait
         }
         else
         {
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
         }
     }
 

@@ -1,23 +1,21 @@
 package org.rpg.rPGCraft.Traits.Active;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
 
 public class SpinAttack extends ActiveTrait
 {
-    public SpinAttack(Main main) {
+    public SpinAttack() {
         // add the name and lore
-        super("Spin Attack", "spin attack", 45, ChatColor.RED, Material.STONE_SWORD, false, main, List.of(
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Spin Attack", "spin attack", 25, Material.STONE_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Spin around and hit and entities within three blocks."
         ));
 

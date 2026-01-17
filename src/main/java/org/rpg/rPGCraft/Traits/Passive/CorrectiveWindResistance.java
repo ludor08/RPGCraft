@@ -1,19 +1,14 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +18,9 @@ public class CorrectiveWindResistance extends Trait
     float range = 10f;
     float accuracy = 2;
     
-    public CorrectiveWindResistance(Main main) {
+    public CorrectiveWindResistance() {
         // add the name and lore
-        super("Corrective Wind Resistance", "corrective wind resistance", ChatColor.AQUA, Material.WIND_CHARGE, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Corrective Wind Resistance", "corrective wind resistance", Material.WIND_CHARGE, true, List.of(
                 ChatColor.AQUA.toString() + "   - Your projectiles will correct their aim towards the nearest nearby entity."
         ));
     }
@@ -52,7 +47,7 @@ public class CorrectiveWindResistance extends Trait
                         continue;
                     }
 
-                    if (projectile.getPersistentDataContainer().has(new NamespacedKey(main,"corrective_wind_resistance_done_homing")))
+                    if (projectile.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(),"corrective_wind_resistance_done_homing")))
                     {
                         continue;
                     }
@@ -84,7 +79,7 @@ public class CorrectiveWindResistance extends Trait
                         
                         projectile.setVelocity(Vector.fromJOML(currentDirection.add(correction)));
 
-                        projectile.getPersistentDataContainer().set(new NamespacedKey(main,"corrective_wind_resistance_done_homing"), PersistentDataType.BOOLEAN, true);
+                        projectile.getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(),"corrective_wind_resistance_done_homing"), PersistentDataType.BOOLEAN, true);
                         break;
                     }
                 }

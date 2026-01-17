@@ -8,22 +8,22 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Stealth extends Trait
 {
-    NamespacedKey invisibilityFromStealthKey = new NamespacedKey(main, "invisibility_from_stealth");
+    NamespacedKey invisibilityFromStealthKey = new NamespacedKey(Main.GetInstance(), "invisibility_from_stealth");
 
-    NamespacedKey stealthTimeKey = new NamespacedKey(main, "stealth_time");
+    NamespacedKey stealthTimeKey = new NamespacedKey(Main.GetInstance(), "stealth_time");
 
-    NamespacedKey stealthTimeNeededKey = new NamespacedKey(main, "stealth_time");
+    NamespacedKey stealthTimeNeededKey = new NamespacedKey(Main.GetInstance(), "stealth_time");
     int baseStealthTimeNeeded = 50;
 
-    public Stealth(Main main) {
+    public Stealth() {
         // add the name and lore
-        super("Stealth", "stealth", ChatColor.AQUA, Material.LEATHER, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Stealth", "stealth", Material.LEATHER, true, List.of(
                 ChatColor.AQUA.toString() + "   - Standing still or crouching for five seconds well turn you invisible.",
                 ChatColor.AQUA.toString() + "   - Moving while not crouching will break invisibility."
         ));

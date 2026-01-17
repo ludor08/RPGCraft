@@ -10,17 +10,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Amphibious extends Trait
 {
-    AttributeModifier submergedMiningSpeedMod = new AttributeModifier(new NamespacedKey(main, "amphibious_submerged_mining_speed"), 1, AttributeModifier.Operation.ADD_NUMBER);
+    AttributeModifier submergedMiningSpeedMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "amphibious_submerged_mining_speed"), 1, AttributeModifier.Operation.ADD_NUMBER);
 
-    public Amphibious(Main main) {
+    public Amphibious() {
         // add the name and lore
-        super("Amphibious", "amphibious", ChatColor.AQUA, Material.POTION, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Amphibious", "amphibious", Material.POTION, true, List.of(
                 ChatColor.AQUA.toString() + "   - Gains the conduit power effect.",
                 ChatColor.AQUA.toString() + "   - Makes the player mine even faster underwater."
         ));

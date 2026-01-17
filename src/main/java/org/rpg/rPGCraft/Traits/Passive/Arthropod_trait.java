@@ -1,30 +1,23 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Arthropod_trait extends Trait
 {
 
-    public Arthropod_trait(Main main) {
+    public Arthropod_trait() {
         // add the name and lore
-        super("Arthropod", "arthropod trait", ChatColor.AQUA, Material.FERMENTED_SPIDER_EYE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Arthropod", "arthropod trait", Material.FERMENTED_SPIDER_EYE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Takes two damage per level of Bane of Arthropods."
         ));
     }

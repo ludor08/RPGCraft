@@ -1,32 +1,27 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Cleve extends Trait
 {
-    NamespacedKey canNotCleveKey = new NamespacedKey(main, "can_not_cleve");
+    NamespacedKey canNotCleveKey = new NamespacedKey(Main.GetInstance(), "can_not_cleve");
 
-    NamespacedKey attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
-
-    public Cleve(Main main) {
+    public Cleve() {
         // add the name and lore
-        super("Cleve", "cleve", ChatColor.AQUA, Material.IRON_AXE, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Cleve", "cleve", Material.IRON_AXE, true, List.of(
                 ChatColor.AQUA.toString() + "   - Swing your weapon with a powerful cleaving motion in front of you,",
                 ChatColor.AQUA.toString() + "     hitting all entities in front of you."
         ));

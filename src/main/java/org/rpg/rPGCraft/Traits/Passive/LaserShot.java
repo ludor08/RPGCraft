@@ -6,18 +6,18 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class LaserShot extends Trait
 {
-    private final NamespacedKey laserDamageKey = new NamespacedKey(main, "laser_shot_damage");
+    private final NamespacedKey laserDamageKey = new NamespacedKey(Main.GetInstance(), "laser_shot_damage");
     private final double laserDamage = 5;
 
-    public LaserShot(Main main) {
+    public LaserShot() {
         // add the name and lore
-        super("Laser Shot", "laser shot", ChatColor.AQUA, Material.BLAZE_ROD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Laser Shot", "laser shot", Material.BLAZE_ROD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Replaces Steady Aim's empowered arrow with a laser that hits three times."
         ));
     }

@@ -1,12 +1,11 @@
-package org.rpg.rPGCraft.Traits.Passive.EmpoweredMixture;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +13,10 @@ import java.util.List;
 public class EmpoweredMixture_1 extends Trait
 {
 
-    public EmpoweredMixture_1(Main main)
+    public EmpoweredMixture_1()
     {
         // add the name and lore
-        super("Empowered Mixture", "empowered mixture 1", ChatColor.AQUA, Material.POTION, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Empowered Mixture", "empowered mixture 1", Material.POTION, false, List.of(
                 ChatColor.AQUA.toString() + "   - The level of potions brewed by you is increased by one."
         ));
     }

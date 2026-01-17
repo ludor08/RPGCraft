@@ -12,7 +12,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
@@ -20,15 +20,13 @@ import java.util.List;
 
 public class Kunai extends ActiveTrait
 {
-    NamespacedKey kunaiKey = new NamespacedKey(main, "kunai");
+    NamespacedKey kunaiKey = new NamespacedKey(Main.GetInstance(), "kunai");
 
-    NamespacedKey poisonKunaiKey = new NamespacedKey(main, "kunai_poison");
-    NamespacedKey poisonLevelKey = new NamespacedKey(main, "kunai_poison_level");
-    NamespacedKey poisonDurationKey = new NamespacedKey(main, "kunai_poison_duration");
+    NamespacedKey kunaiDamageKey = new NamespacedKey(Main.GetInstance(), "kunai_damage");
 
     public Kunai(Main main) {
         // add the name and lore
-        super("Kunai", "kunai", 5, ChatColor.RED, Material.STONE_SWORD, false, main, List.of(
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Kunai", "kunai", 5, Material.STONE_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Throw a kunai that does 1 damage and can carry other effects."
         ));
 

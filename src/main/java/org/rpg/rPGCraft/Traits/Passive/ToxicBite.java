@@ -1,29 +1,23 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class ToxicBite extends Trait
 {
-    public ToxicBite(Main main) {
+    public ToxicBite() {
         // add the name and lore
-        super("Toxic Bite", "toxic bite", ChatColor.AQUA, Material.GHAST_TEAR, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Toxic Bite", "toxic bite", Material.GHAST_TEAR, false, List.of(
                 ChatColor.AQUA.toString() + "   - Hands give poison two for 5 seconds."
         ));
     }

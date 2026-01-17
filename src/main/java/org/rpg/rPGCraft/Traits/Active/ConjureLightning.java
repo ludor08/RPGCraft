@@ -1,14 +1,9 @@
 package org.rpg.rPGCraft.Traits.Active;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.ActiveTrait;
-import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 
@@ -16,9 +11,9 @@ import java.util.List;
 
 public class ConjureLightning extends ActiveTrait
 {
-    public ConjureLightning(Main main) {
+    public ConjureLightning() {
         // add the name and lore
-        super("Conjure Lightning", "conjure lightning", 150, ChatColor.DARK_GRAY, Material.LIGHTNING_ROD, false, main, List.of(
+        super(ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "Conjure Lightning", "conjure lightning", 75, Material.LIGHTNING_ROD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Strike where you're looking with lightning, then, start a lightning storm."
         ));
 

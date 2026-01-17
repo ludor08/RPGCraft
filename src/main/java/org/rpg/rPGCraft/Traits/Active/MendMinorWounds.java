@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
@@ -16,12 +16,12 @@ import java.util.List;
 
 public class MendMinorWounds extends ActiveTrait
 {
-    private final NamespacedKey healAmountKey = new NamespacedKey(main, "mend_minor_wounds_amount");
+    private final NamespacedKey healAmountKey = new NamespacedKey(Main.GetInstance(), "mend_minor_wounds_amount");
     int baseHealAmount = 5;
 
-    public MendMinorWounds(Main main) {
+    public MendMinorWounds() {
         // add the name and lore
-        super("Mend Minor Wounds", "mend minor wounds", 35, ChatColor.GREEN, Material.TURTLE_SCUTE, false, main, List.of(
+        super(ChatColor.GREEN + ChatColor.BOLD.toString() + "Mend Minor Wounds", "mend minor wounds", 35, Material.TURTLE_SCUTE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Shoots a beam that heals whichever entity it hits for five health.",
                 ChatColor.AQUA.toString() + "     If the beam doesn't hit anything, heal yourself instead."
         ));

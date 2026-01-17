@@ -7,29 +7,24 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SupernaturalGrowth extends Trait
 {
-    private final NamespacedKey sizeMod;
-    private final NamespacedKey damageMod;
+    private final NamespacedKey sizeMod = new NamespacedKey(Main.GetInstance(), "supernatural_growth_size");
+    private final NamespacedKey damageMod = new NamespacedKey(Main.GetInstance(), "supernatural_growth_damage");
 
-    public SupernaturalGrowth(Main main) {
+    public SupernaturalGrowth() {
         // add the name and lore
-        super("Supernatural Growth", "supernatural growth", ChatColor.AQUA, Material.RED_MUSHROOM_BLOCK, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Supernatural Growth", "supernatural growth", Material.RED_MUSHROOM_BLOCK, true, List.of(
                 ChatColor.AQUA.toString() + "   - Starts off 1 block tall but standing in water causes",
                 ChatColor.AQUA.toString() + "     the player to grow in size, up to 3 blocks tall.",
                 ChatColor.AQUA.toString() + "   - Gives three damage per block over one"
         ));
-
-        sizeMod = new NamespacedKey(main, "supernatural_growth_size");
-        damageMod = new NamespacedKey(main, "supernatural_growth_damage");
     }
 
     @Override

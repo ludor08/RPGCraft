@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.Main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +23,19 @@ public abstract class Trait
     // name and lore of this trait
     public String name;
     public String name_id;
-    public ChatColor nameColor;
     public Material iconMaterial;
     public List<String> lore;
 
     // type of buffs
     public boolean tickTrait;
 
-    // main
-    public Main main;
 
-    public Trait(String name, String name_id, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
+    public Trait(String name, String name_id, Material iconMaterial, boolean tickTrait, List<String> lore)
     {
         this.name = name;
         this.name_id = name_id;
         this.lore = lore;
-        this.nameColor = nameColor;
         this.iconMaterial = iconMaterial;
-
-        this.main = main;
 
         this.tickTrait = tickTrait;
     }
@@ -51,10 +46,10 @@ public abstract class Trait
         ItemStack traitIcon = new ItemStack(iconMaterial);
         ItemMeta traitIconMeta = traitIcon.getItemMeta();
 
-        traitIconMeta.setDisplayName(nameColor.toString() + ChatColor.BOLD + name);
+        traitIconMeta.setDisplayName(name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(main.GetTraitKey(), PersistentDataType.STRING, name);
+        traitIconMeta.getPersistentDataContainer().set(Main.GetInstance().GetTraitKey(), PersistentDataType.STRING, name);
 
         // add the description
         List<String> lore = GetTraitLore();
@@ -80,7 +75,7 @@ public abstract class Trait
         // if this is an Active trait
         if (this instanceof ActiveTrait activeTrait)
         {
-            itemLore.add(ChatColor.BLUE + "Input Sequence : " +  main.statSheetManager.GenerateInputSequenceActionBar(activeTrait.GetInputSequence(), ChatColor.BLUE));
+            itemLore.add(ChatColor.BLUE + "Input Sequence : " +  Main.GetInstance().statSheetManager.GenerateInputSequenceActionBar(activeTrait.GetInputSequence(), ChatColor.BLUE));
             itemLore.add(ChatColor.BLUE + "Cost : " + activeTrait.GetCost());
             itemLore.add(" ");
             itemLore.add(ChatColor.AQUA + "On Activation :");

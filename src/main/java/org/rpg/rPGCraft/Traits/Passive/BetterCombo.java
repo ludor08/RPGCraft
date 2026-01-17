@@ -6,19 +6,19 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class BetterCombo extends Trait
 {
-    NamespacedKey comboDamageScalerKey = new NamespacedKey(main, "combo_damage_scaler");
+    NamespacedKey comboDamageScalerKey = new NamespacedKey(Main.GetInstance(), "combo_damage_scaler");
     int comboDamageScalerMod = 1;
 
-    public BetterCombo(Main main)
+    public BetterCombo()
     {
         // add the name and lore
-        super("Better Combo", "better combo", ChatColor.AQUA, Material.CHAIN, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Better Combo", "better combo", Material.CHAIN, false, List.of(
                 ChatColor.AQUA.toString() + "   - Double combo's damage modifier."
         ));
     }

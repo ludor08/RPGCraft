@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class TeleportingGrapple extends Trait
 {
-    private final NamespacedKey teleportingGrappleKey = new NamespacedKey(main, "teleporting_grapple");
+    private final NamespacedKey teleportingGrappleKey = new NamespacedKey(Main.GetInstance(), "teleporting_grapple");
 
-    public TeleportingGrapple(Main main) {
+    public TeleportingGrapple() {
         // add the name and lore
-        super("Teleporting Grapple", "teleporting grapple", ChatColor.AQUA, Material.ENDER_EYE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Teleporting Grapple", "teleporting grapple", Material.ENDER_EYE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Grappling Hook teleport you to the arrow, instead of launching you."
         ));
     }

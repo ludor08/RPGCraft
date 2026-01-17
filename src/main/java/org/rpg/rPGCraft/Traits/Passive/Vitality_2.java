@@ -1,20 +1,14 @@
-package org.rpg.rPGCraft.Traits.Passive.Vitality;
+package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -22,13 +16,13 @@ public class Vitality_2 extends Trait
 {
     private AttributeModifier healthMod;
 
-    public Vitality_2(Main main) {
+    public Vitality_2() {
         // add the name and lore
-        super("Vitality", "vitality 2", ChatColor.AQUA, Material.APPLE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Vitality", "vitality 2", Material.APPLE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Gain one and a half extra hearts."
         ));
 
-        healthMod = new AttributeModifier(new NamespacedKey(main, "vitality"), 3, AttributeModifier.Operation.ADD_NUMBER);
+        healthMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "vitality"), 3, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override

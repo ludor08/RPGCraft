@@ -1,26 +1,28 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
+import org.bukkit.block.BlockType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.persistence.PersistentDataType;
+import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.RPGparticles;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class FlashOfOak extends Trait
 {
-    private final NamespacedKey otherDamageKey = new NamespacedKey(main, "flash_of_oak_other_damage");
+    private final NamespacedKey otherDamageKey = new NamespacedKey(Main.GetInstance(), "flash_of_oak_other_damage");
     float otherDamageMod = 0.15f;
 
-    public FlashOfOak(Main main)
+    public FlashOfOak()
     {
         // add the name and lore
-        super("Flash Of Oak", "flash of oak", ChatColor.AQUA, Material.OAK_LOG, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Flash Of Oak", "flash of oak", Material.OAK_LOG, false, List.of(
                 ChatColor.AQUA.toString() + "   - Takes 50% more damage from fire.",
                 ChatColor.AQUA.toString() + "   - Takes 15% less damage from all other damage sources."
         ));

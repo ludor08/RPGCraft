@@ -1,24 +1,11 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -26,9 +13,9 @@ public class ManyLegs extends Trait
 {
     final float climbSpeed = 0.25f;
 
-    public ManyLegs(Main main) {
+    public ManyLegs() {
         // add the name and lore
-        super("Many Legs", "many legs", ChatColor.AQUA, Material.LEATHER_HORSE_ARMOR, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Many Legs", "many legs", Material.LEATHER_HORSE_ARMOR, true, List.of(
                 ChatColor.AQUA.toString() + "   - Sneak next to walls to climb them"
         ));
     }

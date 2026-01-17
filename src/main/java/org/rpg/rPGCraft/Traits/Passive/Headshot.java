@@ -1,23 +1,26 @@
-package org.rpg.rPGCraft.Traits.Passive.Headshot;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.*;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.joml.Vector3d;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Headshot extends Trait
 {
-    private final NamespacedKey headshotDamageModKey = new NamespacedKey(main, "headshot_damage_mod");
+    private final NamespacedKey headshotDamageModKey = new NamespacedKey(Main.GetInstance(), "headshot_damage_mod");
     float headshotDamageMod = 1.15f;
 
-    public Headshot(Main main) {
+    public Headshot() {
         // add the name and lore
-        super("Headshot", "headshot", ChatColor.AQUA, Material.PLAYER_HEAD, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Headshot", "headshot", Material.PLAYER_HEAD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Projectiles that hit the general head area deals 1.15x damage. (if headshots feel inconsistent with",
                 ChatColor.AQUA.toString() + "     certain mobs, please let me know)"
         ));

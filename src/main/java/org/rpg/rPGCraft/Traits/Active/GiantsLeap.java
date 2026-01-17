@@ -1,38 +1,32 @@
 package org.rpg.rPGCraft.Traits.Active;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Arrow;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.RPGparticles;
 import org.rpg.rPGCraft.RPGutils;
 
 import java.util.List;
 
 public class GiantsLeap extends ActiveTrait
 {
-    NamespacedKey noFallDamageTime = new NamespacedKey(main, "giants_leap_no_fall_damage_time");
-    NamespacedKey giantsImpactKey = new NamespacedKey(main, "giants_impact");
-    NamespacedKey cleavingImpactKey = new NamespacedKey(main, "cleaving_impact");
-    NamespacedKey incineratingImpactKey = new NamespacedKey(main, "incinerating_impact");
-
-    NamespacedKey attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
+    NamespacedKey noFallDamageTime = new NamespacedKey(Main.GetInstance(), "giants_leap_no_fall_damage_time");
+    NamespacedKey giantsImpactKey = new NamespacedKey(Main.GetInstance(), "giants_impact");
+    NamespacedKey cleavingImpactKey = new NamespacedKey(Main.GetInstance(), "cleaving_impact");
+    NamespacedKey incineratingImpactKey = new NamespacedKey(Main.GetInstance(), "incinerating_impact");
 
     float jumpPowerMod = 2;
 
-    public GiantsLeap(Main main) {
+    public GiantsLeap() {
         // add the name and lore
-        super("Giants Leap", "giants leap", 15, ChatColor.RED, Material.LEATHER_BOOTS, true, main, List.of(
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Giants Leap", "giants leap", 15, Material.LEATHER_BOOTS, true, List.of(
                 ChatColor.AQUA.toString() + "   - Upon activating this trait you will leap forward."
         ));
 
@@ -61,6 +55,8 @@ public class GiantsLeap extends ActiveTrait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        Main main = Main.GetInstance();
+
         if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL))
         {
             if (e.getEntity().getPersistentDataContainer().has(noFallDamageTime))

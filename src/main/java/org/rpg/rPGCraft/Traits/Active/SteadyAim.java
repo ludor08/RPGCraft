@@ -1,37 +1,32 @@
 package org.rpg.rPGCraft.Traits.Active;
 
-import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Debug;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.ActiveTrait;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.RPGraycast;
-import org.rpg.rPGCraft.RPGutils;
+import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 
 import java.util.List;
 
 public class SteadyAim extends ActiveTrait
 {
-    NamespacedKey damageModKey = new NamespacedKey(main, "steady_aim_damage_bonus");
+    NamespacedKey hasSteadyAimKey = new NamespacedKey(Main.GetInstance(), "has_steady_aim");
+
+    NamespacedKey damageModKey = new NamespacedKey(Main.GetInstance(), "steady_aim_damage_bonus");
     float damageMod = 1.75f;
 
-    private final NamespacedKey laserDamageKey = new NamespacedKey(main, "laser_shot_damage");
+    private final NamespacedKey laserDamageKey = new NamespacedKey(Main.GetInstance(), "laser_shot_damage");
 
-    AttributeModifier speedMod = new AttributeModifier(new NamespacedKey(main, "steady_aim_speed_mod"), -10, AttributeModifier.Operation.ADD_NUMBER);
+    AttributeModifier speedMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "steady_aim_speed_mod"), -10, AttributeModifier.Operation.ADD_NUMBER);
 
-    public SteadyAim(Main main) {
+    public SteadyAim() {
         // add the name and lore
-        super("Steady Aim", "steady aim", 50, ChatColor.RED, Material.ARROW, false, main, List.of(
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Steady Aim", "steady aim", 50, Material.ARROW, true, List.of(
                 ChatColor.AQUA.toString() + "   - Upon activating this trait while sneaking, you will not be able to move, however, ",
                 ChatColor.AQUA.toString() + "     you will also gain a 1.75x multiplier to your next shots damage.",
                 ChatColor.AQUA.toString() + "   - This ability will end upon unsneaking or firing a projectile."
@@ -68,6 +63,9 @@ public class SteadyAim extends ActiveTrait
         }
 
         player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+        player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+    }
+
     }
 
     @Override
@@ -86,11 +84,11 @@ public class SteadyAim extends ActiveTrait
 
                 ShootLaser(direction, location, player);
 
-                Bukkit.getScheduler().runTaskLater(main, () -> {
+                Bukkit.getScheduler().runTaskLater(Main.GetInstance(), () -> {
                     ShootLaser(direction, location, player);
                 }, 20);
 
-                Bukkit.getScheduler().runTaskLater(main, () -> {
+                Bukkit.getScheduler().runTaskLater(Main.GetInstance(), () -> {
                     ShootLaser(direction, location, player);
                 }, 40);
                 return;
@@ -135,7 +133,7 @@ public class SteadyAim extends ActiveTrait
         {
             if (entity instanceof LivingEntity living)
             {
-                living.damage(player.getPersistentDataContainer().get(new NamespacedKey(main, "laser_shot_damage"), PersistentDataType.DOUBLE), DamageSource.builder(DamageType.ARROW).build());
+                RPGutils.DamageWithTrait(living, player, (player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "laser_shot_damage"), PersistentDataType.DOUBLE)), false);
             }
         }
     }

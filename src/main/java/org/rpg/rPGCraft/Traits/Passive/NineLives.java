@@ -1,28 +1,22 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class NineLives extends Trait
 {
-    NamespacedKey nineLivesKey = new NamespacedKey(main, "nine_lives");
+    NamespacedKey nineLivesKey = new NamespacedKey(Main.GetInstance(), "nine_lives");
 
-    public NineLives(Main main) {
+    public NineLives() {
         // add the name and lore
-        super("Nine Lives", "nine lives", ChatColor.AQUA, Material.RED_DYE, false, main, List.of(
+        super(ChatColor.BOLD.toString() + "Nine Lives", "nine lives", Material.RED_DYE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Once per life when the Feloid is dropped to 0 hp, they drop to 2 hp instead."
         ));
     }

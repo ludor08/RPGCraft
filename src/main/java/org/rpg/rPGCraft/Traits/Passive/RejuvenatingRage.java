@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class RejuvenatingRage extends Trait
 {
-    private final NamespacedKey rejuvenatingRageKey = new NamespacedKey(main, "rejuvenating_rage");
+    private final NamespacedKey rejuvenatingRageKey = new NamespacedKey(Main.GetInstance(), "rejuvenating_rage");
 
-    public RejuvenatingRage(Main main) {
+    public RejuvenatingRage() {
         // add the name and lore
-        super("Rejuvenating Rage", "rejuvenating rage", ChatColor.AQUA, Material.ANVIL, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Rejuvenating Rage", "rejuvenating rage", Material.ANVIL, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Oath Of Rage give the Regeneration effect."
         ));
     }

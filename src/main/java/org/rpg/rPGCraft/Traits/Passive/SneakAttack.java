@@ -2,14 +2,13 @@ package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.joml.Vector3d;
+import org.rpg.rPGCraft.RPGparticles;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -17,13 +16,11 @@ public class SneakAttack extends Trait
 {
     float damageMod = 1.5f;
 
-    public SneakAttack(Main main) {
+    public SneakAttack() {
         // add the name and lore
-        super("Sneak Attack", "sneak attack", ChatColor.AQUA, Material.REDSTONE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Sneak Attack", "sneak attack", Material.REDSTONE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Attacking while invisible and crouching will consume invisibility, but deal 50% more."
         ));
-
-        this.main = main;
     }
 
     @Override

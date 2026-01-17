@@ -1,9 +1,10 @@
-package org.rpg.rPGCraft;
+package org.rpg.rPGCraft.Traits;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.Main;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public abstract class ActiveTrait extends Trait
 {
     private final int cost;
 
-    public ActiveTrait(String name, String name_id, int cost, ChatColor nameColor, Material iconMaterial, boolean tickTrait, Main main, List<String> lore)
+    public ActiveTrait(String name, String name_id, int cost, Material iconMaterial, boolean tickTrait, List<String> lore)
     {
-        super(name, name_id, nameColor, iconMaterial, tickTrait, main, lore);
+        super(name, name_id, iconMaterial, tickTrait, lore);
 
         this.cost = cost;
     }
@@ -23,11 +24,11 @@ public abstract class ActiveTrait extends Trait
     public void OnInputSequence(Player player)
     {
         // if the player has the needed mana
-        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player) >= 0)
+        if (player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player) >= 0)
         {
             TriggerActiveEvent(player);
 
-            player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player));
+            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player));
         }
         // if not
         else
@@ -48,7 +49,7 @@ public abstract class ActiveTrait extends Trait
         // get the modifier price
         int newCost = cost;
 
-        for (Trait trait : main.statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
+        for (Trait trait : Main.GetInstance().statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
         {
             if (trait instanceof CostModifierTrait costModifier && costModifier.GetModifiedTraitID().equals(name_id))
             {

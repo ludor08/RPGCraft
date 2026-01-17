@@ -1,33 +1,25 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Size_Change_Small extends Trait
 {
-    private AttributeModifier sizeMod;
+    private AttributeModifier sizeMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "small"), -0.25d, AttributeModifier.Operation.ADD_NUMBER);;
 
-    public Size_Change_Small(Main main) {
+    public Size_Change_Small() {
         // add the name and lore
-        super("Size Change:Small", "size change:small", ChatColor.AQUA, Material.IRON_NUGGET, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Size Change:Small", "size change:small", Material.IRON_NUGGET, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes the player a little smaller (0.5 blocks)."
         ));
-
-        sizeMod = new AttributeModifier(new NamespacedKey(main, "small"), -0.25d, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     @Override

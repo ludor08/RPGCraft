@@ -13,7 +13,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ public class SuperHardenedSkin extends Trait
     private final AttributeModifier armorMod;
     private final AttributeModifier armorToughnessMod;
 
-    public SuperHardenedSkin(Main main)
+    public SuperHardenedSkin()
     {
         // add the name and lore
-        super("Super Hardened Skin", "super hardened skin", ChatColor.AQUA, Material.SUGAR, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Super Hardened Skin", "super hardened skin", Material.SUGAR, false, List.of(
                 ChatColor.AQUA.toString() + "   - Takes three more damage from pickaxes, and one per level of efficiency if its on a pickaxe.",
                 ChatColor.AQUA.toString() + "   - Gains six base defense and two armor toughness."
         ));
 
-        armorMod = new AttributeModifier(new NamespacedKey(main, "super_hardened_skin_armor"), 6, AttributeModifier.Operation.ADD_NUMBER);
-        armorToughnessMod = new AttributeModifier(new NamespacedKey(main, "super_hardened_skin_armor_toughness"), 2, AttributeModifier.Operation.ADD_NUMBER);
+        armorMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "super_hardened_skin_armor"), 6, AttributeModifier.Operation.ADD_NUMBER);
+        armorToughnessMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "super_hardened_skin_armor_toughness"), 2, AttributeModifier.Operation.ADD_NUMBER);
 
     }
 

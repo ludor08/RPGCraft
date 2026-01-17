@@ -4,18 +4,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Fur extends Trait
 {
 
-    public Fur(Main main)
+    public Fur()
     {
         // add the name and lore
-        super("Fur", "fur", ChatColor.AQUA, Material.RABBIT_HIDE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Fur", "fur", Material.RABBIT_HIDE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Takes 50% less cold damage.",
                 ChatColor.AQUA.toString() + "   - Takes 50% more fire damage."
         ));

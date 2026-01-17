@@ -1,29 +1,22 @@
-package org.rpg.rPGCraft.Traits.Passive.EnhancedMixture;
+package org.rpg.rPGCraft.Traits.Passive;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionType;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class EnhancedMixture_1 extends Trait
 {
 
-    public EnhancedMixture_1(Main main)
+    public EnhancedMixture_1()
     {
         // add the name and lore
-        super("Enhanced Mixture", "enhanced mixture 1", ChatColor.AQUA, Material.POTION, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Enhanced Mixture", "enhanced mixture 1", Material.POTION, false, List.of(
                 ChatColor.AQUA.toString() + "   - The duration of potion brewed by you is increased",
                 ChatColor.AQUA.toString() + "     by 30 seconds if the duration was already more than one second."
         ));

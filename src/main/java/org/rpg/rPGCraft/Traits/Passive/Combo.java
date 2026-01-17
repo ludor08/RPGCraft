@@ -9,27 +9,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.rpg.rPGCraft.ItemManager;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class Combo extends Trait
 {
-    NamespacedKey lacerate = new NamespacedKey(main, "lacerate");
+    NamespacedKey lacerate = new NamespacedKey(Main.GetInstance(), "lacerate");
 
-    NamespacedKey comboCount = new NamespacedKey(main, "combo_count");
-    NamespacedKey comboTimer = new NamespacedKey(main, "combo_timer");
+    NamespacedKey comboCount = new NamespacedKey(Main.GetInstance(), "combo_count");
+    NamespacedKey comboTimer = new NamespacedKey(Main.GetInstance(), "combo_timer");
 
-    NamespacedKey comboDamageScalerKey = new NamespacedKey(main, "combo_damage_scaler");
+    NamespacedKey comboDamageScalerKey = new NamespacedKey(Main.GetInstance(), "combo_damage_scaler");
     int baseComboDamageScaler = 1;
 
-    public Combo(Main main) {
+    public Combo() {
         // add the name and lore
-        super("Combo", "combo", ChatColor.AQUA, Material.CHAIN, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Combo", "combo", Material.CHAIN, true, List.of(
                 ChatColor.AQUA.toString() + "   - Every time you hit a creature with a weapon you gain one combo.",
                 ChatColor.AQUA.toString() + "   - You do plus 1% for every combo that you have.",
                 ChatColor.AQUA.toString() + "   - Your combo reset when you take damage or if you go 3 seconds without gaining more combo."
@@ -56,7 +54,7 @@ public class Combo extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-        if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE || main.itemManager.GetWeaponTypes().contains(((Player)e.getDamager()).getInventory().getItem(EquipmentSlot.HAND).getType()))
+        if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE || Main.GetInstance().itemManager.GetWeaponTypes().contains(((Player)e.getDamager()).getInventory().getItem(EquipmentSlot.HAND).getType()))
         {
             e.setDamage(e.getDamage() * (1 + (e.getDamager().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) / 100)));
 
@@ -72,7 +70,7 @@ public class Combo extends Trait
                     {
                         int lacerateDamage = (int) Math.min(10, Math.floor(living.getAttribute(Attribute.MAX_HEALTH).getValue()/10));
 
-                        living.damage(lacerateDamage, e.getDamager());
+                        e.setDamage(e.getDamage() + lacerateDamage);
                     }
                 }
 

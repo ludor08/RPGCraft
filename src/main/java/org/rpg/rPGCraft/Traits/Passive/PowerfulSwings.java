@@ -6,21 +6,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PowerfulSwings extends Trait
 {
     Main main;
 
-    public PowerfulSwings(Main main) {
+    public PowerfulSwings() {
         // add the name and lore
-        super("Powerful Swings", "powerful swings", ChatColor.AQUA, Material.IRON_AXE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Powerful Swings", "powerful swings", Material.IRON_AXE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Does 10% more damage with melee weapons."
         ));
 

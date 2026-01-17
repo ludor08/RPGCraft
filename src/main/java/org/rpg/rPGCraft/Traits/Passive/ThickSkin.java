@@ -5,23 +5,22 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class ThickSkin extends Trait
 {
-    private final NamespacedKey otherDamageKey = new NamespacedKey(main, "flash_of_oak_other_damage");
+    private final NamespacedKey otherDamageKey = new NamespacedKey(Main.GetInstance(), "flash_of_oak_other_damage");
     float otherDamageMod = 0.1f;
 
-    public ThickSkin(Main main)
+    public ThickSkin()
     {
         // add the name and lore
-        super("Thick Skin", "thick skin", ChatColor.AQUA, Material.ARMADILLO_SCUTE, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Thick Skin", "thick skin", Material.ARMADILLO_SCUTE, false, List.of(
                 ChatColor.AQUA.toString() + "   - Takes 10% less damage from all damage sources."
         ));
     }

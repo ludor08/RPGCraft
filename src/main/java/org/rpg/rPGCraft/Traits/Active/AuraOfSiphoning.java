@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.ActiveTrait;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
 
@@ -15,16 +15,16 @@ import java.util.List;
 
 public class AuraOfSiphoning extends ActiveTrait
 {
-    NamespacedKey siphoningKey = new NamespacedKey(main, "aura_of_siphoning");
-    NamespacedKey siphoningTickKey = new NamespacedKey(main, "aura_of_siphoning_tick");
+    NamespacedKey siphoningKey = new NamespacedKey(Main.GetInstance(), "aura_of_siphoning");
+    NamespacedKey siphoningTickKey = new NamespacedKey(Main.GetInstance(), "aura_of_siphoning_tick");
 
     int manaCost = 5;
 
-    NamespacedKey weaknessLevelKey = new NamespacedKey(main, "aura_of_weakness_level");
+    NamespacedKey weaknessLevelKey = new NamespacedKey(Main.GetInstance(), "aura_of_weakness_level");
 
-    public AuraOfSiphoning(Main main) {
+    public AuraOfSiphoning() {
         // add the name and lore
-        super("Aura Of Siphoning", "aura of siphoning", 40, ChatColor.AQUA, Material.PALE_HANGING_MOSS, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Aura Of Siphoning", "aura of siphoning", 40, Material.PALE_HANGING_MOSS, true, List.of(
                 ChatColor.AQUA.toString() + "   - Siphon mana from all entities within five blocks of you at a 2 to 1 ratio.",
                 ChatColor.AQUA.toString() + "   - When activated this trait will stay active and consume 5 mana per second, until deactivated with the same input sequence."
         ));
@@ -39,6 +39,8 @@ public class AuraOfSiphoning extends ActiveTrait
     @Override
     public void OnTick(Player player)
     {
+        Main main = Main.GetInstance();
+
         if (player.getPersistentDataContainer().get(siphoningKey, PersistentDataType.BOOLEAN))
         {
             player.getPersistentDataContainer().set(siphoningTickKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(siphoningTickKey, PersistentDataType.INTEGER)+1);

@@ -6,17 +6,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
 public class FlameCharge extends Trait
 {
-    NamespacedKey flameChargeKey = new NamespacedKey(main, "flame_charge");
+    NamespacedKey flameChargeKey = new NamespacedKey(Main.GetInstance(), "flame_charge");
 
-    public FlameCharge(Main main) {
+    public FlameCharge() {
         // add the name and lore
-        super("Flame Charge", "flame charge", ChatColor.AQUA, Material.BLAZE_POWDER, false, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Flame Charge", "flame charge", Material.BLAZE_POWDER, false, List.of(
                 ChatColor.AQUA.toString() + "   - Makes Flame Charge light enemies aflame."
         ));
     }

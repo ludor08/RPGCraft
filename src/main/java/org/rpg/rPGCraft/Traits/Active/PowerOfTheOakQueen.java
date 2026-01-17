@@ -1,35 +1,27 @@
 package org.rpg.rPGCraft.Traits.Active;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.ActiveTrait;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.RPGutils;
-import org.rpg.rPGCraft.Trait;
-import org.rpg.rPGCraft.Traits.Passive.FlashOfOak;
+import org.joml.Vector3d;
+import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PowerOfTheOakQueen extends ActiveTrait
 {
-    NamespacedKey oakQueenTimerKey = new NamespacedKey(main, "power_of_the_oak_queen_timer");
-    AttributeModifier entSizeMod = new AttributeModifier(new NamespacedKey(main, "power_of_the_oak_queen_size_mod"), 0.5, AttributeModifier.Operation.ADD_NUMBER);
-    AttributeModifier entDamageMod = new AttributeModifier(new NamespacedKey(main, "power_of_the_oak_queen_damage_mod"), 5, AttributeModifier.Operation.ADD_NUMBER);
+    NamespacedKey oakQueenTimerKey = new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_timer");
+    AttributeModifier entSizeMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_size_mod"), 0.5, AttributeModifier.Operation.ADD_NUMBER);
+    AttributeModifier entDamageMod = new AttributeModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_damage_mod"), 5, AttributeModifier.Operation.ADD_NUMBER);
 
-    public PowerOfTheOakQueen(Main main) {
+    public PowerOfTheOakQueen() {
         // add the name and lore
-        super("Power Of The Oak Queen", "power of the oak queen", 150, ChatColor.AQUA, Material.GOLDEN_HELMET, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Power Of The Oak Queen", "power of the oak queen", 150, Material.GOLDEN_HELMET, true, List.of(
                 ChatColor.AQUA.toString() + "Wield the power of the oak queen to become something better than mortal for 60 seconds.",
                 ChatColor.AQUA.toString() + " ",
                 ChatColor.AQUA.toString() + "   - Grow one block in size.",
@@ -51,7 +43,7 @@ public class PowerOfTheOakQueen extends ActiveTrait
         {
             boolean hasFlashOfOak = false;
 
-            for (Trait trait : main.statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
+            for (Trait trait : Main.GetInstance().statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
             {
                 if (trait.name_id.equals("flash of oak"))
                 {
@@ -87,7 +79,7 @@ public class PowerOfTheOakQueen extends ActiveTrait
     @Override
     public void TriggerActiveEvent(Player player)
     {
-        for (Trait trait : main.statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
+        for (Trait trait : Main.GetInstance().statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
         {
             if (trait.name_id.equals("flash of oak"))
             {
@@ -100,7 +92,7 @@ public class PowerOfTheOakQueen extends ActiveTrait
         }
 
         player.sendMessage(ChatColor.DARK_RED + "You must have Flash Of Oak active to use this trait.");
-        player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER)+150);
+        player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER)+150);
     }
 
     @Override
@@ -111,12 +103,12 @@ public class PowerOfTheOakQueen extends ActiveTrait
             player.getPersistentDataContainer().remove(oakQueenTimerKey);
         }
 
-        if (player.getAttribute(Attribute.SCALE).getModifier(new NamespacedKey(main, "power_of_the_oak_queen_size_mod")) != null)
+        if (player.getAttribute(Attribute.SCALE).getModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_size_mod")) != null)
         {
             player.getAttribute(Attribute.SCALE).removeModifier(entSizeMod);
         }
 
-        if (player.getAttribute(Attribute.ATTACK_DAMAGE).getModifier(new NamespacedKey(main, "power_of_the_oak_queen_damage_mod")) != null)
+        if (player.getAttribute(Attribute.ATTACK_DAMAGE).getModifier(new NamespacedKey(Main.GetInstance(), "power_of_the_oak_queen_damage_mod")) != null)
         {
             player.getAttribute(Attribute.ATTACK_DAMAGE).removeModifier(entDamageMod);
         }

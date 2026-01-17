@@ -1,6 +1,5 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -9,16 +8,10 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.Trait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +20,16 @@ public class Pack extends Trait
 {
     private NamespacedKey packModKey;
 
-    public Pack(Main main) {
+    public Pack() {
         // add the name and lore
-        super("Pack", "pack", ChatColor.AQUA, Material.BONE, true, main, List.of(
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Pack", "pack", Material.BONE, true, List.of(
                 ChatColor.AQUA.toString() + "   - For every tamed wolf or a player (these can be any race)",
-                ChatColor.AQUA.toString() + "     within 10 blocks that hasn’t the last damage source, ",
+                ChatColor.AQUA.toString() + "     within 10 blocks that hasn’t the last damage source and is in the same party as you,",
                 ChatColor.AQUA.toString() + "     you gain +2 base defense (to a max of +10), and +1 damage (to a max of +5),",
                 ChatColor.AQUA.toString() + "     and the wolf(s) and the player(s) gain resistance one."
         ));
 
-        packModKey = new NamespacedKey(main, "pack");
+        packModKey = new NamespacedKey(Main.GetInstance(), "pack");
     }
 
     @Override

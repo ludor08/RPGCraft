@@ -5,23 +5,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.ActiveTrait;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.RPGraycast;
-import org.rpg.rPGCraft.RPGutils;
+import org.joml.Vector3d;
+import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
 
 import java.util.List;
 
 public class SmokeBomb extends ActiveTrait
 {
-    NamespacedKey secretTechniqueKey = new NamespacedKey(main, "secret_technique");
+    NamespacedKey secretTechniqueKey = new NamespacedKey(Main.GetInstance(), "secret_technique");
 
-    NamespacedKey durationKey = new NamespacedKey(main, "smoke_bomb_duration");
+    NamespacedKey durationKey = new NamespacedKey(Main.GetInstance(), "smoke_bomb_duration");
     int baseDuration = 200;
 
-    public SmokeBomb(Main main) {
+    public SmokeBomb() {
         // add the name and lore
-        super("Smoke Bomb", "smoke bomb", 75, ChatColor.DARK_GRAY, Material.GUNPOWDER, false, main, List.of(
+
+        super(ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "Smoke Bomb", "smoke bomb", 75, Material.GUNPOWDER, false, List.of(
                 ChatColor.AQUA.toString() + "   - Throw down a smoke bomb, and disappear for 10 seconds."
         ));
 
