@@ -67,7 +67,12 @@ public class GiantsLeap extends ActiveTrait
 
                     for (Entity shockwavedEntity : shockwavedEntitys)
                     {
-                        if (shockwavedEntity instanceof LivingEntity livingShockwavedEntity)
+                        if (main.partyManager.IsInTheSameParty(e.getEntity(), shockwavedEntity))
+                        {
+                            continue;
+                        }
+
+                        if (shockwavedEntity instanceof LivingEntity livingEntity)
                         {
                             if (e.getEntity().getPersistentDataContainer().has(incineratingImpactKey))
                             {

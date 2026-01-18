@@ -54,6 +54,11 @@ public class CorrectiveWindResistance extends Trait
 
                     if (target instanceof LivingEntity livingTarget)
                     {
+                        if (Main.GetInstance().partyManager.IsInTheSameParty(player, livingTarget))
+                        {
+                            continue;
+                        }
+
                         // get the current direction
                         Vector3d currentDirection = projectile.getVelocity().normalize().toVector3d();
 

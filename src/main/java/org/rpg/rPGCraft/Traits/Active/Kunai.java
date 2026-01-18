@@ -24,7 +24,11 @@ public class Kunai extends ActiveTrait
 
     NamespacedKey kunaiDamageKey = new NamespacedKey(Main.GetInstance(), "kunai_damage");
 
-    public Kunai(Main main) {
+    NamespacedKey poisonKunaiKey = new NamespacedKey(Main.GetInstance(), "kunai_poison");
+    NamespacedKey poisonLevelKey = new NamespacedKey(Main.GetInstance(), "kunai_poison_level");
+    NamespacedKey poisonDurationKey = new NamespacedKey(Main.GetInstance(), "kunai_poison_duration");
+
+    public Kunai() {
         // add the name and lore
         super(ChatColor.RED + ChatColor.BOLD.toString() + "Kunai", "kunai", 5, Material.STONE_SWORD, false, List.of(
                 ChatColor.AQUA.toString() + "   - Throw a kunai that does 1 damage and can carry other effects."

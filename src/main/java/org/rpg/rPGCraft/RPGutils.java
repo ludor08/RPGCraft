@@ -186,49 +186,41 @@ public class RPGutils
         return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch())) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch())), Math.cos(Math.toRadians(entity.getPitch())) * Math.cos(Math.toRadians(entity.getYaw())));
     }
 
-    public static @NotNull Vector3d getFacingUpDirection(Entity entity)
-    {
-        return new Vector3d(-Math.cos(Math.toRadians(entity.getPitch() + ((Math.PI)/2))) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(entity.getPitch()) + ((Math.PI)/2)), Math.cos(Math.toRadians(entity.getPitch()) + ((Math.PI)/2)) * Math.cos(Math.toRadians(entity.getYaw())));
-    }
-
     public static @NotNull Vector3d getBodyFacingDirection(Entity entity)
     {
         return new Vector3d(-Math.cos(Math.toRadians(0)) * Math.sin(Math.toRadians(entity.getYaw())), -Math.sin(Math.toRadians(0)), Math.cos(Math.toRadians(0)) * Math.cos(Math.toRadians(entity.getYaw())));
     }
 
-    public static @NotNull Vector3d getBodyRightDirection(Entity entity)
-    {
-        return new Vector3d(-Math.cos(Math.toRadians(0)) * Math.sin(Math.toRadians(entity.getYaw()) + ((Math.PI)/2)), -Math.sin(Math.toRadians(0)), Math.cos(Math.toRadians(0)) * Math.cos(Math.toRadians(entity.getYaw()) + ((Math.PI)/2)));
-    }
-
-    public static @NotNull Vector3d getOffsetBodyDirection(Entity entity, Location loc, float forward, float sides, float up)
+    public static @NotNull Vector3d getLocationOffsetByVector(Location loc, Vector3d vector, float forwardOffset, float sideOffset, float upOffset)
     {
         Vector3d position = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
+        Vector3d normalizedVector = vector.normalize();
 
         // move it forward
-        position.add(getBodyFacingDirection(entity).mul(forward));
+        Vector3d facing = new Vector3d(normalizedVector);
+
+        position.add(new Vector3d(facing).mul(forwardOffset));
 
         // move it to the sides (right being positive)
-        position.add(getBodyRightDirection(entity).mul(sides));
+        Vector3d right = new Vector3d(normalizedVector).rotateY(Math.toRadians(90));
+        right.y = 0;
+
+        if (right.x == 0 && right.z == 0)
+        {
+            right.x = 1;
+        }
+        else right.normalize();
+
+        position.add(new Vector3d(right).mul(sideOffset));
 
         // move it up
-        position.add(new Vector3d(0, 1, 0).mul(up));
+        Vector3d upVector = new Vector3d(
+                facing.y * right.z - facing.z * right.y,
+                facing.z * right.x - facing.x * right.z,
+                facing.x * right.y - facing.y * right.x
+        );
 
-        return position;
-    }
-
-    public static @NotNull Vector3d getOffsetFacingDirection(Entity entity, Location loc, float forward, float sides, float up)
-    {
-        Vector3d position = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
-
-        // move it forward
-        position.add(getFacingDirection(entity).mul(forward));
-
-        // move it to the sides (right being positive)
-        position.add(getBodyRightDirection(entity).mul(sides));
-
-        // move it up
-        position.add(getFacingUpDirection(entity).mul(up));
+        position.add(upVector.mul(upOffset));
 
         return position;
     }
@@ -262,10 +254,10 @@ public class RPGutils
 
     /// traits
 
-    public static void HealWithTraits(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason, Main main)
+    public static void HealWithTrait(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason)
     {
-        NamespacedKey boostedHealingDurationKey = new NamespacedKey(main,"boostedHealing_speed_duration");
-        NamespacedKey boostedHealingPowerKey = new NamespacedKey(main,"boostedHealing_speed_power");
+        NamespacedKey boostedHealingDurationKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_duration");
+        NamespacedKey boostedHealingPowerKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_power");
 
         int amountToBeHealed = value;
 
@@ -275,6 +267,40 @@ public class RPGutils
         }
 
         target.heal(amountToBeHealed, regainReason);
+    }
+
+    public static void DamageWithTrait(LivingEntity target, Entity attacker, double damageAmount, boolean doSendInput)
+    {
+        NamespacedKey attackInputCanceledKey = new NamespacedKey(Main.GetInstance(), "attack_input_canceled");
+
+        if (attacker != null)
+        {
+            if (!Main.GetInstance().partyManager.IsInTheSameParty(attacker, target))
+            {
+                RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !doSendInput);
+                target.damage(damageAmount, attacker);
+                RPGutils.RemoveNamespacedKey(attacker, attackInputCanceledKey);
+            }
+        }
+        else
+        {
+            target.damage(damageAmount);
+        }
+    }
+
+    public static void AttackWithTrait(Entity target, LivingEntity attacker, boolean doSendInput)
+    {
+        NamespacedKey attackInputCanceledKey = new NamespacedKey(Main.GetInstance(), "attack_input_canceled");
+
+        if (attacker != null)
+        {
+            if (!Main.GetInstance().partyManager.IsInTheSameParty(attacker, target))
+            {
+                RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !doSendInput);
+                attacker.attack(target);
+                RPGutils.RemoveNamespacedKey(attacker, attackInputCanceledKey);
+            }
+        }
     }
 
     /// namespacedKeys

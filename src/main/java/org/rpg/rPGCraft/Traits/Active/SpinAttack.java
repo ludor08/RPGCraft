@@ -37,6 +37,11 @@ public class SpinAttack extends ActiveTrait
         // go through all the nearby entities
         for (Entity entity : nearbyEntities)
         {
+            if (Main.GetInstance().partyManager.IsInTheSameParty(player, entity))
+            {
+                continue;
+            }
+
             // if this entity is the player
             if (entity == player)
             {
@@ -49,7 +54,7 @@ public class SpinAttack extends ActiveTrait
             // if the entity is less than three blocks away
             if (distance <= 3)
             {
-                player.attack(entity);
+                RPGutils.AttackWithTrait(entity, player, false);
             }
         }
     }

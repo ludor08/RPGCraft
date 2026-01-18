@@ -57,6 +57,11 @@ public class AuraOfSiphoning extends ActiveTrait
                 {
                     if (entity instanceof LivingEntity livingEntity)
                     {
+                        if (main.partyManager.IsInTheSameParty(player, livingEntity))
+                        {
+                            continue;
+                        }
+
                         if (RPGutils.getDistance(player.getLocation(), entity.getLocation()) > 5)
                         {
                             continue;

@@ -1,9 +1,6 @@
 package org.rpg.rPGCraft.Traits.Passive;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
@@ -67,6 +64,11 @@ public class Charge extends Trait
 
                 for (Entity entity : entities)
                 {
+                    if (main.partyManager.IsInTheSameParty(player, entity))
+                    {
+                        continue;
+                    }
+
                     if (entity instanceof LivingEntity livingEntity)
                     {
                         int damage = player.getPersistentDataContainer().get(chargeDamageKey, PersistentDataType.INTEGER);
@@ -110,7 +112,7 @@ public class Charge extends Trait
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(new NamespacedKey(main, "charge_move_mod"));
+        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(new NamespacedKey(Main.GetInstance(), "charge_move_mod"));
 
         RPGutils.RemoveNamespacedKey(player, momentumKey);
         RPGutils.AddToNamespacedKey(player, speedModKey, 0, -1.1f);

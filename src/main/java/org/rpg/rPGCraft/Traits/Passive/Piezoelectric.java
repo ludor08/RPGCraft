@@ -35,6 +35,11 @@ public class Piezoelectric extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.isCancelled())
+        {
+            return;
+        }
+
         Player player = (Player) e.getEntity();
 
         // if the damage cause is one of the physicalDamageCauses

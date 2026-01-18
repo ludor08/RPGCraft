@@ -55,7 +55,15 @@ public class Dash extends ActiveTrait
         location.setYaw(player.getYaw());
 
         player.teleport(location);
-        for (Entity entity : entities) player.attack(entity);
+        for (Entity entity : entities)
+        {
+            if (main.partyManager.IsInTheSameParty(player, entity))
+            {
+                continue;
+            }
+
+            RPGutils.AttackWithTrait(entity, player, false);
+        }
     }
 
     @Override

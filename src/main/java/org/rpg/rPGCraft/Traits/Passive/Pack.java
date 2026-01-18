@@ -43,8 +43,7 @@ public class Pack extends Trait
             {
                 if (player.getLastDamageCause().getEntity() != entity)
                 {
-
-                    if ((entity instanceof Player newPlayer && newPlayer != player) || (entity instanceof Wolf wolf && wolf.isTamed()))
+                    if (Main.GetInstance().partyManager.IsInTheSameParty(player, entity))
                     {
                         packMembers.add(entity);
                     }
@@ -52,7 +51,7 @@ public class Pack extends Trait
             }
             else
             {
-                if ((entity instanceof Player newPlayer && newPlayer != player) || (entity instanceof Wolf wolf && wolf.isTamed()))
+                if (Main.GetInstance().partyManager.IsInTheSameParty(player, entity))
                 {
                     packMembers.add(entity);
                 }
