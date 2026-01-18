@@ -32,7 +32,12 @@ public class RebukeOfTheFlame extends Trait
     {
         Player player = (Player) e.getEntity();
 
-        if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER))
+        if (e.isCancelled())
+        {
+            return;
+        }
+
+        if (player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER))
         {
             if (e.getDamageSource().getCausingEntity() == null)
             {

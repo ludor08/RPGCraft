@@ -30,6 +30,11 @@ public class ToxicSpores extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.isCancelled())
+        {
+            return;
+        }
+
         for (Entity entity : e.getEntity().getNearbyEntities(1, 2, 1))
         {
             if (entity instanceof LivingEntity living)

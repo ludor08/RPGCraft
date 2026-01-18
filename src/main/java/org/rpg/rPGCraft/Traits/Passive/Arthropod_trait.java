@@ -25,6 +25,11 @@ public class Arthropod_trait extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.isCancelled())
+        {
+            return;
+        }
+
         DamageCause damageCause = e.getCause();
 
         // the damage is coming from an entity

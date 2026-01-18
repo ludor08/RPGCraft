@@ -81,6 +81,11 @@ public class Combo extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.isCancelled())
+        {
+            return;
+        }
+
         if (e.getEntity().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) > 0)
         {
             e.getEntity().sendMessage("You lost your combo of " + e.getEntity().getPersistentDataContainer().get(comboCount, PersistentDataType.INTEGER) + ".");

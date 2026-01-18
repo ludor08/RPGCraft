@@ -43,6 +43,11 @@ public class SupernaturalGrowth extends Trait
     @Override
     public void OnTakeDamage(EntityDamageEvent e)
     {
+        if (e.isCancelled())
+        {
+            return;
+        }
+
         RPGutils.SafeAttributeRemove(Attribute.SCALE, new AttributeModifier(sizeMod, (e.getDamage()/10), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), -0.45f);
         RPGutils.SafeAttributeRemove(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, (e.getDamage()/60), AttributeModifier.Operation.ADD_NUMBER), ((Player)e.getEntity()), 0);
     }
