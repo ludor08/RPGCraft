@@ -12,8 +12,8 @@ import java.util.List;
 public class Emeroid extends Race
 {
     // set up the race
-    public Emeroid(Main main)
+    public Emeroid()
     {
-        super("Emeroid", ChatColor.GREEN, Material.EMERALD, List.of(new GreenAndShiny(main)),null);
+        super(ChatColor.GREEN + ChatColor.BOLD.toString() + "Emeroid", Material.EMERALD, List.of(new GreenAndShiny()),null);
     }
 }

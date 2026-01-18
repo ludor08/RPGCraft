@@ -13,8 +13,8 @@ import java.util.List;
 public class Insectoid extends Race
 {
     // set up the race
-    public Insectoid(Main main)
+    public Insectoid()
     {
-        super("Insectoid", ChatColor.GRAY, Material.ARMADILLO_SCUTE, List.of(new Size_Change_Tiny(main), new Wings(main), new Squashable(main)),null);
+        super(ChatColor.GRAY + ChatColor.BOLD.toString() + "Insectoid", Material.ARMADILLO_SCUTE, List.of(new Size_Change_Tiny(), new Wings(), new Squashable()),null);
     }
 }

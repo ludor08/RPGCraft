@@ -13,8 +13,8 @@ import java.util.List;
 public class Crystalloid extends Race
 {
     // name of the race
-    public Crystalloid(Main main)
+    public Crystalloid()
     {
-        super("Crystalloid", ChatColor.WHITE, Material.DIAMOND_PICKAXE, List.of(new SuperHardenedSkin(main)),List.of(new Diamoid(main), new Emeroid(main), new Quartzoid(main)));
+        super(ChatColor.WHITE + ChatColor.BOLD.toString() + "Crystalloid", Material.DIAMOND_PICKAXE, List.of(new SuperHardenedSkin()),List.of(new Diamoid(), new Emeroid(), new Quartzoid()));
     }
 }

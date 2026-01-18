@@ -13,8 +13,8 @@ import java.util.List;
 public class Fungoid extends Race
 {
     // name of the race
-    public Fungoid(Main main)
+    public Fungoid()
     {
-        super("Fungoid", ChatColor.DARK_PURPLE, Material.BROWN_MUSHROOM, List.of(new Regeneration(main)),List.of(new Mushoid(main), new Skulkoid(main)));
+        super(ChatColor.DARK_PURPLE + ChatColor.BOLD.toString() + "Fungoid", Material.BROWN_MUSHROOM, List.of(new Regeneration()),List.of(new Mushoid(), new Skulkoid()));
     }
 }

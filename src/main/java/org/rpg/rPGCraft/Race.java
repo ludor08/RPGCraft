@@ -4,22 +4,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Race {
     public String name;
-    public ChatColor nameColor;
 
     public Material iconMaterial;
     public List<Race> subraces;
     public List<Trait> traits;
 
-    public Race(String name, ChatColor nameColor, Material iconMaterial, List<Trait> traits, List<Race> subraces)
+    public Race(String name, Material iconMaterial, List<Trait> traits, List<Race> subraces)
     {
         this.name = name;
-        this.nameColor = nameColor;
         this.iconMaterial = iconMaterial;
 
         this.traits = traits;
@@ -32,7 +31,7 @@ public class Race {
         ItemStack raceIcon = new ItemStack(iconMaterial);
         ItemMeta raceIconMeta = raceIcon.getItemMeta();
 
-        raceIconMeta.setDisplayName(nameColor.toString() + ChatColor.BOLD + name);
+        raceIconMeta.setDisplayName(name);
 
         // add the description
         List<String> lore = new ArrayList<>();

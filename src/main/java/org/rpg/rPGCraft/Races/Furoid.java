@@ -15,8 +15,8 @@ import java.util.List;
 public class Furoid extends Race
 {
     // name of the race
-    public Furoid(Main main)
+    public Furoid()
     {
-        super("Furoid", ChatColor.GRAY, Material.BEEF, List.of(new Fur(main), new AnimalAgility(main)),List.of(new Foxoid(main), new Feloid(main), new Canineoid(main)));
+        super(ChatColor.GRAY + ChatColor.BOLD.toString() + "Furoid", Material.BEEF, List.of(new Fur(), new AnimalAgility()),List.of(new Foxoid(), new Feloid(), new Canineoid()));
     }
 }

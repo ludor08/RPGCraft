@@ -15,8 +15,8 @@ import java.util.List;
 public class Arthropod extends Race
 {
     // name of the race
-    public Arthropod(Main main)
+    public Arthropod()
     {
-        super("Arthropod", ChatColor.DARK_GREEN, Material.SPIDER_EYE, List.of(new Size_Change_Small(main), new Arthropod_trait(main)),List.of(new Insectoid(main), new Arachnoid(main), new Crabnoid(main)));
+        super(ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "Arthropod", Material.SPIDER_EYE, List.of(new Size_Change_Small(), new Arthropod_trait()),List.of(new Insectoid(), new Arachnoid(), new Crabnoid()));
     }
 }

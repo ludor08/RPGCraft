@@ -2,9 +2,9 @@ package org.rpg.rPGCraft.Races.Subraces;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Race;
-import org.rpg.rPGCraft.Traits.Passive.Diet.AbnormalDiet_Berries;
+import org.rpg.rPGCraft.Traits.Passive.AbnormalDiet_Berries;
+import org.rpg.rPGCraft.Traits.Passive.GracefulStep;
 import org.rpg.rPGCraft.Traits.Passive.Pounce;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
 public class Foxoid extends Race
 {
     // set up the race
-    public Foxoid(Main main)
+    public Foxoid()
     {
-        super("Foxoid", ChatColor.GOLD, Material.SWEET_BERRIES, List.of(new Pounce(main), new AbnormalDiet_Berries(main)),null);
+        super(ChatColor.GOLD + ChatColor.BOLD.toString() + "Foxoid", Material.SWEET_BERRIES, List.of(new Pounce(), new AbnormalDiet_Berries(), new GracefulStep()),null);
     }
 }

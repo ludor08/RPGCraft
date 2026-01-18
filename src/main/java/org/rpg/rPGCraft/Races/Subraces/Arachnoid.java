@@ -11,8 +11,8 @@ import java.util.List;
 public class Arachnoid extends Race
 {
     // set up the race
-    public Arachnoid(Main main)
+    public Arachnoid()
     {
-        super("Arachnoid", ChatColor.RED, Material.FERMENTED_SPIDER_EYE, List.of(new Fur(main), new ToxicBite(main), new ManyLegs(main)),null);
+        super(ChatColor.RED + ChatColor.BOLD.toString() + "Arachnoid", Material.FERMENTED_SPIDER_EYE, List.of(new Fur(), new ToxicBite(), new ManyLegs()),null);
     }
 }

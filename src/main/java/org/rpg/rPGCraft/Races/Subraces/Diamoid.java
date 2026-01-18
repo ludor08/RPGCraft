@@ -14,8 +14,8 @@ import java.util.List;
 public class Diamoid extends Race
 {
     // set up the race
-    public Diamoid(Main main)
+    public Diamoid()
     {
-        super("Diamoid", ChatColor.AQUA, Material.DIAMOND, List.of(new DiamondSkin(main)),null);
+        super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Diamoid", Material.DIAMOND, List.of(new DiamondSkin()),null);
     }
 }

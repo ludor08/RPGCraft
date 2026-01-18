@@ -11,8 +11,8 @@ import java.util.List;
 public class Crabnoid extends Race
 {
     // set up the race
-    public Crabnoid(Main main)
+    public Crabnoid()
     {
-        super("Crabnoid", ChatColor.YELLOW, Material.GOLDEN_HELMET, List.of(new Pincers(main), new Exoskeleton(main), new Amphibious(main), new SandCrawler(main)),null);
+        super(ChatColor.YELLOW + ChatColor.BOLD.toString() + "Crabnoid", Material.GOLDEN_HELMET, List.of(new Pincers(), new Exoskeleton(), new Amphibious(), new SandCrawler()),null);
     }
 }

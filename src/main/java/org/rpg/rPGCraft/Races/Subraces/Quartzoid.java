@@ -11,8 +11,8 @@ import java.util.List;
 public class Quartzoid extends Race
 {
     // set up the race
-    public Quartzoid(Main main)
+    public Quartzoid()
     {
-        super("Quartzoid", ChatColor.AQUA, Material.QUARTZ, List.of(new Piezoelectric(main)),null);
+        super(ChatColor.WHITE + ChatColor.BOLD.toString() + "Quartzoid", Material.QUARTZ, List.of(new Piezoelectric()),null);
     }
 }
