@@ -60,13 +60,7 @@ public class OathOfRage extends ActiveTrait
             RPGutils.SafeAttributeAdd(Attribute.ATTACK_DAMAGE, damageMod, player);
             RPGutils.SafeAttributeAdd(Attribute.ARMOR, armorMod, player);
 
-            for (int i = 0; i < 20; i++)
-            {
-                Vector3d offset = new Vector3d(Math.cos((Math.PI*2)/((double) i /20)), 0, Math.sin((Math.PI*2)/((double) i /20)));
-                Location location = new Location(player.getWorld(), player.getLocation().getX() + offset.x, player.getLocation().getY() + offset.y, player.getLocation().getZ() + offset.z);
-
-                player.getWorld().spawnParticle(Particle.RAID_OMEN, location, 10, 0,0,0,2);
-            }
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_POLAR_BEAR_WARNING, SoundCategory.PLAYERS, 3, 0.5f, 1);
         }
         else
         {
@@ -82,6 +76,12 @@ public class OathOfRage extends ActiveTrait
             if (player.getPersistentDataContainer().get(rageTimerKey, PersistentDataType.INTEGER) > 0)
             {
                 RPGutils.AddToNamespacedKey(player, rageTimerKey, 0, -1);
+                RPGparticles.SpawnParticle(player.getWorld(), 3, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.RAID_OMEN, 1);
+
+                if (player.getPersistentDataContainer().has(rejuvenatingRageKey))
+                {
+                    RPGparticles.SpawnParticle(player.getWorld(), 1, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.HEART, 1);
+                }
             }
             else if (player.getPersistentDataContainer().get(rageTimerKey, PersistentDataType.INTEGER) <= 0)
             {
@@ -120,7 +120,9 @@ public class OathOfRage extends ActiveTrait
         {
             if (e.getDamager() instanceof LivingEntity living)
             {
-                RPGutils.HealWithTraits(e.getDamager(), living, (int) Math.floor(e.getDamage()*0.1), EntityRegainHealthEvent.RegainReason.REGEN,main);
+                RPGutils.HealWithTrait(e.getDamager(), living, (int) Math.floor(e.getDamage()*0.1), EntityRegainHealthEvent.RegainReason.REGEN);
+
+                RPGparticles.SpawnBlockParticle(e.getEntity().getWorld(), 5*((int) e.getDamage()/3), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0.0625, 0.0625,0.0625), BlockType.REDSTONE_BLOCK.createBlockData(), 1);
             }
         }
     }

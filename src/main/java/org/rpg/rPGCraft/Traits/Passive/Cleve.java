@@ -71,9 +71,7 @@ public class Cleve extends Trait
                 {
                     if (clevedEntity instanceof LivingEntity living)
                     {
-                        RPGutils.SetNamespacedKeyValue(player, attackInputCanceledKey, true);
-                        player.attack(living);
-                        RPGutils.RemoveNamespacedKey(player, attackInputCanceledKey);
+                        RPGutils.AttackWithTrait(living, player, false);
                     }
                 }
             }

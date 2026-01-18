@@ -13,11 +13,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.CustomItemComponents.CustomItem;
+import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +29,7 @@ import java.util.Objects;
 
 public class StatSheetManager implements Listener
 {
-    Main main;
+    private Main main;
 
     NamespacedKey attackInputCanceledKey;
 
@@ -61,7 +65,7 @@ public class StatSheetManager implements Listener
         }
 
         // if the player does not have a stat sheet give them one
-        return AddStatSheet(new StatSheet(player.getUniqueId(), main));
+        return AddStatSheet(new StatSheet(player.getUniqueId()));
     }
 
     // Adder
@@ -108,9 +112,9 @@ public class StatSheetManager implements Listener
         return null;
     }
 
-    public StatSheetManager(Main main)
+    public StatSheetManager()
     {
-        this.main = main;
+        this.main = Main.GetInstance();
         Bukkit.getPluginManager().registerEvents(this,main);
 
         attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
@@ -120,7 +124,7 @@ public class StatSheetManager implements Listener
             // if there is no stat sheet assigned to a player when they join
             if (FindStatSheetByPlayer(player) == null)
             {
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -214,7 +218,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(e.getPlayer().getUniqueId(), main));
+            AddStatSheet(new StatSheet(e.getPlayer().getUniqueId()));
         }
     }
 
@@ -235,7 +239,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -243,6 +247,11 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnDealDamageEvent(EntityDamageByEntityEvent e)
     {
+        if (main.partyManager.IsInTheSameParty(e.getEntity(), e.getDamager()))
+        {
+            e.setCancelled(true);
+        }
+
         if (e.getDamager() instanceof Player player)
         {
             // if the player has a stat sheet
@@ -267,7 +276,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -276,7 +285,7 @@ public class StatSheetManager implements Listener
     {
         if (player.getPersistentDataContainer().has(attackInputCanceledKey))
         {
-            return true;
+            return player.getPersistentDataContainer().get(attackInputCanceledKey, PersistentDataType.BOOLEAN);
         }
 
         return false;
@@ -299,7 +308,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -321,7 +330,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -367,7 +376,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -389,7 +398,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -411,7 +420,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            AddStatSheet(new StatSheet(player.getUniqueId()));
         }
     }
 
@@ -432,7 +441,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            AddStatSheet(new StatSheet(player.getUniqueId()));
         }
     }
 
@@ -453,7 +462,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            AddStatSheet(new StatSheet(player.getUniqueId()));
         }
     }
 
@@ -474,7 +483,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            AddStatSheet(new StatSheet(player.getUniqueId()));
         }
     }
 
@@ -495,7 +504,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            AddStatSheet(new StatSheet(player.getUniqueId()));
         }
     }
 
@@ -516,8 +525,27 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
+        }
+    }
+
+    @EventHandler
+    public void OnInteractEntityEvent(PlayerInteractEntityEvent e)
+    {
+        // if the player has a stat sheet
+        if (FindStatSheetByPlayer(e.getPlayer()) != null)
+        {
+            for (Trait trait : FindStatSheetByPlayer(e.getPlayer()).GetActiveTraits())
+            {
+                trait.OnClickEntity(e);
+            }
+        }
+        // if they do not have one
+        else
+        {
+            // give them one :)
+            AddStatSheet(new StatSheet(e.getPlayer().getUniqueId()));
         }
     }
 
@@ -539,7 +567,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId(), main));
+                AddStatSheet(new StatSheet(player.getUniqueId()));
             }
         }
     }
@@ -556,24 +584,34 @@ public class StatSheetManager implements Listener
                 // if the entity wasn't an MISC entity
                 if (!e.getEntity().getSpawnCategory().equals(SpawnCategory.MISC))
                 {
+                    Entity entity = e.getEntity();
+
+                    Player player = e.getEntity().getKiller();
+
+                    int droppedExp = 0;
+
                     // if the monster is not a custom entity
                     if (!e.getEntity().getPersistentDataContainer().has(main.GetCustomMobKey(), PersistentDataType.STRING))
                     {
-                        Entity entity = e.getEntity();
-
-                        Player player = e.getEntity().getKiller();
 
                         switch (entity.getType())
                         {
                             case WITHER:
-                                FindStatSheetByPlayer(player).GiveXP(1400);
+                                droppedExp = 1400;
                                 break;
 
                             default:
-                                FindStatSheetByPlayer(player).GiveXP(e.getDroppedExp());
+                                droppedExp = e.getDroppedExp();
                                 break;
                         }
                     }
+
+                    if (entity.getPersistentDataContainer().has(main.GetLegendaryMobKey()))
+                    {
+                        droppedExp *= main.gameManager.GetLegendaryMobStatMultiplier();
+                    }
+
+                    FindStatSheetByPlayer(player).GiveXP(droppedExp);
                 }
             }
         }

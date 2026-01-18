@@ -12,9 +12,9 @@ public class StatSheetCommand implements CommandExecutor
 {
     Main main;
 
-    public StatSheetCommand(Main main)
+    public StatSheetCommand()
     {
-        this.main = main;
+        main = Main.GetInstance();
     }
 
 

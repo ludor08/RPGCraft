@@ -1,5 +1,5 @@
 name: RPGCraft
-version: '1.4-BETA'
+version: '2.2-BETA'
 main: org.rpg.rPGCraft.Main
 api-version: '1.21'
 prefix: RPGCraft
@@ -9,7 +9,16 @@ commands:
   statSheet:
 
   classXp:
+    permission: "2"
 
   classLevel:
+    permission: "2"
 
   reset:
+
+  party:
+
+  rpggive:
+    permission: "2"
+
+

@@ -44,8 +44,11 @@ public class GiantsLeap extends ActiveTrait
     {
         Vector3d direction = RPGutils.getFacingDirection(player);
 
-        direction.y = Math.max(0.25, direction.y);
+        RPGparticles.SpawnBlockParticle(player.getWorld(), 300, player.getLocation().add(0, 0.1, 0), new Vector3d(0.375,0,0.375), player.getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1, 1.7f, 1);
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, SoundCategory.PLAYERS, 1, 2f, 1);
 
+        direction.y = Math.max(0.25, direction.y);
         direction.mul(jumpPowerMod);
 
         player.setVelocity(Vector.fromJOML(direction));
@@ -64,6 +67,22 @@ public class GiantsLeap extends ActiveTrait
                 if (e.getEntity().getPersistentDataContainer().has(giantsImpactKey))
                 {
                     List<Entity> shockwavedEntitys = e.getEntity().getNearbyEntities(2,0.5, 2);
+                    RPGparticles.SpawnBlockParticle(e.getEntity().getWorld(), 1000, e.getEntity().getLocation().add(0, 0.1, 0), new Vector3d(1,0.025,1), e.getEntity().getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
+                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 0.75f, 1);
+                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 1.25f, 1);
+                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 1f, 1);
+
+                    if (e.getEntity().getPersistentDataContainer().has(incineratingImpactKey))
+                    {
+                        e.getEntity().getWorld().spawnParticle(Particle.FLAME, e.getEntity().getLocation().add(0, 1, 0), 250, 1,0.5,1, 0);
+                        e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.PLAYERS, 3, 1, 1);
+                    }
+
+                    if (e.getEntity().getPersistentDataContainer().has(cleavingImpactKey))
+                    {
+                        e.getEntity().getWorld().spawnParticle(Particle.CRIT, e.getEntity().getLocation().add(0, 1, 0), 250, 1,0.5,1, 0);
+                        e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 3, 1, 1);
+                    }
 
                     for (Entity shockwavedEntity : shockwavedEntitys)
                     {
@@ -76,27 +95,22 @@ public class GiantsLeap extends ActiveTrait
                         {
                             if (e.getEntity().getPersistentDataContainer().has(incineratingImpactKey))
                             {
-                                RPGutils.SetNamespacedKeyValue(e.getEntity(), attackInputCanceledKey, true);
-                                livingShockwavedEntity.damage(2, e.getEntity());
-                                RPGutils.RemoveNamespacedKey(e.getEntity(), attackInputCanceledKey);
+                                RPGutils.DamageWithTrait(livingEntity, e.getEntity(), 2, false);
 
-                                if (livingShockwavedEntity.getFireTicks() < 100)
+                                if (livingEntity.getFireTicks() < 100)
                                 {
-                                    livingShockwavedEntity.setFireTicks(100);
+                                    livingEntity.setFireTicks(100);
                                 }
                             }
 
-                            if (!e.getEntity().getPersistentDataContainer().has(cleavingImpactKey))
+                            if (e.getEntity().getPersistentDataContainer().has(cleavingImpactKey))
                             {
-                                RPGutils.SetNamespacedKeyValue(e.getEntity(), attackInputCanceledKey, true);
-                                livingShockwavedEntity.damage(e.getDamage()/2, e.getEntity());
-                                RPGutils.RemoveNamespacedKey(e.getEntity(), attackInputCanceledKey);
+                                RPGutils.AttackWithTrait(shockwavedEntity, (LivingEntity) e.getEntity(), false);
+
+                                e.getEntity().getWorld().playSound(shockwavedEntity.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 3, 1, 1);
                             }
 
-                            RPGutils.SetNamespacedKeyValue(e.getEntity(), attackInputCanceledKey, true);
-                            ((LivingEntity)e.getEntity()).attack(shockwavedEntity);
-                            RPGutils.RemoveNamespacedKey(e.getEntity(), attackInputCanceledKey);
-
+                            RPGutils.DamageWithTrait(livingEntity, e.getEntity(), (int) (e.getDamage()/2), false);
                         }
                     }
                 }

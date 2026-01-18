@@ -38,10 +38,13 @@ public class Dash extends ActiveTrait
 
         float mul = 4;
 
-        Location location = RPGraycast.RecastUntilCollision(player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER),direction,player.getEyeLocation(), Particle.CRIT, 5);
-        List<Entity> entities = RPGraycast.RecastForEntities(player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER),direction,player.getEyeLocation(), true, player, null, 0,new Vector3d(0.5,0.5,0.5));
+        Vector3d direction = RPGutils.getFacingDirection(player).div(mul);
+        int distance = player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER)*((int)mul);
 
-        List<Entity> feetEntities = RPGraycast.RecastForEntities(player.getPersistentDataContainer().get(distanceKey, PersistentDataType.INTEGER),direction,player.getLocation(), false, player, null, 0,new Vector3d(0.5,0.5,0.5));
+        Location location = RPGraycast.RecastUntilCollision(distance,direction,player.getEyeLocation(), Particle.CRIT, 10);
+        List<Entity> entities = RPGraycast.RecastForEntities(distance,direction,player.getEyeLocation(), true, player, null, 0,new Vector3d(0.5,0.5,0.5));
+
+        List<Entity> feetEntities = RPGraycast.RecastForEntities(distance,direction,player.getLocation(), false, player, null, 0,new Vector3d(0.5,0.5,0.5));
 
         for (Entity entity : feetEntities)
         {

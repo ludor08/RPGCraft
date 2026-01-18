@@ -37,6 +37,11 @@ public class ToxicSpores extends Trait
 
         for (Entity entity : e.getEntity().getNearbyEntities(1, 2, 1))
         {
+            if (Main.GetInstance().partyManager.IsInTheSameParty(e.getEntity(), entity))
+            {
+                continue;
+            }
+
             if (entity instanceof LivingEntity living)
             {
                 living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 1));

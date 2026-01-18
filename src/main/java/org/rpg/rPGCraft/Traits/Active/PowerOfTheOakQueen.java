@@ -60,6 +60,8 @@ public class PowerOfTheOakQueen extends ActiveTrait
 
                 player.getAttribute(Attribute.ATTACK_DAMAGE).removeModifier(entDamageMod);
                 player.sendMessage(ChatColor.DARK_RED + "You must have Flash Of Oak active for the duration of this trait.");
+
+                return;
             }
 
             player.getPersistentDataContainer().set(oakQueenTimerKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(oakQueenTimerKey, PersistentDataType.INTEGER) - 1);
@@ -73,6 +75,19 @@ public class PowerOfTheOakQueen extends ActiveTrait
                 player.getAttribute(Attribute.ATTACK_DAMAGE).removeModifier(entDamageMod);
             }
 
+            for (Entity entity : player.getNearbyEntities(100, 100, 100))
+            {
+                if (entity instanceof Player particlePlayer)
+                {
+                    Vector3d lOff = RPGutils.getLocationOffsetByVector(player.getEyeLocation(), RPGutils.getFacingDirection(player),   (float) player.getWidth()*0.5f, (float) -(player.getWidth()*0.2f), 0.05f * (0.6f / (float) player.getWidth()));
+                    Location leftEye = new Location(player.getWorld(), lOff.x, lOff.y, lOff.z);
+                    RPGparticles.SpawnParticle(particlePlayer, 5, leftEye,new Vector3d(0,0,0), Particle.ASH, 0);
+
+                    Vector3d rOff = RPGutils.getLocationOffsetByVector(player.getEyeLocation(), RPGutils.getFacingDirection(player),  (float) player.getWidth()*0.5f, (float) (player.getWidth()*0.2f), 0.05f * (0.6f / (float) player.getWidth()));
+                    Location rightEye = new Location(player.getWorld(), rOff.x, rOff.y, rOff.z);
+                    RPGparticles.SpawnParticle(particlePlayer, 5, rightEye,new Vector3d(0,0,0), Particle.ASH, 0);
+                }
+            }
         }
     }
 

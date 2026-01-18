@@ -26,12 +26,14 @@ public class SneakAttack extends Trait
     @Override
     public void OnDealDamage(EntityDamageByEntityEvent e)
     {
-        if (e.getEntity() instanceof LivingEntity living && living.hasPotionEffect(PotionEffectType.INVISIBILITY))
+        if (e.getDamager() instanceof LivingEntity living && living.hasPotionEffect(PotionEffectType.INVISIBILITY))
         {
-            if (e.getEntity().isSneaking())
+            if (e.getDamager().isSneaking())
             {
                 living.removePotionEffect(PotionEffectType.INVISIBILITY);
                 e.setDamage(e.getDamage()*damageMod);
+
+                RPGparticles.SpawnBlockParticle(e.getDamager().getWorld(), (int) (3*e.getDamage()), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0,0,0), BlockType.REDSTONE_BLOCK.createBlockData(), 1f);
             }
         }
     }

@@ -46,7 +46,7 @@ public class RebukeOfTheFlame extends Trait
 
             if (e.getDamageSource().getCausingEntity() != player && e.getDamageSource().getCausingEntity() instanceof LivingEntity living)
             {
-                living.damage(rebukeDamage, player);
+                RPGutils.DamageWithTrait(living, player, rebukeDamage, false);
 
                 if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_set_on_fire")) && player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "rebuke_of_the_flame_set_on_fire"),PersistentDataType.BOOLEAN))
                 {

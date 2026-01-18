@@ -61,7 +61,13 @@ public class GrapplingHookArrow extends ActiveTrait
 
             if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "teleporting_grapple")))
             {
-                player.teleport(e.getEntity().getLocation());
+                Location teleLocation = e.getEntity().getLocation();
+                teleLocation.setPitch(player.getPitch());
+                teleLocation.setYaw(player.getYaw());
+
+                player.teleport(teleLocation);
+
+                RPGparticles.SpawnParticle(player.getWorld(), 50, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(player.getWidth()/2, player.getHeight()/2, player.getWidth()/2), Particle.ENCHANT, 0);
             }
             else
             {

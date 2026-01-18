@@ -41,12 +41,12 @@ public class MendMinorWounds extends ActiveTrait
 
         if (lookingAt instanceof LivingEntity livingLookingAt)
         {
-            RPGutils.HealWithTraits(player,livingLookingAt,player.getPersistentDataContainer().get(healAmountKey, PersistentDataType.INTEGER),EntityRegainHealthEvent.RegainReason.MAGIC,main);
+            RPGutils.HealWithTrait(player,livingLookingAt,player.getPersistentDataContainer().get(healAmountKey, PersistentDataType.INTEGER),EntityRegainHealthEvent.RegainReason.MAGIC);
             RPGraycast.RecastForEntity(100, direction, player.getEyeLocation(), true, player, Particle.HAPPY_VILLAGER, 5);
         }
         else if (lookingAt == null)
         {
-            RPGutils.HealWithTraits(player,player,player.getPersistentDataContainer().get(healAmountKey, PersistentDataType.INTEGER),EntityRegainHealthEvent.RegainReason.MAGIC,main);
+            RPGutils.HealWithTrait(player,player,player.getPersistentDataContainer().get(healAmountKey, PersistentDataType.INTEGER),EntityRegainHealthEvent.RegainReason.MAGIC);
             for (int i = 1; i < 20; i++)
             {
                 Vector3d offset = new Vector3d(Math.cos((Math.PI*2)/((double) i /20)), i*0.1, Math.sin((Math.PI*2)/((double) i /20)));

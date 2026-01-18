@@ -119,14 +119,14 @@ public class RPGraycast
             if (particle != null)
             {
                 // spawn the particle
-                location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
+                RPGparticles.SpawnParticle(location.getWorld(), numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
             }
         }
 
         return new Location(location.getWorld(), position.x, position.y, position.z);
     }
 
-    public static Location RecastForAnything(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
+    public static Location RecastForAnything(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles, Entity source)
     {
         Vector3d position = new Vector3d(location.getX(), location.getY(), location.getZ());
 
@@ -143,7 +143,10 @@ public class RPGraycast
             }
 
             // check if there are any entities at the given location
-            if (!location.getWorld().getNearbyEntities(new Location(location.getWorld(), position.x, position.y, position.z),0.5,0.5,0.5).isEmpty())
+            List<Entity> nearbyEntities = new ArrayList<>(location.getWorld().getNearbyEntities(new Location(location.getWorld(), position.x, position.y, position.z), 0.5, 0.5, 0.5).stream().toList());
+            nearbyEntities.remove(source);
+
+            if (!nearbyEntities.isEmpty())
             {
                 break;
             }
@@ -157,6 +160,11 @@ public class RPGraycast
         }
 
         return new Location(location.getWorld(), position.x, position.y, position.z);
+    }
+
+    public static Location RecastForAnything(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
+    {
+        return RecastForAnything(numberOfChecks, direction, location, particle, numberOfParticles, null);
     }
 
     public static Location RecastForAnyBlock(int numberOfChecks, Vector3d direction, Location location, Particle particle, int numberOfParticles)
@@ -206,7 +214,7 @@ public class RPGraycast
             if (particle != null)
             {
                 // spawn the particle
-                location.getWorld().spawnParticle(particle, new Location(location.getWorld(), position.x, position.y, position.z), numberOfParticles);
+                RPGparticles.SpawnParticle(location.getWorld(), numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
             }
         }
 

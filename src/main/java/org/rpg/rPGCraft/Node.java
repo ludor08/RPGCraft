@@ -1,13 +1,12 @@
 package org.rpg.rPGCraft;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class Node
         traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(traits.get(level-1).main.GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id + id);
+        traitIconMeta.getPersistentDataContainer().set(Main.GetInstance().GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id + id);
 
         // add the description
         List<String> lore = traits.get(level-1).GetTraitLore();

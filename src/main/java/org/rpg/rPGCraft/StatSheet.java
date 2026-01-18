@@ -4,11 +4,19 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
+import org.rpg.rPGCraft.CustomItemComponents.ItemEnhancement;
+import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
+import org.rpg.rPGCraft.Definitions.TraitDefinitions;
+import org.rpg.rPGCraft.Traits.ActiveTrait;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,10 +34,10 @@ public class StatSheet
         return Bukkit.getPlayer(playerUUID);
     }
 
-    public StatSheet(UUID playerUUID, Main main)
+    public StatSheet(UUID playerUUID)
     {
         this.playerUUID = playerUUID;
-        this.main = main;
+        main = Main.GetInstance();
 
         // set up the tick runnable // if this becomes too legging move to StatSheetManger and make work for all player at once
         AtomicInteger tick = new AtomicInteger();
@@ -44,45 +52,17 @@ public class StatSheet
 
             Player player = GetPlayer();
 
-            // if this player has a input sequence reset delay
+            // Update Inventory Traits
+            UpdateInventoryTraits();
+
+            // if this player has an input sequence reset delay
             if (player.getPersistentDataContainer().has(new NamespacedKey(main, "input_sequence_reset_delay")))
             {
-                // if it is more than 0
-                if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) > 0)
-                {
-                    // remove 1
-                    player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER)-1); // TODO make use a tick in the config file
-
-                    // if it is 0
-                    if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) <= 0)
-                    {
-                        int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
-                        int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
-
-                        // reset the input sequence
-                        player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
-                                main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
-                        player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
-                    }
-                }
+                HandleInputSequenceResetDelay(player);
             }
 
             // if the player has less than their max mana
-            int startingMana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
-            int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
-            int manaRechargeSpeed = player.getPersistentDataContainer().get(main.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER);
-
-            if (tick.get() == 1 && startingMana < maxMana)
-            {
-                if (startingMana+manaRechargeSpeed < maxMana)
-                {
-                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, startingMana+manaRechargeSpeed);
-                }
-                else
-                {
-                    player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, maxMana);
-                }
-            }
+            RechargeMana(player, tick);
 
             // check if any of the trait are tick trait
             for (Trait trait : GetActiveTraits())
@@ -95,6 +75,135 @@ public class StatSheet
         };
 
         StartTickTimer();
+    }
+
+    private void UpdateInventoryTraits()
+    {
+        if (GetPlayer().getPersistentDataContainer().has(main.GetCurrentTraitsFromCustomItemsKey()))
+        {
+            if (!GetPlayer().getPersistentDataContainer().get(main.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING).equals(GenerateTraitString(GetApplicableItemTraits())))
+            {
+                List<String> traitIDStrings = new ArrayList<>(Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING).split("_")).toList());
+
+                // find the old and new traits
+                List<Trait> newTraits = new ArrayList<>();
+                List<Trait> oldTraits = new ArrayList<>();
+
+                for (Trait trait : GetApplicableItemTraits())
+                {
+                    // if the same trait is in both traitIDStrings and GetApplicableItemTraits()
+                    if (traitIDStrings.contains(trait.name_id))
+                    {
+                        // Go though all of traitIDStrings
+                        for (int i = 0; i < traitIDStrings.size(); i++)
+                        {
+                            // if the ID is the same remove it from traitIDStrings and break
+                            if (traitIDStrings.get(i).equals(trait.name_id))
+                            {
+                                traitIDStrings.remove(i);
+                                break;
+                            }
+                        }
+                    }
+                    // if not. Add trait to newTraits
+                    else
+                    {
+                        newTraits.add(trait);
+                    }
+                }
+
+                // add the remaining traits to old traits
+                for (String traitIDString : traitIDStrings)
+                {
+                    if (!Objects.equals(traitIDString, ""))
+                    {
+                        oldTraits.add(TraitDefinitions.GetTraitByID(traitIDString));
+                    }
+                }
+
+                // handle the newTraits
+                for (Trait newTrait : newTraits)
+                {
+                    if (newTrait != null)
+                    {
+                        newTrait.OnGainTraitBuff(GetPlayer());
+                    }
+                }
+
+                // handle the oldTraits
+                for (Trait oldTrait : oldTraits)
+                {
+                    if (oldTrait != null)
+                    {
+                        oldTrait.OnRemoveTraitBuff(GetPlayer());
+                    }
+                }
+            }
+
+            GetPlayer().getPersistentDataContainer().set(main.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
+        }
+        else
+        {
+            for (Trait newTrait : GetApplicableItemTraits())
+            {
+                newTrait.OnGainTraitBuff(GetPlayer());
+            }
+
+            GetPlayer().getPersistentDataContainer().set(main.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
+        }
+    }
+
+    private String GenerateTraitString(List<Trait> traits)
+    {
+        StringBuilder inventoryTraits = new StringBuilder();
+
+        for (Trait trait : traits)
+        {
+            inventoryTraits.append("_");
+            inventoryTraits.append(trait.name_id);
+        }
+
+        return inventoryTraits.toString();
+    }
+
+    private void HandleInputSequenceResetDelay(Player player) {
+        // if it is more than 0
+        if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) > 0)
+        {
+            // remove 1
+            player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER)-1); // TODO make use a tick in the config file
+
+            // if it is 0
+            if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) <= 0)
+            {
+                int mana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+                int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+
+                // reset the input sequence
+                player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
+                        main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
+                player.getPersistentDataContainer().set(main.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+            }
+        }
+    }
+
+    private void RechargeMana(Player player, AtomicInteger tick) {
+        int startingMana = player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER);
+        int maxMana = player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER);
+        int manaRechargeSpeed = player.getPersistentDataContainer().get(main.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER);
+
+        // if the player has less than their max mana
+        if (tick.get() == 1 && startingMana < maxMana)
+        {
+            if (startingMana+manaRechargeSpeed < maxMana)
+            {
+                player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, startingMana+manaRechargeSpeed);
+            }
+            else
+            {
+                player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER, maxMana);
+            }
+        }
     }
 
     public void StartTickTimer()
@@ -175,13 +284,39 @@ public class StatSheet
         if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
         {
             // get the traits from said nodes
+            for (String traitID : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+            {
+                traits.add(TraitDefinitions.GetTraitByID(traitID));
+            }
+        }
+
+        traits.addAll(GetApplicableItemTraits());
+
+        return traits;
+    }
+
+    public List<Trait> GetActiveClassTraits()
+    {
+        // make a list for all of the traits
+        List<Trait> traits = new ArrayList<>();
+
+        // the player
+        Player player = GetPlayer();
+
+        // get the deactivated
+        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+
+        // if the player has a class
+        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+        {
+            // get the traits from said nodes
             for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
             {
                 for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
                 {
                     for (Trait trait : node.traits)
                     {
-                        if (traitName.equals((trait.name_id+node.id)))
+                        if (traitName.equals(trait.name_id+node.id) && !deactivatedNodes.contains(trait.name_id+node.id))
                         {
                             traits.add(trait);
                         }
@@ -193,7 +328,7 @@ public class StatSheet
         return traits;
     }
 
-    public List<Trait> GetActiveTraits()
+    public List<Trait> GetActiveRaceTraits()
     {
         // make a list for all of the traits
         List<Trait> traits = new ArrayList<>();
@@ -233,24 +368,75 @@ public class StatSheet
             }
         }
 
-        // get the deactivated
-        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(main.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+        return traits;
+    }
 
-        // if the player has a class
-        if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
+    public List<Trait> GetActiveTraits()
+    {
+        // make a list for all of the traits
+        List<Trait> traits = new ArrayList<>();
+
+        // add all of the traits from the race
+        traits.addAll(GetActiveRaceTraits());
+
+        // add all of the traits from items
+        traits.addAll(GetApplicableItemTraits());
+
+        // add the traits form the class
+        traits.addAll(GetActiveClassTraits());
+
+        return traits;
+    }
+
+    public List<Trait> GetApplicableItemTraits()
+    {
+        List<Trait> traits = new ArrayList<>();
+
+        List<Integer> unusedSlots = new ArrayList<>();
+        for (int i = 0; i < GetPlayer().getInventory().getSize(); i++) unusedSlots.add(i);
+
+        for (int slotNum : unusedSlots)
         {
-            // get the traits from said nodes
-            for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
+            ItemStack itemStack = GetPlayer().getInventory().getItem(slotNum);
+            if (itemStack == null || itemStack.getType() == Material.AIR)
             {
-                for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
+                continue;
+            }
+
+            String itemID = itemStack.getPersistentDataContainer().get(main.GetCustomItemKey(), PersistentDataType.STRING);
+            if (itemID == null)
+            {
+                continue;
+            }
+
+            // Check if the slot is an equipment slot
+            EquipmentSlot equipmentSlot = null;
+
+            if (slotNum == GetPlayer().getInventory().getHeldItemSlot())
+            {
+                equipmentSlot = EquipmentSlot.HAND;
+            } else if (slotNum == 36)
+            {
+                equipmentSlot = EquipmentSlot.FEET;
+            } else if (slotNum == 37)
+            {
+                equipmentSlot = EquipmentSlot.LEGS;
+            } else if (slotNum == 38)
+            {
+                equipmentSlot = EquipmentSlot.CHEST;
+            } else if (slotNum == 39)
+            {
+                equipmentSlot = EquipmentSlot.HEAD;
+            } else if (slotNum == 40)
+            {
+                equipmentSlot = EquipmentSlot.OFF_HAND;
+            }
+
+            for (ItemEnhancement itemEnhancement : CustomItemDefinitions.GetCustomItemByID(itemID).getEnchantments())
+            {
+                if (ItemEnhancement.IsEnchantmentApplicable(itemEnhancement, equipmentSlot))
                 {
-                    for (Trait trait : node.traits)
-                    {
-                        if (traitName.equals(trait.name_id+node.id) && !deactivatedNodes.contains(trait.name_id+node.id))
-                        {
-                            traits.add(trait);
-                        }
-                    }
+                    traits.add(itemEnhancement.GetTrait());
                 }
             }
         }
@@ -269,28 +455,10 @@ public class StatSheet
         }
     }
 
-    public void RemoveTraits(PlayableClass playableClass)
+    public void RemoveClassTraits()
     {
-        // get all of the players selected nodes
-        List<Trait> selectedNodes = new ArrayList<>();
-
-        // get the traits from said nodes
-        for (String traitName : Arrays.stream(GetPlayer().getPersistentDataContainer().get(main.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList())
-        {
-            for (Node node : playableClass.traitTree.nodes)
-            {
-                for (Trait trait : node.traits)
-                {
-                    if (traitName.equals(trait.name_id+node.id))
-                    {
-                        selectedNodes.add(trait);
-                    }
-                }
-            }
-        }
-
         // remove the traits from the player
-        for (Trait removeTrait : selectedNodes)
+        for (Trait removeTrait : GetActiveClassTraits())
         {
             removeTrait.OnRemoveTraitBuff(GetPlayer());
         }
@@ -455,27 +623,27 @@ public class StatSheet
         // the player
         Player player = GetPlayer();
 
-        // if the player has a race persistent
+        // if the player has a class persistent
         if (player.getPersistentDataContainer().has(main.GetClassKey(), PersistentDataType.STRING))
         {
-            // clear the deactivated nodes
-            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
-
-            // Find the parent race script
+            // Find the class script
             PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(main.GetClassKey(), PersistentDataType.STRING));
 
-            // if there isn't a parent race then end the function and throw an error
+            // if there isn't a class then end the function and throw an error
             if (playableClass == null)
             {
                 System.out.println(ChatColor.RED.toString() + "ERROR: invalid class");
                 return;
             }
 
-            // Reset the race
+            // Reset the class
+            RemoveClassTraits();
             player.getPersistentDataContainer().remove(main.GetClassKey());
-            RemoveTraits(playableClass);
 
             player.getPersistentDataContainer().set(main.GetTreeProgressionKey(), PersistentDataType.STRING, "");
+
+            // clear the deactivated nodes
+            player.getPersistentDataContainer().set(main.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
         }
     }
 

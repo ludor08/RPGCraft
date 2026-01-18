@@ -35,6 +35,12 @@ public class WindShot extends Trait
 
         if (player.getPersistentDataContainer().get(shotsKey, PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(neededShotsKey, PersistentDataType.INTEGER))
         {
+            // spawn the particle for wind level one
+            Location locForWindLevelOne = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x, RPGutils.getFacingDirection(player).y, RPGutils.getFacingDirection(player).z);
+
+            RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, locForWindLevelOne, new Vector3d(0,0,0), Particle.CRIT, 0, 0.75f, 20, RPGutils.getFacingDirection(player));
+
+            // shoot the arrow
             e.getEntity().setVelocity(new Vector(e.getEntity().getVelocity().getX()*2,e.getEntity().getVelocity().getY()*2,e.getEntity().getVelocity().getZ()*2));
 
             player.getPersistentDataContainer().set(shotsKey, PersistentDataType.INTEGER, 0);
@@ -42,6 +48,11 @@ public class WindShot extends Trait
             if (player.getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "high_power_wind_shot")))
             {
                 List<Entity> entities = RPGraycast.RecastForEntities(100,RPGutils.getFacingDirection(player), player.getEyeLocation(),true,player,null,0,new Vector3d(3,3,3));
+
+                // spawn the particle for wind level one
+                Location locForWindLevelTwo = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x*3, RPGutils.getFacingDirection(player).y*3, RPGutils.getFacingDirection(player).z*3);
+
+                RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, locForWindLevelTwo, new Vector3d(0,0,0), Particle.CRIT, 0, 1.475f, 40, RPGutils.getFacingDirection(player));
 
                 for (Entity entity : entities)
                 {

@@ -1,5 +1,6 @@
 package org.rpg.rPGCraft.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,9 +14,9 @@ public class ResetCommand implements CommandExecutor
 {
     Main main;
 
-    public ResetCommand(Main main)
+    public ResetCommand()
     {
-        this.main = main;
+        main = Main.GetInstance();
     }
 
 
@@ -38,7 +39,6 @@ public class ResetCommand implements CommandExecutor
                     // pick a new class
                     player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
 
-                    player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, 100); // TODO remove
                     break;
 
                 case "race":
@@ -48,6 +48,10 @@ public class ResetCommand implements CommandExecutor
                     player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
                     break;
             }
+        }
+        else
+        {
+            Bukkit.getLogger().info("Only a player can ran this command.");
         }
 
         return false;

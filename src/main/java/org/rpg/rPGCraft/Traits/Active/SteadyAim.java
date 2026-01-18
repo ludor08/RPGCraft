@@ -122,6 +122,8 @@ public class SteadyAim extends ActiveTrait
                 spectralArrow.setDamage(spectralArrow.getDamage()*player.getPersistentDataContainer().get(damageModKey, PersistentDataType.FLOAT));
             }
 
+            e.getEntity().getPersistentDataContainer().set(hasSteadyAimKey, PersistentDataType.BOOLEAN, true);
+
             player.getPersistentDataContainer().remove(damageModKey);
             player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(speedMod);
         }
@@ -146,6 +148,11 @@ public class SteadyAim extends ActiveTrait
 
         for (Entity entity : entities)
         {
+            if (Main.GetInstance().partyManager.IsInTheSameParty(player, entity))
+            {
+                continue;
+            }
+
             if (entity instanceof LivingEntity living)
             {
                 RPGutils.DamageWithTrait(living, player, (player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "laser_shot_damage"), PersistentDataType.DOUBLE)), false);

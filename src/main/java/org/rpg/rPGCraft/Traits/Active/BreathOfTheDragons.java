@@ -33,8 +33,14 @@ public class BreathOfTheDragons extends ActiveTrait
     @Override
     public void TriggerActiveEvent(Player player)
     {
+        // spawn the fireball
         DragonFireball dragonFireball = player.launchProjectile(DragonFireball.class);
         dragonFireball.setVelocity(new Vector(dragonFireball.getVelocity().getX()/2,dragonFireball.getVelocity().getY()/2,dragonFireball.getVelocity().getZ()/2));
         dragonFireball.getPersistentDataContainer().set(breathKey, PersistentDataType.BOOLEAN, true);
+
+        // spawn the particle
+        Location loc = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x, RPGutils.getFacingDirection(player).y, RPGutils.getFacingDirection(player).z);
+
+        RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, loc, new Vector3d(0,0,0), Particle.DRAGON_BREATH, 0, 0.5f, 20, RPGutils.getFacingDirection(player));
     }
 }

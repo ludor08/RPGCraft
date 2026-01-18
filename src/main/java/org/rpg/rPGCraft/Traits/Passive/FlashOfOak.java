@@ -32,6 +32,7 @@ public class FlashOfOak extends Trait
     public void OnTakeDamage(EntityDamageEvent e)
     {
         DamageCause damageCause = e.getCause();
+        Player player = (Player) e.getEntity();
 
         float HOT_DAMAGE_MOD = 1.5f;
 
@@ -42,10 +43,26 @@ public class FlashOfOak extends Trait
             || damageCause.equals(DamageCause.LAVA))
         {
             e.setDamage(e.getDamage() * HOT_DAMAGE_MOD);
+
+            for (Entity nearbyEntity : player.getNearbyEntities(100,100,100))
+            {
+                if (nearbyEntity instanceof Player nearbyPlayer)
+                {
+                    RPGparticles.SpawnParticleWithMotion(nearbyPlayer, 10, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(0,0.1,0), new Vector3d(player.getWidth()/2, player.getHeight()/2, player.getWidth()/2),Particle.FLAME, 1);
+                }
+            }
         }
         else
         {
-            e.setDamage(e.getDamage() * 1 - e.getEntity().getPersistentDataContainer().get(otherDamageKey, PersistentDataType.FLOAT));
+            e.setDamage(e.getDamage() * 1 - player.getPersistentDataContainer().get(otherDamageKey, PersistentDataType.FLOAT));
+
+            for (Entity nearbyEntity : player.getNearbyEntities(100,100,100))
+            {
+                if (nearbyEntity instanceof Player nearbyPlayer)
+                {
+                    RPGparticles.SpawnBlockParticleWithMotion(nearbyPlayer, 5, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(0,0.1,0), new Vector3d(player.getWidth()/2, player.getHeight()/2, player.getWidth()/2), BlockType.OAK_LOG.createBlockData(), 1);
+                }
+            }
         }
     }
 

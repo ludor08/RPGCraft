@@ -5,49 +5,59 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.SpawnCategory;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.Commands.*;
+import org.rpg.rPGCraft.CustomItemComponents.CustomItem;
+import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
 
+import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameManager implements Listener {
 
-    Main main;
+    private Main main;
 
     Random random = new Random();
 
     float LEGENDARY_MOB_CHANCE = 0.01f;
     int LEGENDARY_MOB_STAT_MULTIPLIER = 4;
 
-    public GameManager(Main main)
+    public GameManager()
     {
-        this.main = main;
+        this.main = Main.GetInstance();
         Bukkit.getPluginManager().registerEvents(this,main);
 
         // commands
-        main.getCommand("statSheet").setExecutor(new StatSheetCommand(main));
+        main.getCommand("statSheet").setExecutor(new StatSheetCommand());
 
-        main.getCommand("classXp").setExecutor(new ClassXPCommand(main));
+        main.getCommand("classXp").setExecutor(new ClassXPCommand());
         main.getCommand("classXp").setTabCompleter(new ClassXPTab());
 
-        main.getCommand("classLevel").setExecutor(new ClassLevelCommand(main));
+        main.getCommand("classLevel").setExecutor(new ClassLevelCommand());
         main.getCommand("classLevel").setTabCompleter(new ClassLevelTab());
 
-        main.getCommand("reset").setExecutor(new ResetCommand(main));
+        main.getCommand("reset").setExecutor(new ResetCommand());
         main.getCommand("reset").setTabCompleter(new ResetTab());
+
+        main.getCommand("party").setExecutor(new PartyCommand());
+        main.getCommand("party").setTabCompleter(new PartyTab());
+
+        main.getCommand("rpggive").setExecutor(new RPGGiveCommand());
+        main.getCommand("rpggive").setTabCompleter(new RPGGiveTab());
 
         // set up the OnTick scheduler
         AtomicInteger tick = new AtomicInteger();
@@ -62,6 +72,11 @@ public class GameManager implements Listener {
 
             OnTick(tick.get());
         }, 20, 5);
+    }
+
+    public int GetLegendaryMobStatMultiplier()
+    {
+        return LEGENDARY_MOB_STAT_MULTIPLIER;
     }
 
     private void OnTick(int tick)
@@ -95,6 +110,8 @@ public class GameManager implements Listener {
                     legendaryEntities.add(entity);
                 }
             }
+
+            //Test(tick);
         }
 
         for (Entity entity : legendaryEntities)
@@ -107,6 +124,17 @@ public class GameManager implements Listener {
 
     }
 
+    private void Test(int tick)
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            RPGparticles.SpawnParticle(Bukkit.getWorlds().get(0), 1, new Location(Bukkit.getWorlds().get(0), random.nextGaussian()*1, random.nextGaussian()*1 + 124, random.nextGaussian()*1), new Vector3d(), Particle.CRIT, 0f);
+        }
+
+        RPGparticles.SpawnParticle(Bukkit.getWorlds().get(0), 100, new Location(Bukkit.getWorlds().get(0), 10, 124, 0), new Vector3d(1,1,1), Particle.CRIT, 0f);
+
+    }
+
     @EventHandler
     public void OnJoin(PlayerJoinEvent e)
     {
@@ -115,11 +143,14 @@ public class GameManager implements Listener {
         // if there is no stat sheet assigned to a player when they join
         if (main.statSheetManager.FindStatSheetByPlayer(player) == null)
         {
-            main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId(), main));
+            main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId()));
         }
 
         // Check the persistents and add them if needed
         CheckPersistent(player);
+
+        // send the resource pack
+        ///player.setResourcePack("https://limewire.com/d/djpm2#KHAZePzhCt");
 
     }
 
@@ -268,6 +299,33 @@ public class GameManager implements Listener {
                 resultMeta.getPersistentDataContainer().set(new NamespacedKey(main, "wasJustBrewed"), PersistentDataType.BOOLEAN, true);
 
                 result.setItemMeta(resultMeta);
+            }
+        }
+    }
+
+    @EventHandler
+    public void OnDeath(EntityDeathEvent e)
+    {
+        LivingEntity killer = e.getEntity().getKiller();
+        if (killer == null) return;
+
+        // TODO make this better
+        if (e.getEntity().getPersistentDataContainer().has(Main.GetInstance().GetCustomMobKey()))
+        {
+            // do other things
+            return;
+        }
+
+        if (e.getEntity() instanceof CaveSpider)
+        {
+            double chance = 0.15;
+
+            int looting = killer.getEquipment().getItem(EquipmentSlot.HAND).getEnchantmentLevel(Enchantment.LOOTING);
+            chance += looting * 0.01;
+
+            if (random.nextFloat() <= chance)
+            {
+                e.getDrops().add(CustomItem.GetCustomItemStack(CustomItemDefinitions.GetCustomItemByID("poison_gland")));
             }
         }
     }

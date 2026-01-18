@@ -29,13 +29,18 @@ public class ConjureLightning extends ActiveTrait
     @Override
     public void TriggerActiveEvent(Player player)
     {
-        // make it thundering for 5 minutes
+        // make it thundering for 1 minutes
+        player.getWorld().setThunderDuration(1200);
         player.getWorld().setThundering(true);
-        player.getWorld().setThunderDuration(5800);
+
+        player.getWorld().setClearWeatherDuration(0);
+
+        // spawn particles
+        Location target = RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),Particle.WAX_OFF, 5, player);
 
         // spawn the lightning
-        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
-        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
-        player.getWorld().spawn(RPGraycast.RecastForAnything(100,RPGutils.getFacingDirection(player),player.getEyeLocation(),null, 0), LightningStrike.class);
+        player.getWorld().spawn(target, LightningStrike.class);
+        player.getWorld().spawn(target, LightningStrike.class);
+        player.getWorld().spawn(target, LightningStrike.class);
     }
 }

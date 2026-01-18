@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Debug;
 import org.joml.Vector2d;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +34,11 @@ public class MenuManager implements Listener
 
     int FULL_ROW_SIZE = 9;
 
-    Main main;
+    private Main main;
 
-    public MenuManager(Main main)
+    public MenuManager()
     {
-        this.main = main;
+        this.main = Main.GetInstance();
         Bukkit.getPluginManager().registerEvents(this,main);
 
         xOffsetKey = new NamespacedKey(main, "x_offset");
@@ -773,7 +773,7 @@ public class MenuManager implements Listener
                     {
                         for (Trait trait : node.traits)
                         {
-                            if (selectedTrait.contains(trait.name_id + node.id))
+                            if (selectedTrait.equals(trait.name_id + node.id))
                             {
                                 nodeIcon = node.GetNodeIcon(node.traits.indexOf(trait)+1, true, deactivatedNodes.contains(trait.name_id+node.id));
 

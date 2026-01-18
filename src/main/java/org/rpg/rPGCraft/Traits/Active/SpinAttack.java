@@ -34,6 +34,13 @@ public class SpinAttack extends ActiveTrait
         // get nearby entities
         List<Entity> nearbyEntities = player.getLocation().add(0,player.getHeight()/2,0).getNearbyEntities(3, (player.getHeight()/2)*1.25, 3).stream().toList();
 
+        for (int r = 1; r < 3; r++)
+        {
+            RPGparticles.SpawnParticleDoughnut(player.getWorld(), 10, player.getLocation().add(0,player.getHeight()/2,0), new Vector3d(0.025f,0.025f,0.025f), Particle.CRIT, 0, r, 30*r, new Vector3d(0,1,0));
+        }
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 3, 1, 1);
+
         // go through all the nearby entities
         for (Entity entity : nearbyEntities)
         {

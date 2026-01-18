@@ -53,6 +53,36 @@ public class Charge extends Trait
         {
             RPGutils.AddToNamespacedKey(player, momentumKey, 0f, 1f);
 
+            Vector3d momentumParticles = RPGutils.getBodyFacingDirection(player).mul(-player.getWalkSpeed());
+
+            Vector3d leftWindLoc = RPGutils.getLocationOffsetByVector(player.getLocation(), RPGutils.getBodyFacingDirection(player),1f, -((float) player.getWidth()), (float) player.getHeight()/2);
+
+            Vector3d rightWindLoc = RPGutils.getLocationOffsetByVector(player.getLocation(), RPGutils.getBodyFacingDirection(player),1f, ((float) player.getWidth()), (float) player.getHeight()/2);
+
+            Vector3d feetWindLoc = RPGutils.getLocationOffsetByVector(player.getLocation(), RPGutils.getBodyFacingDirection(player),0f, 0, 0.1f);
+
+            if (player.getPersistentDataContainer().has(flameChargeKey))
+            {
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), leftWindLoc.x, leftWindLoc.y, leftWindLoc.z), momentumParticles, Particle.FLAME, 1);
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), rightWindLoc.x, rightWindLoc.y, rightWindLoc.z), momentumParticles, Particle.FLAME, 1);
+
+                Vector3d leftFlame = leftWindLoc.add(new Vector3d(0f, -(player.getHeight()/3), 0f));
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), leftFlame.x, leftFlame.y, leftFlame.z), momentumParticles, Particle.FLAME, 1);
+
+                Vector3d rightFlame = rightWindLoc.add(new Vector3d(0f, -(player.getHeight()/3), 0f));
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), rightFlame.x, rightFlame.y, rightFlame.z), momentumParticles, Particle.FLAME, 1);
+
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), feetWindLoc.x, feetWindLoc.y, feetWindLoc.z), momentumParticles, Particle.FLAME, 1);
+            }
+            else
+            {
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), leftWindLoc.x, leftWindLoc.y, leftWindLoc.z), momentumParticles, Particle.CRIT, 1);
+
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), rightWindLoc.x, rightWindLoc.y, rightWindLoc.z), momentumParticles, Particle.CRIT, 1);
+
+                RPGparticles.SpawnParticle(player.getWorld(), 0, new Location(player.getWorld(), feetWindLoc.x, feetWindLoc.y, feetWindLoc.z), momentumParticles, Particle.CRIT, 1);
+            }
+
             if (player.getPersistentDataContainer().get(momentumKey, PersistentDataType.FLOAT) > 30 && player.getAttribute(Attribute.MOVEMENT_SPEED).getModifier(new NamespacedKey(main, "charge_move_mod")) == null)
             {
                 RPGutils.SafeAttributeAdd(Attribute.MOVEMENT_SPEED, new AttributeModifier(new NamespacedKey(main, "charge_move_mod"), player.getPersistentDataContainer().get(speedModKey,PersistentDataType.FLOAT), AttributeModifier.Operation.ADD_SCALAR), player);
@@ -89,9 +119,7 @@ public class Charge extends Trait
                             }
                         }
 
-                        RPGutils.SetNamespacedKeyValue(player, attackInputCanceledKey, true);
-                        livingEntity.damage(damage, player);
-                        RPGutils.RemoveNamespacedKey(player, attackInputCanceledKey);
+                        RPGutils.DamageWithTrait(livingEntity, player, damage, false);
 
                         player.setSprinting(true);
                     }

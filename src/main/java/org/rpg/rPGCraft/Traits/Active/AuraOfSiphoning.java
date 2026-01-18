@@ -67,7 +67,7 @@ public class AuraOfSiphoning extends ActiveTrait
                             continue;
                         }
 
-                        livingEntity.damage(1, player);
+                        RPGutils.DamageWithTrait(livingEntity, player, 1, false);
 
                         if (livingEntity.getPersistentDataContainer().has(main.GetManaKey()))
                         {

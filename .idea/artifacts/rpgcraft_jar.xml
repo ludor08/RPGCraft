@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="rpgcraft:jar">
-    <output-path>$USER_HOME$/Desktop/peper 1.21 sever/plugins</output-path>
+    <output-path>$USER_HOME$/OneDrive/Desktop/peper 1.21 sever/plugins</output-path>
     <root id="archive" name="rpgcraft.jar">
       <element id="module-output" name="rpgcraft" />
     </root>

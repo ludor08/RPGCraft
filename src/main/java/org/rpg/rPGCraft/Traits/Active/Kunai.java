@@ -49,8 +49,15 @@ public class Kunai extends ActiveTrait
         Arrow kunai = player.launchProjectile(Arrow.class);
         kunai.getPersistentDataContainer().set(kunaiKey, PersistentDataType.BOOLEAN, true);
 
-        ((LivingEntity)kunai).getAttribute(Attribute.SCALE).addModifier(new AttributeModifier(new NamespacedKey(main, "kunai_size"), -0.9d, AttributeModifier.Operation.ADD_NUMBER));
-        kunai.setDamage(1);
+        int kunaiDamage = 1;
+
+        if (player.getPersistentDataContainer().has(kunaiDamageKey))
+        {
+            kunaiDamage += player.getPersistentDataContainer().get(kunaiDamageKey, PersistentDataType.INTEGER);
+        }
+
+        ((LivingEntity)kunai).getAttribute(Attribute.SCALE).addModifier(new AttributeModifier(new NamespacedKey(Main.GetInstance(), "kunai_size"), -0.9d, AttributeModifier.Operation.ADD_NUMBER));
+        kunai.setDamage(kunaiDamage);
         kunai.setVelocity(kunai.getVelocity().multiply(2));
         kunai.setCustomName("Kunai");
         kunai.setGravity(false);

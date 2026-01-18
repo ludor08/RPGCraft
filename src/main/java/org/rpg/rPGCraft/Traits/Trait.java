@@ -1,4 +1,4 @@
-package org.rpg.rPGCraft;
+package org.rpg.rPGCraft.Traits;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
@@ -6,10 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -161,6 +158,11 @@ public abstract class Trait
 
     }
 
+    public void OnClickEntity(PlayerInteractEntityEvent e)
+    {
+
+    }
+
     public void OnInventoryClick(InventoryClickEvent e)
     {
 
@@ -181,3 +183,5 @@ public abstract class Trait
 
     }
 }
+
+

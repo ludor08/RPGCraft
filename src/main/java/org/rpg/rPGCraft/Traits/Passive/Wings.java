@@ -43,6 +43,8 @@ public class Wings extends Trait
             Vector3d direction = new Vector3d(-Math.cos(Math.toRadians(e.getPlayer().getPitch())) * Math.sin(Math.toRadians(e.getPlayer().getYaw())), -Math.sin(Math.toRadians(e.getPlayer().getPitch())), Math.cos(Math.toRadians(e.getPlayer().getPitch())) * Math.cos(Math.toRadians(e.getPlayer().getYaw())));
 
             e.getPlayer().setVelocity(new Vector((direction.x*flapPower), flapPower, (direction.z*flapPower)));
+
+            RPGparticles.SpawnParticleWithMotion(e.getPlayer().getWorld(), 3, e.getPlayer().getLocation().add(0,-0.5, 0), new Vector3d(0, -1, 0), new Vector3d(0, e.getPlayer().getWidth()/8, 0), Particle.POOF, 1);
             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_BEE_POLLINATE, 0.5f,0.5f);
         }
     }

@@ -33,7 +33,8 @@ public class SupernaturalGrowth extends Trait
         Material footMaterial = player.getWorld().getBlockAt(player.getLocation()).getType();
 
         // if they are in water
-        if (footMaterial.equals(Material.WATER) || footMaterial.equals(Material.KELP_PLANT) || footMaterial.equals(Material.SEAGRASS) || footMaterial.equals(Material.TALL_SEAGRASS))
+        if ((footMaterial.equals(Material.WATER) || footMaterial.equals(Material.KELP_PLANT) || footMaterial.equals(Material.SEAGRASS) || footMaterial.equals(Material.TALL_SEAGRASS))
+            || player.isInRain())
         {
             RPGutils.SafeAttributeAdd(Attribute.SCALE, new AttributeModifier(sizeMod, 0.05, AttributeModifier.Operation.ADD_NUMBER), player, 0.55f);
             RPGutils.SafeAttributeAdd(Attribute.ATTACK_DAMAGE, new AttributeModifier(damageMod, 0.3, AttributeModifier.Operation.ADD_NUMBER), player, 6);

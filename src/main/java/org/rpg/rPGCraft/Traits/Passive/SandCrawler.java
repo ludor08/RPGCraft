@@ -37,25 +37,27 @@ public class SandCrawler extends Trait
     @Override
     public void OnTick(Player player)
     {
-        if (player.isSneaking())
-        {
-            if (!player.getAttribute(Attribute.GRAVITY).getModifiers().contains(gravityMod))
-            {
-                player.getAttribute(Attribute.GRAVITY).addModifier(gravityMod);
-            }
-        }
-        else
-        {
-            if (player.getAttribute(Attribute.GRAVITY).getModifiers().contains(gravityMod))
-            {
-                player.getAttribute(Attribute.GRAVITY).removeModifier(gravityMod);
-            }
-        }
+
 
         Material footMaterial = player.getWorld().getBlockAt(player.getLocation()).getType();
 
         if (footMaterial.equals(Material.WATER) || footMaterial.equals(Material.KELP_PLANT) || footMaterial.equals(Material.SEAGRASS) || footMaterial.equals(Material.TALL_SEAGRASS))
         {
+            if (player.isSneaking())
+            {
+                if (!player.getAttribute(Attribute.GRAVITY).getModifiers().contains(gravityMod))
+                {
+                    player.getAttribute(Attribute.GRAVITY).addModifier(gravityMod);
+                }
+            }
+            else
+            {
+                if (player.getAttribute(Attribute.GRAVITY).getModifiers().contains(gravityMod))
+                {
+                    player.getAttribute(Attribute.GRAVITY).removeModifier(gravityMod);
+                }
+            }
+
             if (player.getWorld().getBlockAt(player.getLocation().add(new Vector(0, -0.1, 0))).isSolid())
             {
                 if (!player.getAttribute(Attribute.WATER_MOVEMENT_EFFICIENCY).getModifiers().contains(waterSpeedMod))
@@ -70,6 +72,13 @@ public class SandCrawler extends Trait
             }
 
             return;
+        }
+        else
+        {
+            if (player.getAttribute(Attribute.GRAVITY).getModifiers().contains(gravityMod))
+            {
+                player.getAttribute(Attribute.GRAVITY).removeModifier(gravityMod);
+            }
         }
 
         if (player.getAttribute(Attribute.WATER_MOVEMENT_EFFICIENCY).getModifiers().contains(waterSpeedMod))

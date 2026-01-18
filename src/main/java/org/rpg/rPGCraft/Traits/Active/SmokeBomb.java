@@ -41,7 +41,7 @@ public class SmokeBomb extends ActiveTrait
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,player.getPersistentDataContainer().get(durationKey, PersistentDataType.INTEGER),1,true,false,true));
 
         // spawn the smoke
-        player.getWorld().spawnParticle(Particle.SMOKE, player.getLocation(), 200);
+        RPGparticles.SpawnParticle(player.getWorld(), 200, player.getLocation(), new Vector3d(0,0,0), Particle.SMOKE, 0.5f);
 
         // if the player has secret technique
         if (player.getPersistentDataContainer().has(secretTechniqueKey) && player.isSneaking())
@@ -51,7 +51,7 @@ public class SmokeBomb extends ActiveTrait
             player.teleport(location);
 
             // spawn the smoke
-            player.getWorld().spawnParticle(Particle.SMOKE, location, 200);
+            RPGparticles.SpawnParticle(player.getWorld(), 200, location, new Vector3d(0,0,0), Particle.SMOKE, 0.5f);
         }
     }
 
