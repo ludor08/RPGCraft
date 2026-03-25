@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 
 import java.util.List;
 
@@ -24,11 +25,11 @@ public abstract class ActiveTrait extends Trait
     public void OnInputSequence(Player player)
     {
         // if the player has the needed mana
-        if (player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player) >= 0)
+        if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player) >= 0)
         {
             TriggerActiveEvent(player);
 
-            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player));
+            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) - GetModifiedCost(player));
         }
         // if not
         else
