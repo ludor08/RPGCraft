@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGparticles;
@@ -64,7 +65,7 @@ public class OathOfRage extends ActiveTrait
         }
         else
         {
-            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
         }
     }
 

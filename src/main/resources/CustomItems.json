@@ -1,8 +1,8 @@
 [
   {
-    "name":"Lesser detoxifying charm",
+    "name":"Lesser Detoxifying Charm",
     "lore":["Gives you immunity to the poison effect when held."],
-    "material":"STRING",
+    "material":"NAME_TAG",
     "maxStackSize":1,
     "itemID":"lesser_detoxifying_charm",
     "customModelData":1,
@@ -10,16 +10,16 @@
     "itemEnhancements":
     [
       {
+        "useCase":"InAnyHand",
+        "trait":{"name_id":"mithridatim"}
+      },
+      {
         "useCase":"InMainHand",
-        "trait":{"name_id":"cancel main hand block interaction"}
+        "trait":{"name_id":"cancel main hand entity interaction"}
       },
       {
         "useCase":"InOffHand",
-        "trait":{"name_id":"cancel off hand block interaction"}
-      },
-      {
-        "useCase":"InAnyHand",
-        "trait":{"name_id":"mithridatim"}
+        "trait":{"name_id":"cancel off hand entity interaction"}
       }
     ],
 
@@ -28,7 +28,7 @@
     "itemEnchantments": []
   },
   {
-    "name":"Poison gland",
+    "name":"Poison Gland",
     "lore":[],
     "material":"FERMENTED_SPIDER_EYE",
     "maxStackSize":64,
@@ -42,7 +42,7 @@
     "itemEnchantments":[]
   },
   {
-    "name":"Purified poison gland",
+    "name":"Purified Poison Gland",
     "lore":[],
     "material":"GLISTERING_MELON_SLICE",
     "maxStackSize":64,
@@ -56,7 +56,7 @@
     "itemEnchantments": []
   },
   {
-    "name":"Reinforced twig wand",
+    "name":"Reinforced Twig Wand",
     "lore":["Gives you +25 max mana when held in the main hand."],
     "material":"NAME_TAG",
     "maxStackSize":1,
@@ -84,7 +84,7 @@
     "itemEnchantments":[]
   },
   {
-    "name":"Reinforced twig",
+    "name":"Reinforced Twig",
     "lore":[],
     "material":"STICK",
     "maxStackSize":64,

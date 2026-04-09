@@ -230,7 +230,7 @@ public class PartyManager
 
     public void InvitePlayerToParty(Entity entity, String partyName)
     {
-        entity.getPersistentDataContainer().set(main.GetLastPartyInviteKey(), PersistentDataType.STRING, partyName);
+        entity.getPersistentDataContainer().set(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING, partyName);
 
         // send a message
         TextComponent clickJoinMessage = new TextComponent("§a§l[Click Here]");

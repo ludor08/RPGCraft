@@ -6,12 +6,12 @@ prefix: RPGCraft
 authors: [ Lily ]
 
 commands:
-  statSheet:
+  statsheet:
 
-  classXp:
+  classxp:
     permission: "2"
 
-  classLevel:
+  classlevel:
     permission: "2"
 
   reset:
@@ -21,4 +21,8 @@ commands:
   rpggive:
     permission: "2"
 
+  rpgspawn:
+    permission: "2"
 
+  test_add_structure:
+    permission: "2"

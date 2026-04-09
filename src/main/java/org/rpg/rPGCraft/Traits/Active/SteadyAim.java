@@ -62,7 +62,7 @@ public class SteadyAim extends ActiveTrait
             player.sendMessage("You must be sneaking to activate this trait.");
         }
 
-        player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+        player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
     }
 
     @Override

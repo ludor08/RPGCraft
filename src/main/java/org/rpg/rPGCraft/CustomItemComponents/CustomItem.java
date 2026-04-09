@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 
 import java.util.List;
 
@@ -117,11 +118,11 @@ public class CustomItem {
         // set the custom weapon key
         if (customItem.GetWeaponType() != null)
         {
-            itemMeta.getPersistentDataContainer().set(Main.GetInstance().GetWeaponTypeKey(), PersistentDataType.STRING, customItem.GetWeaponType());
+            itemMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetWeaponTypeKey(), PersistentDataType.STRING, customItem.GetWeaponType());
         }
 
         // set the items key and value
-        itemMeta.getPersistentDataContainer().set(Main.GetInstance().GetCustomItemKey(), PersistentDataType.STRING, customItem.GetItemID());
+        itemMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetCustomItemKey(), PersistentDataType.STRING, customItem.GetItemID());
 
         // set the item meta
         item.setItemMeta(itemMeta);

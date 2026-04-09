@@ -9,6 +9,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGparticles;
@@ -48,7 +49,7 @@ public class GrapplingHookArrow extends ActiveTrait
         else
         {
             player.sendMessage("You must be using a bow or crossbow to use this trait.");
-            player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER) + GetCost());
+            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetCost());
         }
     }
 

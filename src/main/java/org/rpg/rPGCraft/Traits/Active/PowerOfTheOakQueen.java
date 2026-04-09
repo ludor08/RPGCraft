@@ -107,7 +107,7 @@ public class PowerOfTheOakQueen extends ActiveTrait
         }
 
         player.sendMessage(ChatColor.DARK_RED + "You must have Flash Of Oak active to use this trait.");
-        player.getPersistentDataContainer().set(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(Main.GetInstance().GetManaKey(), PersistentDataType.INTEGER)+150);
+        player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)+150);
     }
 
     @Override

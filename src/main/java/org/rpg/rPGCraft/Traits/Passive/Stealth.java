@@ -32,11 +32,11 @@ public class Stealth extends Trait
     @Override
     public void OnTick(Player player)
     {
-        if ((player.getVelocity().getX() == 0 && player.getVelocity().getZ() == 0) || player.isSneaking())
+        if ((player.getForwardsMovement() == 0 && player.getSidewaysMovement() == 0) || player.isSneaking())
         {
             player.getPersistentDataContainer().set(stealthTimeKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(stealthTimeKey, PersistentDataType.INTEGER) + 1);
 
-            if (player.getPersistentDataContainer().get(stealthTimeNeededKey, PersistentDataType.INTEGER) <= player.getPersistentDataContainer().get(stealthTimeKey, PersistentDataType.INTEGER) && !player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+            if (player.getPersistentDataContainer().get(stealthTimeNeededKey, PersistentDataType.INTEGER) <= player.getPersistentDataContainer().get(stealthTimeKey, PersistentDataType.INTEGER))
             {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 0,true,false));
                 player.getPersistentDataContainer().set(invisibilityFromStealthKey, PersistentDataType.BOOLEAN, true);

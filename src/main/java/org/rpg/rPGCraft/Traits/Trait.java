@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,6 @@ public abstract class Trait
 
     // type of buffs
     public boolean tickTrait;
-
 
     public Trait(String name, String name_id, Material iconMaterial, boolean tickTrait, List<String> lore)
     {
@@ -46,7 +46,7 @@ public abstract class Trait
         traitIconMeta.setDisplayName(name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(Main.GetInstance().GetTraitKey(), PersistentDataType.STRING, name);
+        traitIconMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetTraitKey(), PersistentDataType.STRING, name);
 
         // add the description
         List<String> lore = GetTraitLore();

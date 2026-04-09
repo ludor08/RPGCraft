@@ -6,9 +6,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.GUIStates.ResetStates.SelectClassGUI;
+import org.rpg.rPGCraft.GUIStates.ResetStates.SelectRaceGUI;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.MenuManager;
 
 public class ResetCommand implements CommandExecutor
 {
@@ -37,15 +39,17 @@ public class ResetCommand implements CommandExecutor
                     main.statSheetManager.FindStatSheetByPlayer(player).ResetClassPersistent();
 
                     // pick a new class
-                    player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
-
+                    MenuManager.AssignGUIState(new SelectClassGUI(player, null), player);
+                    //player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
+                    player.sendMessage("In testing");
+                    Bukkit.getLogger().warning("Code has been removed for testing reasons.");
                     break;
 
                 case "race":
                     main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
 
                     // pick a new race
-                    player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
+                    MenuManager.AssignGUIState(new SelectRaceGUI(player, null), player);
                     break;
             }
         }

@@ -19,17 +19,17 @@ import java.util.List;
 
 public class CustomItemDefinitions
 {
-    private static HashMap<String, CustomItem> CustomItemIdMap;
+    private static HashMap<String, CustomItem> customItemIdMap;
 
     private static void AddCustomItemToMap(CustomItem customItem)
     {
-        CustomItemIdMap.put(customItem.GetItemID(), customItem);
+        customItemIdMap.put(customItem.GetItemID(), customItem);
     }
 
     public static void Initialize()
     {
         Main main = Main.GetInstance();
-        CustomItemIdMap = new HashMap<String, CustomItem>();
+        customItemIdMap = new HashMap<String, CustomItem>();
 
         File customItems = new File(main.getDataFolder(), "CustomItems.json");
 
@@ -56,9 +56,9 @@ public class CustomItemDefinitions
 
     public static CustomItem GetCustomItemByID(String name_id)
     {
-        if (CustomItemIdMap.containsKey(name_id))
+        if (customItemIdMap.containsKey(name_id))
         {
-            return CustomItemIdMap.get(name_id);
+            return customItemIdMap.get(name_id);
         }
         else
         {
@@ -67,8 +67,18 @@ public class CustomItemDefinitions
         }
     }
 
+    public static boolean HasCustomItemForID(String name_id)
+    {
+        if (customItemIdMap.containsKey(name_id))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static HashMap<String, CustomItem> GetCustomItemIdMap()
     {
-        return CustomItemIdMap;
+        return customItemIdMap;
     }
 }

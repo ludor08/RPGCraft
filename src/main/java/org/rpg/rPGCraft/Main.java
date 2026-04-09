@@ -1,58 +1,39 @@
 package org.rpg.rPGCraft;
 
-import com.google.gson.GsonBuilder;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.WorldCreator;
+import org.bukkit.block.structure.Mirror;
+import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.event.Listener;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.structure.Structure;
 import org.rpg.rPGCraft.Classes.Archer;
 import org.rpg.rPGCraft.Classes.Berserker;
 import org.rpg.rPGCraft.Classes.Rogue;
 import org.rpg.rPGCraft.Classes.Sage;
-import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
-import org.rpg.rPGCraft.Definitions.TraitDefinitions;
+import org.rpg.rPGCraft.Definitions.*;
 import org.rpg.rPGCraft.Races.*;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public final class Main extends JavaPlugin implements Listener
 {
+    // random
+    private Random random = new Random();;
+
     // managers
     public MenuManager menuManager;
+    public EntityManager entityManager;
     public StatSheetManager statSheetManager;
     public GameManager gameManager;
     public ItemManager itemManager;
     public PartyManager partyManager;
     public RecipeManager recipeManager;
-
-    // NamespacedKeys
-    private final NamespacedKey currentTraitsFromCustomItemsKey = new NamespacedKey(this, "current_traits_from_custom_items");
-
-    private final NamespacedKey lastPartyInviteKey = new NamespacedKey(this, "last_party_invite");
-    private final NamespacedKey raceKey = new NamespacedKey(this, "race");
-    private final NamespacedKey subraceKey = new NamespacedKey(this, "subrace");
-    private final NamespacedKey classKey = new NamespacedKey(this, "class");
-    private final NamespacedKey UIKey = new NamespacedKey(this, "ui");
-    private final NamespacedKey traitKey = new NamespacedKey(this, "trait");
-    private final NamespacedKey levelKey = new NamespacedKey(this, "level");
-    private final NamespacedKey classXPKey = new NamespacedKey(this, "class_xp");
-    private final NamespacedKey treeProgressionKey = new NamespacedKey(this, "tree_progression");
-    private final NamespacedKey deactivatedNodesKey = new NamespacedKey(this, "deactivated_nodes");
-    private final NamespacedKey activeTraitInputKey = new NamespacedKey(this, "active_trait_input");
-    private final NamespacedKey manaKey = new NamespacedKey(this, "mana");
-    private final NamespacedKey manaRechargeSpeedKey = new NamespacedKey(this, "mana_recharge_speed");
-    private final NamespacedKey manaMaxKey = new NamespacedKey(this, "mana_max");
-
-    private final NamespacedKey weaponTypeKey = new NamespacedKey(this, "weapon_type");
-    private final NamespacedKey customMobKey = new NamespacedKey(this, "custom_mob");
-    private final NamespacedKey customItemKey = new NamespacedKey(this, "custom_item_id");
-    private final NamespacedKey customItemAttributeKey = new NamespacedKey(this, "custom_item_attribute");
-    private final NamespacedKey levelStatModKey = new NamespacedKey(this, "level_hp_mod");
-    private final NamespacedKey legendaryMobKey = new NamespacedKey(this, "legendary_mob");
+    public WorldManager worldManager;
 
     // choose able races
     private List<Race> chooseAbleRaces;
@@ -61,109 +42,9 @@ public final class Main extends JavaPlugin implements Listener
     private List<PlayableClass> chooseAbleClasses;
 
     // Getters
-    public NamespacedKey GetCurrentTraitsFromCustomItemsKey()
+    public Random GetRandom()
     {
-        return currentTraitsFromCustomItemsKey;
-    }
-
-    public NamespacedKey GetLastPartyInviteKey()
-    {
-        return lastPartyInviteKey;
-    }
-
-    public NamespacedKey GetRaceKey()
-    {
-        return raceKey;
-    }
-
-    public NamespacedKey GetManaKey()
-    {
-        return manaKey;
-    }
-
-    public NamespacedKey GetManaRechargeSpeedKey()
-    {
-        return manaRechargeSpeedKey;
-    }
-
-    public NamespacedKey GetManaMaxKey()
-    {
-        return manaMaxKey;
-    }
-
-    public NamespacedKey GetActiveTraitInputKey()
-    {
-        return activeTraitInputKey;
-    }
-
-    public NamespacedKey GetSubraceKey()
-    {
-        return subraceKey;
-    }
-
-    public NamespacedKey GetUIKey()
-    {
-        return UIKey;
-    }
-
-    public NamespacedKey GetClassKey()
-    {
-        return classKey;
-    }
-
-    public NamespacedKey GetTraitKey()
-    {
-        return traitKey;
-    }
-
-    public NamespacedKey GetLevelKey()
-    {
-        return levelKey;
-    }
-
-    public NamespacedKey GetCustomItemKey()
-    {
-        return customItemKey;
-    }
-
-    public NamespacedKey GetLevelStatModKey()
-    {
-        return levelStatModKey;
-    }
-
-    public NamespacedKey GetClassXPKey()
-    {
-        return classXPKey;
-    }
-
-    public NamespacedKey GetWeaponTypeKey()
-    {
-        return weaponTypeKey;
-    }
-
-    public NamespacedKey GetItemAttributeKey()
-    {
-        return customItemAttributeKey;
-    }
-
-    public NamespacedKey GetCustomMobKey()
-    {
-        return customMobKey;
-    }
-
-    public NamespacedKey GetTreeProgressionKey()
-    {
-        return treeProgressionKey;
-    }
-
-    public NamespacedKey GetDeactivatedNodesKey()
-    {
-        return deactivatedNodesKey;
-    }
-
-    public NamespacedKey GetLegendaryMobKey()
-    {
-        return legendaryMobKey;
+        return random;
     }
 
     public List<Race> GetChooseAbleRaces()
@@ -191,17 +72,31 @@ public final class Main extends JavaPlugin implements Listener
         statSheetManager = new StatSheetManager();
         itemManager = new ItemManager();
         partyManager = new PartyManager();
+        entityManager = new EntityManager();
+        worldManager = new WorldManager();
 
         // initialize the hash maps
         TraitDefinitions.Initialize();
         CustomItemDefinitions.Initialize();
+        EntityDefinitions.Initialize();
+        StateDefinitions.Initialize();
+        StructureDefinitions.Initialize();
 
         gameManager = new GameManager();
         recipeManager = new RecipeManager();
+
+        Structure structure = null;
+        try {
+            structure = Bukkit.getStructureManager().loadStructure(StructureDefinitions.GetStructureFileByID("test_ritual.nbt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        structure.place(new Location(Bukkit.getWorld("world"), 0,0,0), true, StructureRotation.NONE, Mirror.NONE, 0, 1, Main.GetInstance().GetRandom());
     }
 
     public static Main GetInstance()
     {
         return instance;
     }
+
 }

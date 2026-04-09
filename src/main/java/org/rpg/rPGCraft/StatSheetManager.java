@@ -71,7 +71,7 @@ public class StatSheetManager implements Listener
     // Adder
     public StatSheet AddStatSheet(StatSheet statSheet)
     {
-        this.statSheets.add(statSheet);
+        statSheets.add(statSheet);
         return statSheet;
     }
 
@@ -568,51 +568,6 @@ public class StatSheetManager implements Listener
             {
                 // give them one :)
                 AddStatSheet(new StatSheet(player.getUniqueId()));
-            }
-        }
-    }
-
-    @EventHandler
-    public void OnPlayerKillEvent(EntityDeathEvent e)
-    {
-        // if the entity was killed by a player
-        if (e.getEntity().getKiller() != null)
-        {
-            // if the entity has a level
-            if (e.getEntity().getKiller().getPersistentDataContainer().has(main.GetLevelKey(), PersistentDataType.INTEGER))
-            {
-                // if the entity wasn't an MISC entity
-                if (!e.getEntity().getSpawnCategory().equals(SpawnCategory.MISC))
-                {
-                    Entity entity = e.getEntity();
-
-                    Player player = e.getEntity().getKiller();
-
-                    int droppedExp = 0;
-
-                    // if the monster is not a custom entity
-                    if (!e.getEntity().getPersistentDataContainer().has(main.GetCustomMobKey(), PersistentDataType.STRING))
-                    {
-
-                        switch (entity.getType())
-                        {
-                            case WITHER:
-                                droppedExp = 1400;
-                                break;
-
-                            default:
-                                droppedExp = e.getDroppedExp();
-                                break;
-                        }
-                    }
-
-                    if (entity.getPersistentDataContainer().has(main.GetLegendaryMobKey()))
-                    {
-                        droppedExp *= main.gameManager.GetLegendaryMobStatMultiplier();
-                    }
-
-                    FindStatSheetByPlayer(player).GiveXP(droppedExp);
-                }
             }
         }
     }

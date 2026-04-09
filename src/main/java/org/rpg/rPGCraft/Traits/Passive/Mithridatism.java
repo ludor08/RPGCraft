@@ -6,6 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
@@ -29,6 +30,15 @@ public class Mithridatism extends Trait
         if (player.hasPotionEffect(PotionEffectType.POISON))
         {
             player.removePotionEffect(PotionEffectType.POISON);
+        }
+    }
+
+    @Override
+    public void OnTakeDamage(EntityDamageEvent e)
+    {
+        if (e.getCause().equals(EntityDamageEvent.DamageCause.POISON))
+        {
+            e.setCancelled(true);
         }
     }
 }

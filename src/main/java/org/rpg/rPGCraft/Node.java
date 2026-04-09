@@ -2,12 +2,14 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
 import org.rpg.rPGCraft.Traits.Trait;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Node
@@ -31,25 +33,24 @@ public class Node
         return translatedCoordinates;
     }
 
-    public ItemStack GetNodeIcon(int level, boolean hasLevel, boolean isDisabled)
+    public ItemStack GetNodeIcon(int level, boolean isDisabled)
     {
-        // generates the icon for this trait
-        ItemStack nodeIcon = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
-        ItemMeta traitIconMeta = nodeIcon.getItemMeta();
+        // used level
+        int usedLevel = Math.clamp(level-1, 0, level);
 
-        traitIconMeta.setDisplayName(ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(level-1).name);
+        // generate the name
+        String name = ChatColor.AQUA.toString() + ChatColor.BOLD + traits.get(usedLevel).name;
 
-        // add the trait
-        traitIconMeta.getPersistentDataContainer().set(Main.GetInstance().GetTraitKey(), PersistentDataType.STRING, traits.get(level-1).name_id + id);
+        // set the material
+        Material material = Material.GREEN_STAINED_GLASS_PANE;
 
         // add the description
-        List<String> lore = traits.get(level-1).GetTraitLore();
+        List<String> lore = traits.get(usedLevel).GetTraitLore();
 
-        if (hasLevel) lore.set(0,ChatColor.GRAY + "Level " + level + ChatColor.DARK_GRAY + "/" + traits.size());
-        else lore.set(0,ChatColor.GRAY + "Level " + 0 + ChatColor.DARK_GRAY + "/" + traits.size());
+        lore.set(0,ChatColor.GRAY + "Level " + level + ChatColor.DARK_GRAY + "/" + traits.size());
 
         // if there are more levels and it has a level
-        if (traits.size() > level && hasLevel)
+        if (traits.size() > level && level > 0)
         {
             lore.add(" ");
             lore.add(ChatColor.GREEN + "====[NEXT LEVEL]====");
@@ -66,37 +67,108 @@ public class Node
 
         }
 
-        if (hasLevel)
+        if (level > 0)
         {
             lore.add(" ");
 
-            if (isDisabled) lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "Disabled.");
-            else lore.add(ChatColor.GREEN.toString() + ChatColor.BOLD + "Enabled.");
+            if (isDisabled)
+            {
+                lore.add(ChatColor.RED.toString() + ChatColor.BOLD + "Disabled.");
+                material = Material.CYAN_STAINED_GLASS_PANE;
+            }
+            else
+            {
+                lore.add(ChatColor.GREEN.toString() + ChatColor.BOLD + "Enabled.");
+                material = Material.LIME_STAINED_GLASS_PANE;
+            }
         }
 
-        traitIconMeta.setLore(lore);
+        // generates the icon for this trait
+        ItemStack nodeIcon = MenuManager.InitializeItemStack(material, name, lore);
 
-        // set the item meta
-        nodeIcon.setItemMeta(traitIconMeta);
+        // add the trait
+        MenuManager.AddPersistentDataContainerToItemStack(nodeIcon, NamespaceDefinitions.GetTraitKey(), traits.get(usedLevel).name_id + id);
 
         // return the icon
         return nodeIcon;
     }
 
-    public Trait GetTraitFromString(String traitName)
+    public List<Trait> GetTraits()
     {
-        Trait trait = null;
+        return traits;
+    }
 
-        for (Trait nodeTrait : traits)
+    public String GetID()
+    {
+        return id;
+    }
+
+    public Vector2d GetCoordinates()
+    {
+        return coordinates;
+    }
+
+    public boolean IsNodeEnabled(Player player)
+    {
+        // get the deactivated
+        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+
+        // go through all traits in the progression in the node
+        for (Trait trait : traits)
         {
-            if (nodeTrait.name_id.equals(traitName.replace(id, "")))
+            if (deactivatedNodes.contains(trait.name_id+id))
             {
-                trait = traits.get(traits.indexOf(nodeTrait));
+                return false;
             }
         }
 
-        return trait;
+        return true;
     }
 
+    public boolean IsNodeOwned(Player player)
+    {
+        // get the owned traits
+        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
 
+        // get the traits in the TreeProgression
+        for (String traitName : treeProgression)
+        {
+            // go through all traits in the progression in the node
+            for (Trait trait : traits)
+            {
+                if (traitName.equals(trait.name_id+id))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int GetNodeLevel(Player player)
+    {
+        // if the node is not owned, return 0
+        if (!IsNodeOwned(player))
+        {
+            return 0;
+        }
+
+        // get the owned traits
+        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+
+        // check if the node trait is in the treeProgression
+        for (String selectedTrait : treeProgression)
+        {
+            for (Trait trait : traits)
+            {
+                if (selectedTrait.equals(trait.name_id + id))
+                {
+                    return traits.indexOf(trait)+1;
+                }
+            }
+        }
+
+        return 0;
+    }
 }

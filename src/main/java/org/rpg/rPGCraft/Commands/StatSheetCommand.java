@@ -6,7 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.GUIStates.StatSheetStates.MainStatSheetGUI;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.MenuManager;
 
 public class StatSheetCommand implements CommandExecutor
 {
@@ -24,7 +26,7 @@ public class StatSheetCommand implements CommandExecutor
         // if a player run this command
         if (commandSender instanceof Player player)
         {
-            player.openInventory(main.menuManager.CreateStatSheetMenu(player));
+            MenuManager.AssignGUIState(new MainStatSheetGUI(player, null), player);
         }
         // if not
         else

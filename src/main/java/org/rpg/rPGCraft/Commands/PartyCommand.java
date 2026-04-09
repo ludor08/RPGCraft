@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 
 public class PartyCommand implements CommandExecutor
 {
@@ -101,19 +102,19 @@ public class PartyCommand implements CommandExecutor
                     break;
 
                 case "accept":
-                    if (player.getPersistentDataContainer().get(main.GetLastPartyInviteKey(), PersistentDataType.STRING) != null)
+                    if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) != null)
                     {
-                        if (main.partyManager.PartyExists(player.getPersistentDataContainer().get(main.GetLastPartyInviteKey(), PersistentDataType.STRING)))
+                        if (main.partyManager.PartyExists(player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING)))
                         {
-                            main.partyManager.AddToParty(player, player.getPersistentDataContainer().get(main.GetLastPartyInviteKey(), PersistentDataType.STRING), 0);
+                            main.partyManager.AddToParty(player, player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING), 0);
 
-                            player.sendMessage(ChatColor.GREEN + "You are now a part of the " + player.getPersistentDataContainer().get(main.GetLastPartyInviteKey(), PersistentDataType.STRING) + " party!");
+                            player.sendMessage(ChatColor.GREEN + "You are now a part of the " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) + " party!");
 
-                            player.getPersistentDataContainer().remove(main.GetLastPartyInviteKey());
+                            player.getPersistentDataContainer().remove(NamespaceDefinitions.GetLastPartyInviteKey());
                         }
                         else
                         {
-                            player.sendMessage(ChatColor.DARK_RED + "Party + " + player.getPersistentDataContainer().get(main.GetLastPartyInviteKey(), PersistentDataType.STRING) + " + does not exist.");
+                            player.sendMessage(ChatColor.DARK_RED + "Party + " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) + " + does not exist.");
                         }
 
 

@@ -69,8 +69,6 @@ public class ItemManager
         // Custom Items
         main.saveResource("CustomItems.json", true);
 
-
-
         /*
         List<CustomItem> customItemList = List.of(new CustomItem("test item with enchacntment", List.of(), Material.ARROW, 125125, "test_item", List.of(), List.of(), List.of(new ItemEnchantment(Enchantment.EFFICIENCY, 2)), null));
 

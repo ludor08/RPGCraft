@@ -2,6 +2,7 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.components.FoodComponent;
 import org.joml.Vector2d;
 
 import java.util.ArrayList;
@@ -51,5 +52,10 @@ public class TraitTree
         }
 
         return surroundingNodes;
+    }
+
+    public List<Node> GetNode()
+    {
+        return nodes;
     }
 }

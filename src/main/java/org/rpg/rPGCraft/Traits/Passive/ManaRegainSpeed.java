@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -23,12 +24,12 @@ public class ManaRegainSpeed extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        RPGutils.AddToNamespacedKey(player, Main.GetInstance().GetManaRechargeSpeedKey(), 1, manaRegainMod);
+        RPGutils.AddToNamespacedKey(player, NamespaceDefinitions.GetManaRechargeSpeedKey(), 1, manaRegainMod);
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        RPGutils.AddToNamespacedKey(player, Main.GetInstance().GetManaRechargeSpeedKey(), 1, -manaRegainMod);
+        RPGutils.AddToNamespacedKey(player, NamespaceDefinitions.GetManaRechargeSpeedKey(), 1, -manaRegainMod);
     }
 }

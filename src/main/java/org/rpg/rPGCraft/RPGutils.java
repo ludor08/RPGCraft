@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RPGutils
@@ -252,6 +253,27 @@ public class RPGutils
         return false;
     }
 
+    public static double ConvertTextCoordinateToLocationCoordinate(@NotNull String textCoordinate, double relativePositionCoordinate)
+    {
+        double coordinate = 0;
+
+        if (textCoordinate.charAt(0) == '~')
+        {
+            if (textCoordinate.length() > 1)
+            {
+                textCoordinate = textCoordinate.replaceFirst("~", "");
+
+                coordinate = relativePositionCoordinate + Integer.parseInt(textCoordinate);
+            }
+        }
+        else
+        {
+            coordinate = Integer.parseInt(textCoordinate);
+        }
+
+        return coordinate;
+    }
+
     /// traits
 
     public static void HealWithTrait(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason)
@@ -269,7 +291,7 @@ public class RPGutils
         target.heal(amountToBeHealed, regainReason);
     }
 
-    public static void DamageWithTrait(LivingEntity target, Entity attacker, double damageAmount, boolean doSendInput)
+    public static void DamageWithTrait(LivingEntity target, Entity attacker, double damageAmount, boolean sendInput)
     {
         NamespacedKey attackInputCanceledKey = new NamespacedKey(Main.GetInstance(), "attack_input_canceled");
 
@@ -277,7 +299,7 @@ public class RPGutils
         {
             if (!Main.GetInstance().partyManager.IsInTheSameParty(attacker, target))
             {
-                RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !doSendInput);
+                RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !sendInput);
                 target.damage(damageAmount, attacker);
                 RPGutils.RemoveNamespacedKey(attacker, attackInputCanceledKey);
             }
@@ -356,5 +378,4 @@ public class RPGutils
             entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, baseLevel + amountToBeAdded);
         }
     }
-
 }

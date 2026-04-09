@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Main;
+import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.List;
@@ -23,24 +24,22 @@ public class GreaterCapacity_1 extends Trait
     @Override
     public void OnGainTraitBuff(Player player)
     {
-        if (player.getPersistentDataContainer().has(Main.GetInstance().GetManaMaxKey()))
+        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetManaMaxKey()))
         {
-            player.getPersistentDataContainer().set(Main.GetInstance().GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(Main.GetInstance().GetManaMaxKey(), PersistentDataType.INTEGER) + maxManaMod);
+            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER) + maxManaMod);
         }
     }
 
     @Override
     public void OnRemoveTraitBuff(Player player)
     {
-        Main main = Main.GetInstance();
-
-        if (player.getPersistentDataContainer().has(main.GetManaMaxKey()))
+        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetManaMaxKey()))
         {
-            player.getPersistentDataContainer().set(main.GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER) - maxManaMod);
+            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER) - maxManaMod);
 
-            if (player.getPersistentDataContainer().get(main.GetManaKey(), PersistentDataType.INTEGER) > player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER))
+            if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) > player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER))
             {
-                player.getPersistentDataContainer().set(main.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(main.GetManaMaxKey(), PersistentDataType.INTEGER));
+                player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER));
             }
         }
     }

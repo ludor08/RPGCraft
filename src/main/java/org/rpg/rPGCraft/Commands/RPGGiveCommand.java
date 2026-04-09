@@ -54,7 +54,7 @@ public class RPGGiveCommand implements CommandExecutor
 
             }
 
-            if (CustomItemDefinitions.GetCustomItemByID(args[0]) != null)
+            if (CustomItemDefinitions.HasCustomItemForID(args[0]))
             {
                 player.getInventory().addItem(CustomItem.GetCustomItemStack(CustomItemDefinitions.GetCustomItemByID(args[0]), amount));
             }
