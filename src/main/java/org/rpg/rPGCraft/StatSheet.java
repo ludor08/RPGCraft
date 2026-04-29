@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.rpg.rPGCraft.CustomItemComponents.ItemEnhancement;
 import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
+import org.rpg.rPGCraft.Definitions.NamespaceDefinitions;
 import org.rpg.rPGCraft.Definitions.TraitDefinitions;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Traits.Trait;
