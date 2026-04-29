@@ -2,7 +2,6 @@ package org.rpg.rPGCraft.GUIStates.ResetStates;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -10,10 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.NamespaceDefinitions;
 import org.rpg.rPGCraft.GUIStates.GUIState;
-import org.rpg.rPGCraft.Traits.Trait;
-
-import java.util.List;
 
 public class ConfirmClassGUI extends GUIState
 {

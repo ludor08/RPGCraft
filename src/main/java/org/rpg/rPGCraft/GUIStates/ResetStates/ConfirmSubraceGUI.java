@@ -5,15 +5,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.MenuManager;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.NamespaceDefinitions;
 import org.rpg.rPGCraft.Race;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ConfirmSubraceGUI extends GUIState
@@ -64,7 +62,7 @@ public class ConfirmSubraceGUI extends GUIState
         if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey())
             && e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING).equals("confirm"))
         {
-            Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).SetRacePersistent(subrace.name, parentRace.name);
+            Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).SetRace(subrace.name, parentRace.name);
 
             // send the confirmation message
             GetOwner().sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Race Selected!");
