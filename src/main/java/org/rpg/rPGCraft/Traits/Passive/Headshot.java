@@ -52,7 +52,7 @@ public class Headshot extends Trait
                     spectralArrow.setDamage(spectralArrow.getDamage()*headshotDamageMod);
                 }
 
-                RPGparticles.SpawnBlockParticle(e.getHitEntity().getWorld(), 10, livingEntity.getEyeLocation(), new Vector3d((generalHeadSize*1.5)/2,(generalHeadSize*1.5)/2,(generalHeadSize*1.5)/2), BlockType.REDSTONE_BLOCK.createBlockData(), 1);
+                RPGparticles.SpawnBlockParticle(10, livingEntity.getEyeLocation(), new Vector3d((generalHeadSize*1.5)/2,(generalHeadSize*1.5)/2,(generalHeadSize*1.5)/2), BlockType.REDSTONE_BLOCK.createBlockData(), 1);
             }
         }
     }

@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -38,7 +38,7 @@ public class RebukeOfTheFlame extends Trait
             return;
         }
 
-        if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER))
+        if (player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) >= player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER))
         {
             if (e.getDamageSource().getCausingEntity() == null)
             {
@@ -63,7 +63,7 @@ public class RebukeOfTheFlame extends Trait
                 }
             }
 
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)-player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER));
+            player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)-player.getPersistentDataContainer().get(rebukeCostKey, PersistentDataType.INTEGER));
         }
     }
 

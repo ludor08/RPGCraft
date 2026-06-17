@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.EquipmentSlot;
@@ -14,7 +15,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.rpg.rPGCraft.CustomItemComponents.ItemEnhancement;
 import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
-import org.rpg.rPGCraft.Definitions.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Definitions.TraitDefinitions;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Traits.Trait;
@@ -24,21 +25,39 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatSheet
 {
-    private UUID playerUUID;
-    private Main main;
+    private Player player;
 
     private BukkitTask tickTimer = null;
     private final Runnable tickRunnable;
 
     public Player GetPlayer()
     {
-        return Bukkit.getPlayer(playerUUID);
+        return player;
     }
 
-    public StatSheet(UUID playerUUID)
+    public void SetPlayer(Player player)
     {
-        this.playerUUID = playerUUID;
-        main = Main.GetInstance();
+        this.player = player;
+    }
+
+    public Race GetRace()
+    {
+        return Main.GetInstance().statSheetManager.FindRace(GetPlayer().getPersistentDataContainer().get(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING));
+    }
+
+    public Race GetSubrace()
+    {
+        return Main.GetInstance().statSheetManager.FindRace(GetPlayer().getPersistentDataContainer().get(MyNamespaces.SUBRACE.GetNamespacedKey(), PersistentDataType.STRING));
+    }
+
+    public PlayableClass GetClass()
+    {
+        return Main.GetInstance().statSheetManager.FindClass(GetPlayer().getPersistentDataContainer().get(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING));
+    }
+
+    public StatSheet(Player player)
+    {
+        this.player = player;
 
         // set up the tick runnable // if this becomes too legging move to StatSheetManger and make work for all player at once
         AtomicInteger tick = new AtomicInteger();
@@ -51,26 +70,24 @@ public class StatSheet
 
             tick.set(tick.get()+1);
 
-            Player player = GetPlayer();
-
             // Update Inventory Traits
             UpdateInventoryTraits();
 
             // if this player has an input sequence reset delay
-            if (player.getPersistentDataContainer().has(new NamespacedKey(main, "input_sequence_reset_delay")))
+            if (GetPlayer().getPersistentDataContainer().has(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay")))
             {
-                HandleInputSequenceResetDelay(player);
+                HandleInputSequenceResetDelay(GetPlayer());
             }
 
             // if the player has less than their max mana
-            RechargeMana(player, tick);
+            RechargeMana(GetPlayer(), tick);
 
             // check if any of the trait are tick trait
             for (Trait trait : GetActiveTraits())
             {
                 if (trait.tickTrait)
                 {
-                    trait.OnTick(player);
+                    trait.OnTick(GetPlayer());
                 }
             }
         };
@@ -80,11 +97,11 @@ public class StatSheet
 
     private void UpdateInventoryTraits()
     {
-        if (GetPlayer().getPersistentDataContainer().has(NamespaceDefinitions.GetCurrentTraitsFromCustomItemsKey()))
+        if (GetPlayer().getPersistentDataContainer().has(MyNamespaces.CURRENT_TRAITS_FROM_CUSTOM_ITEMS.GetNamespacedKey()))
         {
-            if (!GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING).equals(GenerateTraitString(GetApplicableItemTraits())))
+            if (!GetPlayer().getPersistentDataContainer().get(MyNamespaces.CURRENT_TRAITS_FROM_CUSTOM_ITEMS.GetNamespacedKey(), PersistentDataType.STRING).equals(GenerateTraitString(GetApplicableItemTraits())))
             {
-                List<String> traitIDStrings = new ArrayList<>(Arrays.stream(GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING).split("_")).toList());
+                List<String> traitIDStrings = new ArrayList<>(Arrays.stream(GetPlayer().getPersistentDataContainer().get(MyNamespaces.CURRENT_TRAITS_FROM_CUSTOM_ITEMS.GetNamespacedKey(), PersistentDataType.STRING).split("_")).toList());
 
                 // find the old and new traits
                 List<Trait> newTraits = new ArrayList<>();
@@ -141,7 +158,7 @@ public class StatSheet
                 }
             }
 
-            GetPlayer().getPersistentDataContainer().set(NamespaceDefinitions.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
+            GetPlayer().getPersistentDataContainer().set(MyNamespaces.CURRENT_TRAITS_FROM_CUSTOM_ITEMS.GetNamespacedKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
         }
         else
         {
@@ -150,7 +167,7 @@ public class StatSheet
                 newTrait.OnGainTraitBuff(GetPlayer());
             }
 
-            GetPlayer().getPersistentDataContainer().set(NamespaceDefinitions.GetCurrentTraitsFromCustomItemsKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
+            GetPlayer().getPersistentDataContainer().set(MyNamespaces.CURRENT_TRAITS_FROM_CUSTOM_ITEMS.GetNamespacedKey(), PersistentDataType.STRING, GenerateTraitString(GetApplicableItemTraits()));
         }
     }
 
@@ -169,48 +186,48 @@ public class StatSheet
 
     private void HandleInputSequenceResetDelay(Player player) {
         // if it is more than 0
-        if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) > 0)
+        if (player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay"), PersistentDataType.INTEGER) > 0)
         {
             // remove 1
-            player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER)-1); // TODO make use a tick in the config file
+            player.getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay"), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay"), PersistentDataType.INTEGER)-1); // TODO make use a tick in the config file
 
             // if it is 0
-            if (player.getPersistentDataContainer().get(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER) <= 0)
+            if (player.getPersistentDataContainer().get(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay"), PersistentDataType.INTEGER) <= 0)
             {
-                int mana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER);
-                int maxMana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER);
+                int mana = player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER);
+                int maxMana = player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER);
 
                 // reset the input sequence
-                player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
-                        main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
-                player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+                player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Main.GetInstance().statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
+                        Main.GetInstance().statSheetManager.GenerateManaActionBar(mana, maxMana)));
+                player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, "");
             }
         }
     }
 
     private void RechargeMana(Player player, AtomicInteger tick)
     {
-        int startingMana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER);
-        int maxMana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER);
-        int manaRechargeSpeed = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER);
+        int startingMana = player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER);
+        int maxMana = player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER);
+        int manaRechargeSpeed = player.getPersistentDataContainer().get(MyNamespaces.MANA_RECHARGE_SPEED.GetNamespacedKey(), PersistentDataType.INTEGER);
 
         // if the player has less than their max mana
         if (tick.get() == 1 && startingMana < maxMana)
         {
             if (startingMana+manaRechargeSpeed < maxMana)
             {
-                player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, startingMana+manaRechargeSpeed);
+                player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, startingMana+manaRechargeSpeed);
             }
             else
             {
-                player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, maxMana);
+                player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, maxMana);
             }
         }
     }
 
     public void StartTickTimer()
     {
-        tickTimer = Bukkit.getScheduler().runTaskTimer(main, tickRunnable, 2, 2);
+        tickTimer = Bukkit.getScheduler().runTaskTimer(Main.GetInstance(), tickRunnable, 2, 2);
     }
 
     public void StopTickTimer()
@@ -231,66 +248,23 @@ public class StatSheet
         return true;
     }
 
-    public void AddTraits(Race race)
-    {
-        // Get the Traits that come from the race
-        List<Trait> traits = race.traits;
-        // Add the on add effects to the player
-        for (Trait trait : traits)
-        {
-            trait.OnGainTraitBuff(GetPlayer());
-        }
-    }
-
     public List<Trait> GetTraits()
     {
         // make a list for all of the traits
         List<Trait> traits = new ArrayList<>();
 
-        // the player
-        Player player = GetPlayer();
-
-        // if the player has a parent race
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
-        {
-            // Find the parent race script
-            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING));
-
-            // if there is a parent race
-            if (raceOfParent != null)
-            {
-                // add all of the traits
-                traits.addAll(raceOfParent.traits);
-
-                // if the player has a subrace
-                if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING))
-                {
-                    // Find the parent race script
-                    Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING));
-
-                    // if there is a parent race
-                    if (raceOfSubrace != null)
-                    {
-                        // add all of the traits
-                        traits.addAll(raceOfSubrace.traits);
-                    }
-                }
-            }
-            else
-            {
-                System.out.println("ERROR: invalid parent race");
-            }
-        }
+        // add all of the race traits to the list
+        traits.addAll(GetActiveRaceTraits());
 
         // if the player has a class
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING))
+        if (GetClass() != null)
         {
             // for all of the nodes in the traitTree
-            for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
+            for (Node node : GetClass().traitTree.nodes)
             {
-                if (node.IsNodeOwned(player) && node.IsNodeEnabled(player))
+                if (node.IsNodeOwned(GetPlayer()) && node.IsNodeEnabled(GetPlayer()))
                 {
-                    traits.add(node.GetTraits().get(node.GetNodeLevel(player) - 1));
+                    traits.add(node.GetTraits().get(node.GetNodeLevel(GetPlayer()) - 1));
                 }
             }
         }
@@ -305,14 +279,11 @@ public class StatSheet
         // make a list for all of the traits
         List<Trait> traits = new ArrayList<>();
 
-        // the player
-        Player player = GetPlayer();
-
         // if the player has a class
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING))
+        if (GetClass() != null)
         {
             // for all of the nodes in the traitTree
-            for (Node node : main.statSheetManager.FindClass(player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING)).traitTree.nodes)
+            for (Node node : GetClass().traitTree.nodes)
             {
                 if (node.IsNodeOwned(player) && node.IsNodeEnabled(player))
                 {
@@ -329,38 +300,17 @@ public class StatSheet
         // make a list for all of the traits
         List<Trait> traits = new ArrayList<>();
 
-        // the player
-        Player player = GetPlayer();
-
-        // if the player has a parent race
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
+        // if there is a parent race
+        if (GetRace() != null)
         {
-            // Find the parent race script
-            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING));
+            // add all of the traits
+            traits.addAll(GetRace().traits);
 
-            // if there is a parent race
-            if (raceOfParent != null)
+            // if the player has a subrace
+            if (GetSubrace() != null)
             {
                 // add all of the traits
-                traits.addAll(raceOfParent.traits);
-
-                // if the player has a subrace
-                if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING))
-                {
-                    // Find the parent race script
-                    Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING));
-
-                    // if there is a parent race
-                    if (raceOfSubrace != null)
-                    {
-                        // add all of the traits
-                        traits.addAll(raceOfSubrace.traits);
-                    }
-                }
-            }
-            else
-            {
-                System.out.println("ERROR: invalid parent race");
+                traits.addAll(GetSubrace().traits);
             }
         }
 
@@ -399,7 +349,7 @@ public class StatSheet
                 continue;
             }
 
-            String itemID = itemStack.getPersistentDataContainer().get(NamespaceDefinitions.GetCustomItemKey(), PersistentDataType.STRING);
+            String itemID = itemStack.getPersistentDataContainer().get(MyNamespaces.CUSTOM_ITEM.GetNamespacedKey(), PersistentDataType.STRING);
             if (itemID == null)
             {
                 continue;
@@ -440,17 +390,6 @@ public class StatSheet
         return traits;
     }
 
-    public void RemoveTraits(Race race)
-    {
-        // Get the Traits that come from the race
-        List<Trait> traits = race.traits;
-        // Add the on add effects to the player
-        for (Trait trait : traits)
-        {
-            trait.OnRemoveTraitBuff(GetPlayer());
-        }
-    }
-
     public void RemoveClassTraits()
     {
         // remove the traits from the player
@@ -463,27 +402,27 @@ public class StatSheet
     public void UpdateInputSequence(Action action)
     {
         Player player = GetPlayer();
-        player.getPersistentDataContainer().set(new NamespacedKey(main, "input_sequence_reset_delay"), PersistentDataType.INTEGER, 50); // TODO make use a tick in the config file
+        player.getPersistentDataContainer().set(new NamespacedKey(Main.GetInstance(), "input_sequence_reset_delay"), PersistentDataType.INTEGER, 50); // TODO make use a tick in the config file
 
         // if the click was a left click
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING) + "0");
+            player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING) + "0");
         }
         // if the click was a right click
         else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING) + "1");
+            player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, player.getPersistentDataContainer().get(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING) + "1");
         }
 
         // get the players action bar data
-        String inputSequence = player.getPersistentDataContainer().get(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING);
-        int mana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER);
-        int maxMana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER);
+        String inputSequence = player.getPersistentDataContainer().get(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING);
+        int mana = player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER);
+        int maxMana = player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER);
 
         // create the action bar
-        TextComponent actionBar = new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +
-                main.statSheetManager.GenerateManaActionBar(mana, maxMana));
+        TextComponent actionBar = new TextComponent(Main.GetInstance().statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +
+                Main.GetInstance().statSheetManager.GenerateManaActionBar(mana, maxMana));
 
         player.sendMessage(ChatMessageType.ACTION_BAR, actionBar);
 
@@ -505,175 +444,146 @@ public class StatSheet
                     activeTrait.OnInputSequence(player);
 
                     // reset the input sequence
-                    player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
-                            main.statSheetManager.GenerateManaActionBar(mana, maxMana)));
-                    player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+                    player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Main.GetInstance().statSheetManager.GenerateInputSequenceActionBar("", ChatColor.GREEN) + ChatColor.GRAY.toString() + "    |    " +
+                            Main.GetInstance().statSheetManager.GenerateManaActionBar(mana, maxMana)));
+                    player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, "");
                     return;
                 }
             }
         }
 
         // if none of the traits have the same input sequence as the players input sequence
-        player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+        player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, "");
 
     }
 
-    public void SetClassPersistent(String playableClass)
+    public void SetClass(PlayableClass newPlayableClass)
     {
-        // the player
-        Player player = GetPlayer();
-
-        // Find the parent race script
-        PlayableClass classOfClass = main.statSheetManager.FindClass(playableClass);
-
         // if there isn't a parent race then end the function and throw an error
-        if (classOfClass == null)
+        if (newPlayableClass == null)
         {
-            System.out.println(ChatColor.RED.toString() + "ERROR: invalid class. " + classOfClass);
+            GetPlayer().getPersistentDataContainer().remove(MyNamespaces.CLASS.GetNamespacedKey());
             return;
         }
 
         // Set the class
-        player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING, playableClass);
+        GetPlayer().getPersistentDataContainer().set(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING, newPlayableClass.name);
     }
 
-    public void SetRacePersistent(String subrace, String parentRace)
+    public void SetRace(Race newSubrace, Race newRace)
     {
         // the player
         Player player = GetPlayer();
-
-        // Find the parent race script
-        Race raceOfParent = main.statSheetManager.FindRace(parentRace);
 
         // if there isn't a parent race then end the function and throw an error
-        if (raceOfParent == null)
+        if (newRace == null)
         {
-            System.out.println(ChatColor.RED.toString() + "ERROR: invalid parent race. " + parentRace);
-            return;
+            GetPlayer().getPersistentDataContainer().remove(MyNamespaces.RACE.GetNamespacedKey());
         }
+        else
+        {
+            // Run the on gain traits for all of the traits in the race
+            GetPlayer().getPersistentDataContainer().set(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING, newRace.name);
 
-        // Set the race
-        player.getPersistentDataContainer().set(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING, parentRace);
-        AddTraits(raceOfParent);
+            newRace.GainTraits(player);
 
-        // If there is a subrace
-        if (subrace != null) {
-            // Find the subrace script
-            Race raceOfSubrace = main.statSheetManager.FindRace(subrace);
+            // If there is a subrace
+            if (newSubrace != null)
+            {
+                // Run the on gain traits for all of the traits in the subrace
+                GetPlayer().getPersistentDataContainer().set(MyNamespaces.SUBRACE.GetNamespacedKey(), PersistentDataType.STRING, newSubrace.name);
 
-            // if there isn't a subrace then end the function and throw an error
-            if (raceOfSubrace == null) {
-                System.out.println(ChatColor.RED.toString() + "ERROR: invalid subrace. " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING));
-                return;
+                newSubrace.GainTraits(player);
             }
-
-            // Set the subrace
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING, subrace);
-            AddTraits(raceOfSubrace);
+            else
+            {
+                GetPlayer().getPersistentDataContainer().remove(MyNamespaces.SUBRACE.GetNamespacedKey());
+            }
         }
     }
 
-    public void ResetRacePersistent()
+    public void ResetRace()
     {
-        // the player
-        Player player = GetPlayer();
+        Race subrace = GetSubrace();
 
-        // if the player has a race persistent
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
+        // if the player has a race
+        if (GetRace() != null)
         {
-            // Find the parent race script
-            Race raceOfParent = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING));
-
-            // if there isn't a parent race then end the function and throw an error
-            if (raceOfParent == null) {
-                System.out.println(ChatColor.RED.toString() + "ERROR: invalid parent race");
-                return;
-            }
-
             // if the player has a subrace persistent
-            if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING))
+            if (subrace != null)
             {
-                // Find the subrace script
-                Race raceOfSubrace = main.statSheetManager.FindRace(player.getPersistentDataContainer().get(NamespaceDefinitions.GetSubraceKey(), PersistentDataType.STRING));
+                // Reset the subrace
+                GetSubrace().LoseTraits(GetPlayer());
 
-                // if there isn't a subrace then end the function and throw an error
-                if (raceOfSubrace == null) {
-                    System.out.println(ChatColor.RED.toString() + "ERROR: invalid subrace");
-                }
-                else
-                {
-                    // Reset the subrace
-                    player.getPersistentDataContainer().remove(NamespaceDefinitions.GetSubraceKey());
-                    RemoveTraits(raceOfSubrace);
-                }
+                subrace = null;
             }
 
             // Reset the race
-            player.getPersistentDataContainer().remove(NamespaceDefinitions.GetRaceKey());
-            RemoveTraits(raceOfParent);
+            GetRace().LoseTraits(GetPlayer());
+
+            SetRace(subrace, null);
         }
     }
 
-    public void ResetClassPersistent()
+    public void ResetClass()
     {
-        // the player
-        Player player = GetPlayer();
-
-        // if the player has a class persistent
-        if (player.getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING))
+        // if the player has a class
+        if (GetClass() != null)
         {
-            // Find the class script
-            PlayableClass playableClass = main.statSheetManager.FindClass(player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING));
-
-            // if there isn't a class then end the function and throw an error
-            if (playableClass == null)
-            {
-                System.out.println(ChatColor.RED.toString() + "ERROR: invalid class");
-                return;
-            }
-
             // Reset the class
             RemoveClassTraits();
-            player.getPersistentDataContainer().remove(NamespaceDefinitions.GetClassKey());
 
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING, "");
+            SetClass(null);
+
+            player.getPersistentDataContainer().set(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING, "");
 
             // clear the deactivated nodes
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
+            player.getPersistentDataContainer().set(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING, "");
         }
     }
 
-    public void GiveXP(int value)
+    public void GiveXP(int value, boolean shouldShare)
     {
-        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER));
-        int currentXp = GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER);
-
         Player player = GetPlayer();
 
-        // check if the players xp is more or equal to the xp needed to level up
-        if (currentXp + value >= levelXpNeeded)
+        // if the player should share the xp with party members
+        if (shouldShare)
         {
-            // level up message
-            player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER)+1));
+            List<Player> playersToBeSharedWith = Main.GetInstance().partyManager.GetPlayersToShareClassXpWith(player);
 
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER) + 1);
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, 0);
-
-            // give the overflow xp back
-            GiveXP((currentXp + value) - levelXpNeeded);
+            for (Player playerToBeSharedWith : playersToBeSharedWith)
+            {
+                Main.GetInstance().statSheetManager.FindStatSheetByPlayer(playerToBeSharedWith).GiveXP(value/playersToBeSharedWith.size(), false);
+            }
         }
-        // if not
         else
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER) + value);
+            int levelXpNeeded = Main.GetInstance().statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER));
+            int currentXp = GetPlayer().getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER);
+
+            // check if the players xp is more or equal to the xp needed to level up
+            if (currentXp + value >= levelXpNeeded)
+            {
+                // level up message
+                player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER)+1));
+
+                player.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER) + 1);
+                player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, 0);
+
+                // give the overflow xp back
+                GiveXP((currentXp + value) - levelXpNeeded, false);
+            }
+            // if not
+            else
+            {
+                player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER) + value);
+            }
         }
-
-
     }
 
     public void SetXP(int value)
     {
-        int levelXpNeeded = main.statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER));
+        int levelXpNeeded = Main.GetInstance().statSheetManager.GetLevelXPRequirements(GetPlayer().getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER));
 
         Player player = GetPlayer();
 
@@ -681,18 +591,18 @@ public class StatSheet
         if (value >= levelXpNeeded)
         {
             // level up message
-            player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER)+1));
+            player.sendMessage(ChatColor.GREEN + "You leveled up! " + player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER) + " -> " + (player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER)+1));
 
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER) + 1);
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, 0);
+            player.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER) + 1);
+            player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, 0);
 
             // give the overflow xp back
-            GiveXP(value - levelXpNeeded);
+            GiveXP(value - levelXpNeeded, false);
         }
         // if not
         else
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, value);
+            player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, value);
         }
 
 
@@ -700,18 +610,17 @@ public class StatSheet
 
     public int GetAvailableTraitPoints()
     {
-        int traitPoints = GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER);
+        int traitPoints = GetPlayer().getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER);
 
-        List<String> selectedTraits = Arrays.stream(GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
-        PlayableClass playableClass = main.statSheetManager.FindClass(GetPlayer().getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING));
+        List<String> selectedTraits = Arrays.stream(GetPlayer().getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING).split("_")).toList();
 
         // if the player has a class
-        if (playableClass != null)
+        if (GetClass() != null)
         {
             // get the traits from said nodes
             for (String traitName : selectedTraits)
             {
-                for (Node node : playableClass.traitTree.nodes)
+                for (Node node : GetClass().traitTree.nodes)
                 {
                     for (Trait trait : node.traits)
                     {
@@ -726,4 +635,6 @@ public class StatSheet
 
         return traitPoints;
     }
+
+
 }

@@ -33,7 +33,7 @@ public class SneakAttack extends Trait
                 living.removePotionEffect(PotionEffectType.INVISIBILITY);
                 e.setDamage(e.getDamage()*damageMod);
 
-                RPGparticles.SpawnBlockParticle(e.getDamager().getWorld(), (int) (3*e.getDamage()), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0,0,0), BlockType.REDSTONE_BLOCK.createBlockData(), 1f);
+                RPGparticles.SpawnBlockParticle((int) (3*e.getDamage()), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0,0,0), BlockType.REDSTONE_BLOCK.createBlockData(), 1f);
             }
         }
     }

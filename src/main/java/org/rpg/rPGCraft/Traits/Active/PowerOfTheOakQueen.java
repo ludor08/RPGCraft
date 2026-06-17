@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -107,7 +108,7 @@ public class PowerOfTheOakQueen extends ActiveTrait
         }
 
         player.sendMessage(ChatColor.DARK_RED + "You must have Flash Of Oak active to use this trait.");
-        player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)+150);
+        player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER,player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)+150);
     }
 
     @Override

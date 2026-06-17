@@ -3,6 +3,8 @@ package org.rpg.rPGCraft.Traits;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,8 +12,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public abstract class Trait
         traitIconMeta.setDisplayName(name);
 
         // add the trait
-        traitIconMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetTraitKey(), PersistentDataType.STRING, name);
+        traitIconMeta.getPersistentDataContainer().set(MyNamespaces.TRAIT.GetNamespacedKey(), PersistentDataType.STRING, name);
 
         // add the description
         List<String> lore = GetTraitLore();
@@ -141,6 +143,11 @@ public abstract class Trait
     public void OnJump(PlayerJumpEvent e)
     {
 
+    }
+
+    public int OnHealWithTrait(Entity healer, LivingEntity target, int cleanValue, int modifiedValue, EntityRegainHealthEvent.RegainReason regainReason)
+    {
+        return modifiedValue;
     }
 
     public void OnPlayerItemConsume(PlayerItemConsumeEvent e)

@@ -36,40 +36,42 @@ public class PartyTab implements TabCompleter
         switch (args.length)
         {
             case 1:
-                return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "invite", "accept", "leave", "permissions"), new ArrayList<>());
+                return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "invite", "accept", "leave", "permissions", "friendlyFire", "shouldShareClassXP"), new ArrayList<>());
 
             case 2:
-                if (args[0].equals("invite"))
+                switch (args[0])
                 {
-                    List<String> playerNames = new ArrayList<>();
-                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) playerNames.add(onlinePlayer.getName());
+                    case "invite":
+                        List<String> playerToInvite = new ArrayList<>();
+                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) playerToInvite.add(onlinePlayer.getName());
 
-                    return StringUtil.copyPartialMatches(args[1], playerNames, new ArrayList<>());
-                }
-                else if (args[0].equals("leave"))
-                {
-                    return StringUtil.copyPartialMatches(args[1], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
-                }
-                else if (args[0].equals("permissions"))
-                {
-                    List<String> playerNames = new ArrayList<>();
-                    for (Player onlinePlayer : Bukkit.getOnlinePlayers())
-                    {
-                        if (main.partyManager.IsInTheSameParty(player,onlinePlayer)) playerNames.add(onlinePlayer.getName());
-                    }
+                        return StringUtil.copyPartialMatches(args[1], playerToInvite, new ArrayList<>());
 
-                    return StringUtil.copyPartialMatches(args[1], playerNames, new ArrayList<>());
+                    case "leave", "friendlyFire", "shouldShareClassXP":
+                        return StringUtil.copyPartialMatches(args[1], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
+
+                    case "permissions":
+                        List<String> playerToSetPermissions = new ArrayList<>();
+                        for (Player onlinePlayer : Bukkit.getOnlinePlayers())
+                        {
+                            if (main.partyManager.IsInTheSameParty(player,onlinePlayer)) playerToSetPermissions.add(onlinePlayer.getName());
+                        }
+
+                        return StringUtil.copyPartialMatches(args[1], playerToSetPermissions, new ArrayList<>());
                 }
                 break;
 
             case 3:
-                if (args[0].equals("invite"))
+                switch (args[0])
                 {
-                    return StringUtil.copyPartialMatches(args[2], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
-                }
-                else if (args[0].equals("permissions"))
-                {
-                    return StringUtil.copyPartialMatches(args[2], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
+                    case "invite":
+                        return StringUtil.copyPartialMatches(args[2], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
+
+                    case "friendlyFire", "shouldShareClassXP":
+                        return StringUtil.copyPartialMatches(args[2], Arrays.asList("true", "false"), new ArrayList<>());
+
+                    case "permissions":
+                        return StringUtil.copyPartialMatches(args[2], main.partyManager.GetPartiesWithPlayer(player), new ArrayList<>());
                 }
                 break;
 

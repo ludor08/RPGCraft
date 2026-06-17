@@ -19,7 +19,7 @@ public class SkeletonWarrior extends RPGCustomEntity
 {
     public SkeletonWarrior()
     {
-        super(EntityType.SKELETON, "Skeleton Warrior", "skeleton_warrior", true, -1, -1, true, new BaseLegendaryComponent(), null);
+        super(EntityType.SKELETON, "Skeleton Warrior", "skeleton_warrior", true, -1, -1, true, new BaseLegendaryComponent(), null, null);
     }
 
     @Override

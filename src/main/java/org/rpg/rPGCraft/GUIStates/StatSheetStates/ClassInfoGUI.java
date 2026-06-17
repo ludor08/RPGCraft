@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -25,10 +26,7 @@ public class ClassInfoGUI extends GUIState
     {
         super(owner, "class_info", 54, lastState);
 
-        if (GetOwner().getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey()))
-        {
-            playableClass = Main.GetInstance().statSheetManager.FindClass(GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING));
-        }
+        playableClass = Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).GetClass();
     }
 
     @Override
@@ -115,7 +113,7 @@ public class ClassInfoGUI extends GUIState
         if (notAtTheTop)
         {
             ItemStack upButton = MenuManager.InitializeItemStack(Material.ARROW, "Up");
-            MenuManager.AddPersistentDataContainerToItemStack(upButton, NamespaceDefinitions.GetUIKey(), "up");
+            MenuManager.AddPersistentDataContainerToItemStack(upButton, MyNamespaces.UI.GetNamespacedKey(), "up");
 
             inventory.setItem(MenuManager.FULL_ROW_SIZE * 6 - 1, upButton);
         }
@@ -125,14 +123,14 @@ public class ClassInfoGUI extends GUIState
         {
             // add the up item to the bottom row and 7 to the side
             ItemStack downButton = MenuManager.InitializeItemStack(Material.ARROW, "Down");
-            MenuManager.AddPersistentDataContainerToItemStack(downButton, NamespaceDefinitions.GetUIKey(), "down");
+            MenuManager.AddPersistentDataContainerToItemStack(downButton, MyNamespaces.UI.GetNamespacedKey(), "down");
 
             inventory.setItem(MenuManager.FULL_ROW_SIZE * 6 - 2, downButton);
         }
 
         // get the info icon
         ItemStack infoIcon = MenuManager.InitializeItemStack(Material.NETHER_STAR, ChatColor.BOLD.toString() + ChatColor.RED + "Class Info",
-                List.of("Class : " + playableClass.name, "Level : " + GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER), "Available trait points : " + Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).GetAvailableTraitPoints()));
+                List.of("Class : " + playableClass.name, "Level : " + GetOwner().getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER), "Available trait points : " + Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).GetAvailableTraitPoints()));
 
         // add the info
         inventory.setItem((int) (inventory.getSize()-(MenuManager.FULL_ROW_SIZE*0.5)), infoIcon);
@@ -145,12 +143,12 @@ public class ClassInfoGUI extends GUIState
         e.setCancelled(true);
 
         // if a UI button was pressed
-        if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey()))
+        if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.UI.GetNamespacedKey()))
         {
             // play a button click sound
             GetOwner().playSound(GetOwner().getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, 1);
 
-            switch (e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING))
+            switch (e.getCurrentItem().getPersistentDataContainer().get(MyNamespaces.UI.GetNamespacedKey(), PersistentDataType.STRING))
             {
                 case "up":
                     yOffset++;
@@ -165,7 +163,7 @@ public class ClassInfoGUI extends GUIState
         }
 
         // if a trait node wasn't pressed
-        if (!e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(NamespaceDefinitions.GetTraitKey(), PersistentDataType.STRING))
+        if (!e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(MyNamespaces.TRAIT.GetNamespacedKey(), PersistentDataType.STRING))
         {
             return;
         }
@@ -191,20 +189,20 @@ public class ClassInfoGUI extends GUIState
                 // if this trait is turned off
                 if (!node.IsNodeEnabled(GetOwner()))
                 {
-                    String newDeactivatedNodes = GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING);
+                    String newDeactivatedNodes = GetOwner().getPersistentDataContainer().get(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING);
                     newDeactivatedNodes = newDeactivatedNodes.replace("_" + nodeTrait.name_id + node.GetID(), "");
 
                     // activate this trait
-                    GetOwner().getPersistentDataContainer().set(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING, newDeactivatedNodes);
+                    GetOwner().getPersistentDataContainer().set(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING, newDeactivatedNodes);
                     nodeTrait.OnGainTraitBuff(GetOwner());
                 }
                 else
                 {
-                    String newDeactivatedNodes = GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING);
+                    String newDeactivatedNodes = GetOwner().getPersistentDataContainer().get(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING);
                     newDeactivatedNodes = newDeactivatedNodes + "_" + nodeTrait.name_id + node.GetID();
 
                     // deactivate this trait
-                    GetOwner().getPersistentDataContainer().set(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING,newDeactivatedNodes);
+                    GetOwner().getPersistentDataContainer().set(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING,newDeactivatedNodes);
                     nodeTrait.OnRemoveTraitBuff(GetOwner());
                 }
 
@@ -227,12 +225,12 @@ public class ClassInfoGUI extends GUIState
                         // remove the old trait
                         node.GetTraits().get(node.GetNodeLevel(GetOwner()) - 1).OnRemoveTraitBuff(GetOwner());
                         GetOwner().getPersistentDataContainer().set(
-                                NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).replace("_" + node.GetTraits().get(node.GetNodeLevel(GetOwner()) - 1).name_id + node.GetID(), ""));
+                                MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING).replace("_" + node.GetTraits().get(node.GetNodeLevel(GetOwner()) - 1).name_id + node.GetID(), ""));
 
                         // add the new trait
                         node.GetTraits().get(node.GetNodeLevel(GetOwner())).OnGainTraitBuff(GetOwner());
                         GetOwner().getPersistentDataContainer().set(
-                                NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.GetTraits().get(node.GetNodeLevel(GetOwner())).name_id + node.GetID());
+                                MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING) + "_" + node.GetTraits().get(node.GetNodeLevel(GetOwner())).name_id + node.GetID());
 
                     }
                 }
@@ -263,7 +261,7 @@ public class ClassInfoGUI extends GUIState
                     // add the new trait
                     node.GetTraits().getFirst().OnGainTraitBuff(GetOwner());
                     GetOwner().getPersistentDataContainer().set(
-                            NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING) + "_" + node.GetTraits().getFirst().name_id + node.GetID());
+                            MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING, GetOwner().getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING) + "_" + node.GetTraits().getFirst().name_id + node.GetID());
 
                     // play a button click sound
                     GetOwner().playSound(GetOwner().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5f, 1);

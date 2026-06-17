@@ -4,9 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.Arrays;
@@ -87,7 +87,7 @@ public class Node
         ItemStack nodeIcon = MenuManager.InitializeItemStack(material, name, lore);
 
         // add the trait
-        MenuManager.AddPersistentDataContainerToItemStack(nodeIcon, NamespaceDefinitions.GetTraitKey(), traits.get(usedLevel).name_id + id);
+        MenuManager.AddPersistentDataContainerToItemStack(nodeIcon, MyNamespaces.TRAIT.GetNamespacedKey(), traits.get(usedLevel).name_id + id);
 
         // return the icon
         return nodeIcon;
@@ -111,7 +111,7 @@ public class Node
     public boolean IsNodeEnabled(Player player)
     {
         // get the deactivated
-        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING).split("_")).toList();
+        List<String> deactivatedNodes = Arrays.stream(player.getPersistentDataContainer().get(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING).split("_")).toList();
 
         // go through all traits in the progression in the node
         for (Trait trait : traits)
@@ -128,7 +128,7 @@ public class Node
     public boolean IsNodeOwned(Player player)
     {
         // get the owned traits
-        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING).split("_")).toList();
 
         // get the traits in the TreeProgression
         for (String traitName : treeProgression)
@@ -155,7 +155,7 @@ public class Node
         }
 
         // get the owned traits
-        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING).split("_")).toList();
+        List<String> treeProgression = Arrays.stream(player.getPersistentDataContainer().get(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING).split("_")).toList();
 
         // check if the node trait is in the treeProgression
         for (String selectedTrait : treeProgression)

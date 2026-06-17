@@ -60,7 +60,7 @@ public class Dash extends ActiveTrait
         player.teleport(location);
         for (Entity entity : entities)
         {
-            if (main.partyManager.IsInTheSameParty(player, entity))
+            if (main.partyManager.ShouldHitBeStoppedByParty(player, entity))
             {
                 continue;
             }

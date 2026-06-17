@@ -1,22 +1,17 @@
 package org.rpg.rPGCraft;
 
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.joml.Vector2d;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
-import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.*;
 
@@ -50,7 +45,7 @@ public class MenuManager implements Listener
     public static ItemStack GetBackButton()
     {
         ItemStack backButton = InitializeItemStack(Material.GUNPOWDER, ChatColor.GRAY.toString() + ChatColor.BOLD.toString() + "Back");
-        AddPersistentDataContainerToItemStack(backButton, NamespaceDefinitions.GetUIKey(), "back");
+        AddPersistentDataContainerToItemStack(backButton, MyNamespaces.UI.GetNamespacedKey(), "back");
 
         return backButton;
     }
@@ -58,7 +53,7 @@ public class MenuManager implements Listener
     public static ItemStack GetConfirmButton()
     {
         ItemStack confirmButton = InitializeItemStack(Material.LIME_CONCRETE, ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Confirm");
-        AddPersistentDataContainerToItemStack(confirmButton, NamespaceDefinitions.GetUIKey(), "confirm");
+        AddPersistentDataContainerToItemStack(confirmButton, MyNamespaces.UI.GetNamespacedKey(), "confirm");
 
         return confirmButton;
     }
@@ -76,8 +71,8 @@ public class MenuManager implements Listener
         if (e.getWhoClicked() instanceof Player player && playerGUIStateHashMap.containsKey(player))
         {
             // if the player clicked a back button
-            if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey())
-                && e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING).equals("back"))
+            if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.UI.GetNamespacedKey())
+                && e.getCurrentItem().getPersistentDataContainer().get(MyNamespaces.UI.GetNamespacedKey(), PersistentDataType.STRING).equals("back"))
             {
                 playerGUIStateHashMap.get(player).Back();
             }

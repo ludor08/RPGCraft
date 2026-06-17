@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.Commands.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameManager implements Listener {
 
@@ -46,7 +46,7 @@ public class GameManager implements Listener {
         main.getCommand("rpgspawn").setExecutor(new RPGSpawnCommand());
         main.getCommand("rpgspawn").setTabCompleter(new RPGSpawnTab());
 
-        main.getCommand("test_add_structure").setExecutor(new RPGTestStructureCommand());
+        main.getCommand("test").setExecutor(new RPGTestCommand());
 
         // set up the OnTick scheduler
         //AtomicInteger tick = new AtomicInteger();
@@ -62,9 +62,9 @@ public class GameManager implements Listener {
         for (Player player : Bukkit.getOnlinePlayers())
         {
             // show the players input sequence and mana
-            String inputSequence = player.getPersistentDataContainer().get(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING);
-            int mana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER);
-            int maxMana = player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER);
+            String inputSequence = player.getPersistentDataContainer().get(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING);
+            int mana = player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER);
+            int maxMana = player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER);
 
             TextComponent actionBar = new TextComponent(main.statSheetManager.GenerateInputSequenceActionBar(inputSequence, ChatColor.GREEN) + ChatColor.GRAY + "    |    " +
                     main.statSheetManager.GenerateManaActionBar(mana, maxMana));
@@ -84,12 +84,6 @@ public class GameManager implements Listener {
     {
         Player player = e.getPlayer();
 
-        // if there is no stat sheet assigned to a player when they join
-        if (main.statSheetManager.FindStatSheetByPlayer(player) == null)
-        {
-            main.statSheetManager.AddStatSheet(new StatSheet(player.getUniqueId()));
-        }
-
         // Check the persistents and add them if needed
         CheckPersistent(player);
 
@@ -101,67 +95,65 @@ public class GameManager implements Listener {
     private void CheckPersistent(Player player)
     {
         // if the player has not yet chosen a race when they join the game, give them a prompt to choose a race
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING))
         {
             //player.openInventory(main.menuManager.CreateRaceMenu(player, main.GetChooseAbleRaces(), 1, "Select a Race!"));
-            Bukkit.getLogger().warning("Race persistent not being checked.");
         }
 
         // if the player has not yet chosen a class but has chosen a race when they join the game, give them a prompt to choose a class
-        else if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING))
+        else if (!player.getPersistentDataContainer().has(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING))
         {
             //player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
-            Bukkit.getLogger().warning("Class persistent not being checked.");
         }
 
         // if the player doesn't have a level persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER))
         {
             // give them one
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER, 1);
+            player.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER, 1);
         }
 
         // if the player doesn't have a level persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER))
         {
             // give them one
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, 0);
+            player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, 0);
         }
 
         // if the player doesn't have a tree progression persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetTreeProgressionKey(), PersistentDataType.STRING, "");
+            player.getPersistentDataContainer().set(MyNamespaces.TREE_PROGRESSION.GetNamespacedKey(), PersistentDataType.STRING, "");
         }
 
         // if the player doesn't have a tree progression persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetDeactivatedNodesKey(), PersistentDataType.STRING, "");
+            player.getPersistentDataContainer().set(MyNamespaces.DEACTIVATED_NODES.GetNamespacedKey(), PersistentDataType.STRING, "");
         }
 
         // if the player doesn't have an active trait input persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetActiveTraitInputKey(), PersistentDataType.STRING, "");
+            player.getPersistentDataContainer().set(MyNamespaces.ACTIVE_TRAIT_INPUT.GetNamespacedKey(), PersistentDataType.STRING, "");
         }
 
         // if the player doesn't have a mana persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, 100);
+            player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, 100);
         }
 
         // if the player doesn't have a mana recharge speed persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.MANA_RECHARGE_SPEED.GetNamespacedKey(), PersistentDataType.INTEGER))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaRechargeSpeedKey(), PersistentDataType.INTEGER, 1);
+            player.getPersistentDataContainer().set(MyNamespaces.MANA_RECHARGE_SPEED.GetNamespacedKey(), PersistentDataType.INTEGER, 1);
         }
 
         // if the player doesn't have a max mana persistent
-        if (!player.getPersistentDataContainer().has(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER))
+        if (!player.getPersistentDataContainer().has(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER))
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER, 100);
+            player.getPersistentDataContainer().set(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER, 100);
         }
     }
 

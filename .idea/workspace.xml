@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="rpgcraft:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c42a6d18-309f-4509-b2ce-c5ad18a66ff2" name="Changes" comment="changed the biome of the boss room world to the_void">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/AnimationFrame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animations/TestBlackSquare.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animations/TestBlackSquareTwo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animations/UnTestBlackSquare.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animations/VoidBombExplode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Animation/Animations/ZombieKingIdle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/RPGTestCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/AnimationDefinitions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/EntityStates.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/MyNamespaces.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/Attacks/RepellingWaveState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/Attacks/ToxicCloudState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/Attacks/VoidBombDetonateState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/Attacks/VoidBombFallingState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/DiscardedSentientArmament/DiscardedSentientArmamentChasingState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/DiscardedSentientArmament/DiscardedSentientArmamentIdleState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/UnboundZombieKingIdleState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/UnboundZombieKingSummonZombiesState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/UnboundZombieKingToxinRainState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/WeakenZombieKingEnhanceZombiesState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/WeakenZombieKingIdleState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/WeakenZombieKingShootAtPlayerStartState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/WeakenZombieKingShootAtPlayerState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/WeakenZombieKingSummonZombiesState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKing/ZombieKingSummonState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/DiscardedSentientArmament.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingFootman.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingRepellingWaveEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingToxicCloudEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingVoidBombEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombiePeasant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Structures/ZombieKingArena.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/BoostedHealing_power.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/NecromanticTitle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/partyRules.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/structures/zombie_king_arena.nbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpgcraft.iml" beforeDir="false" afterPath="$PROJECT_DIR$/rpgcraft.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Classes/Rogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Classes/Rogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ClassLevelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ClassLevelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ClassXPCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ClassXPCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/PartyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/PartyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/PartyTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/PartyTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/RPGTestStructureCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ResetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Commands/ResetCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/CustomItemComponents/CustomItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/CustomItemComponents/CustomItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/CustomItemComponents/ItemAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/CustomItemComponents/ItemAttribute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/EntityDefinitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/EntityDefinitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/StateDefinitions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/StructureDefinitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/StructureDefinitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/TraitDefinitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Definitions/TraitDefinitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/EntityStates/ZombieKingSummonState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/BaseLegendaryComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/BaseLegendaryComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/EnderDragonLegendaryComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/EnderDragonLegendaryComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/WitherLegendaryComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/WitherLegendaryComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/ZombieKingLegendaryComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/LegendaryComponents/ZombieKingLegendaryComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/SkeletonWarrior.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/SkeletonWarrior.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieBrute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieBrute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingSummonEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingSummonEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGCustomEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Entities/RPGEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmClassGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmClassGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmSubraceGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmSubraceGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectClassGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectClassGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectRaceGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectRaceGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectSubraceGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/ResetStates/SelectSubraceGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/ClassInfoGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/ClassInfoGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/MainStatSheetGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/MainStatSheetGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/RaceInfoGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/RaceInfoGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/ShownStatsSheetGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/ShownStatsSheetGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/SubraceInfoGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GUIStates/StatSheetStates/SubraceInfoGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/ItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/ItemManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/MenuManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/MenuManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/NamespaceDefinitions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/PartyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/PartyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGparticles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGparticles.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGraycast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGraycast.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGutils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/RPGutils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Race.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/StatSheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/StatSheet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/StatSheetManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/StatSheetManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Structures/SpawnPlatformStructure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/AuraOfSiphoning.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/AuraOfSiphoning.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/BreathOfTheDragons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/BreathOfTheDragons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/Dash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/Dash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/GiantsLeap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/GiantsLeap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/GrapplingHookArrow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/GrapplingHookArrow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/OathOfRage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/OathOfRage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/PowerOfTheOakQueen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/PowerOfTheOakQueen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SmokeBomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SmokeBomb.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SpinAttack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SpinAttack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SteadyAim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Active/SteadyAim.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/ActiveTrait.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/ActiveTrait.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/AntiGravityArrow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/AntiGravityArrow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/BoostedHealing_speed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/BoostedHealing_speed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Charge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Charge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Cleve.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Cleve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/CorrectiveWindResistance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/CorrectiveWindResistance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Headshot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Headshot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/ManaRegainSpeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/ManaRegainSpeed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Pack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Pack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Pounce.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Pounce.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/RebukeOfTheFlame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/RebukeOfTheFlame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Ricochet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Ricochet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/SneakAttack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/SneakAttack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/ToxicSpores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/ToxicSpores.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/WindShot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/WindShot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Wings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Passive/Wings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Trait.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/rpg/rPGCraft/Traits/Trait.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/CustomItems.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/CustomItems.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/parties.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/parties.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/CustomItems.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/CustomItems.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Classes/Rogue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Classes/Rogue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/CustomItemComponents/CustomItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/CustomItemComponents/CustomItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/CustomItemComponents/ItemAttribute.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/CustomItemComponents/ItemAttribute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/EntityDefinitions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/EntityDefinitions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/StateDefinitions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/StructureDefinitions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/StructureDefinitions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/TraitDefinitions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Definitions/TraitDefinitions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/EntityState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/EntityState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/EntityStates/ZombieKingSummonState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/BaseLegendaryComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/BaseLegendaryComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/EnderDragonLegendaryComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/EnderDragonLegendaryComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/WitherLegendaryComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/WitherLegendaryComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/ZombieKingLegendaryComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/LegendaryComponents/ZombieKingLegendaryComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/SkeletonWarrior.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/SkeletonWarrior.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieBrute.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieBrute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKing.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKing.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingSummonEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntities/ZombieKingSummonEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGCustomEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Entities/RPGEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/EntityManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/EntityManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmClassGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmClassGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmSubraceGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/ConfirmSubraceGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectClassGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectClassGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectRaceGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectRaceGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectSubraceGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/ResetStates/SelectSubraceGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/ClassInfoGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/ClassInfoGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/MainStatSheetGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/MainStatSheetGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/RaceInfoGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/RaceInfoGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/ShownStatsSheetGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/ShownStatsSheetGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/SubraceInfoGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GUIStates/StatSheetStates/SubraceInfoGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GameManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/GameManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/ItemManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/ItemManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/MenuManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/MenuManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/NamespaceDefinitions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Node.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Node.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/PartyManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/PartyManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGparticles.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGparticles.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGraycast.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGraycast.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGutils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/RPGutils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Race.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Race.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/StatSheet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/StatSheet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/StatSheetManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/StatSheetManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Structures/TestStructure.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Structures/TestStructure.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/AuraOfSiphoning.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/AuraOfSiphoning.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/BreathOfTheDragons.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/BreathOfTheDragons.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/GiantsLeap.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/GiantsLeap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/GrapplingHookArrow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/GrapplingHookArrow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/OathOfRage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/OathOfRage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/PowerOfTheOakQueen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/PowerOfTheOakQueen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SmokeBomb.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SmokeBomb.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SpinAttack.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SpinAttack.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SteadyAim.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Active/SteadyAim.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/ActiveTrait.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/ActiveTrait.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/CostModifier/PoisonKunai.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/CostModifier/PoisonKunai.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/CostModifier/PowerfulKunai.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/CostModifier/PowerfulKunai.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/AntiGravityArrow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/AntiGravityArrow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/AssassinsMixture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/AssassinsMixture.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/BoostedHealing_speed.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/BoostedHealing_speed.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/BullCharge.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/BullCharge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Charge.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Charge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/CorrectiveWindResistance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/CorrectiveWindResistance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/GreaterCapacity_2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Headshot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Headshot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/LingeringRage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/LingeringRage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/ManaRegainSpeed.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/ManaRegainSpeed.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Pounce.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Pounce.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/RebukeOfTheFlame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/RebukeOfTheFlame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Ricochet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Ricochet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/SneakAttack.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/SneakAttack.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/ThickSkin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/ThickSkin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/WindShot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/WindShot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Wings.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Passive/Wings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Trait.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/Traits/Trait.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/WorldManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/WorldManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/WorldProperties/BossRoomWorldProperties.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/WorldProperties/BossRoomWorldProperties.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ClassLevelCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ClassLevelCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ClassXPCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ClassXPCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/PartyCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/PartyCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/RPGTestStructureCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ResetCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/rpg/rPGCraft/commands/ResetCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structures/test_ritual.gz" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Enum" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$/RPGCraft" source="main" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/RPGCraft" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ludor08&quot;
+  }
+}</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="b53cbfa3-72df-4970-b25a-8d6696d2ec8b" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ludor08/RPGCraft.git&quot;,
+    &quot;accountId&quot;: &quot;b53cbfa3-72df-4970-b25a-8d6696d2ec8b&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2xsmFwvFCBihiGNEiGUH20mtqyN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.rpgcraft [ca.bkaw:paper-nms-maven-plugin:1.4.10:init].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rache/IdeaProjects/RPGCraft/src/main/java/org/rpg/rPGCraft/commands&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Java&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.rpg.rPGCraft.Entities.EntityStates.ZombieKing" />
+      <recent name="org.rpg.rPGCraft.Entities.RPGCustomEntities" />
+      <recent name="org.rpg.rPGCraft.GUIStates" />
+      <recent name="org.rpg.rPGCraft" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rache\IdeaProjects\RPGCraft\src\main\java\org\rpg\rPGCraft\commands" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rache\IdeaProjects\RPGCraft\src\main\resources\structures" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.rpg.rPGCraft.Traits.Passive" />
+      <recent name="org.rpg.rPGCraft.Entities.EntityStates.Attacks" />
+      <recent name="org.rpg.rPGCraft.Entities.RPGCustomEntities" />
+      <recent name="org.rpg.rPGCraft.Entities.EntityStates.ZombieKing" />
+      <recent name="org.rpg.rPGCraft.Animation.Animations" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="mcdev-temp-root" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="mcdev-temp-root" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c42a6d18-309f-4509-b2ce-c5ad18a66ff2" name="Changes" comment="" />
+      <created>1748735062000</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748735062000</updated>
+    </task>
+    <task id="LOCAL-00237" summary="Sneak Attack &quot;Attacking while invisible and crouching will consume invisibility, but deal 150% more.&quot;">
+      <option name="closed" value="true" />
+      <created>1759996284727</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1759996284727</updated>
+    </task>
+    <task id="LOCAL-00238" summary="Rogue now has a trait tree that goes up to level 20.">
+      <option name="closed" value="true" />
+      <created>1759996338158</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1759996338158</updated>
+    </task>
+    <task id="LOCAL-00239" summary="Made Claws not increase all damage.">
+      <option name="closed" value="true" />
+      <created>1762157259263</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157259263</updated>
+    </task>
+    <task id="LOCAL-00240" summary="Fixed some of the wording in Lacerate.">
+      <option name="closed" value="true" />
+      <created>1762157362505</created>
+      <option name="number" value="00240" />
+      <option name="presentableId" value="LOCAL-00240" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157362505</updated>
+    </task>
+    <task id="LOCAL-00241" summary="Version 1.4-BETA -&gt; 1.5-BETA">
+      <option name="closed" value="true" />
+      <created>1762157420165</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157420165</updated>
+    </task>
+    <task id="LOCAL-00242" summary="Added make utility to RPGutils">
+      <option name="closed" value="true" />
+      <created>1762157587057</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157587057</updated>
+    </task>
+    <task id="LOCAL-00243" summary="Made Secret Technique increase the mana cost by 5 instead of decreasing it by 15.">
+      <option name="closed" value="true" />
+      <created>1762157792530</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157792530</updated>
+    </task>
+    <task id="LOCAL-00244" summary="Made SmokeBomb use AddToNamespacedKey">
+      <option name="closed" value="true" />
+      <created>1762157850619</created>
+      <option name="number" value="00244" />
+      <option name="presentableId" value="LOCAL-00244" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157850619</updated>
+    </task>
+    <task id="LOCAL-00245" summary="Added attackInputCanceledKey">
+      <option name="closed" value="true" />
+      <created>1762157945577</created>
+      <option name="number" value="00245" />
+      <option name="presentableId" value="LOCAL-00245" />
+      <option name="project" value="LOCAL" />
+      <updated>1762157945577</updated>
+    </task>
+    <task id="LOCAL-00246" summary="Berserker now has a trait tree that goes up to level 20.">
+      <option name="closed" value="true" />
+      <created>1762158180695</created>
+      <option name="number" value="00246" />
+      <option name="presentableId" value="LOCAL-00246" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158180695</updated>
+    </task>
+    <task id="LOCAL-00247" summary="Added some clarification to Dodge">
+      <option name="closed" value="true" />
+      <created>1762158286921</created>
+      <option name="number" value="00247" />
+      <option name="presentableId" value="LOCAL-00247" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158286921</updated>
+    </task>
+    <task id="LOCAL-00248" summary="Bloodlust Rage &quot;Adds a 10% life stealing effect while raging. Makes Oath of Rage cost 10 more mana.&quot;">
+      <option name="closed" value="true" />
+      <created>1762158398596</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158398596</updated>
+    </task>
+    <task id="LOCAL-00249" summary="Bull Charge &quot;Increases the speed mod from Charge and doubles Charge damage.&quot;">
+      <option name="closed" value="true" />
+      <created>1762158462502</created>
+      <option name="number" value="00249" />
+      <option name="presentableId" value="LOCAL-00249" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158462503</updated>
+    </task>
+    <task id="LOCAL-00250" summary="Charge &quot;After sprinting forward for 3 seconds, start charging dealing 2 damage to any entity that you run into and move 10% faster.&quot;">
+      <option name="closed" value="true" />
+      <created>1762158568358</created>
+      <option name="number" value="00250" />
+      <option name="presentableId" value="LOCAL-00250" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158568358</updated>
+    </task>
+    <task id="LOCAL-00251" summary="Cleve &quot;Swing your weapon with a powerful cleaving motion in front of you, hitting all entities in front of you.&quot;">
+      <option name="closed" value="true" />
+      <created>1762158888670</created>
+      <option name="number" value="00251" />
+      <option name="presentableId" value="LOCAL-00251" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158888670</updated>
+    </task>
+    <task id="LOCAL-00252" summary="Rage -&gt; OathOfRage &quot;Gain two more armor and boost your damage by 20% for 30 seconds&quot;">
+      <option name="closed" value="true" />
+      <created>1762158967205</created>
+      <option name="number" value="00252" />
+      <option name="presentableId" value="LOCAL-00252" />
+      <option name="project" value="LOCAL" />
+      <updated>1762158967205</updated>
+    </task>
+    <task id="LOCAL-00253" summary="Giants Leap &quot;Upon activating this trait you will leap forward.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159242108</created>
+      <option name="number" value="00253" />
+      <option name="presentableId" value="LOCAL-00253" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159242108</updated>
+    </task>
+    <task id="LOCAL-00254" summary="Giants Impact “Makes Giants Leap create an impact that deals half the fall damage you would have taken.”">
+      <option name="closed" value="true" />
+      <created>1762159300360</created>
+      <option name="number" value="00254" />
+      <option name="presentableId" value="LOCAL-00254" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159300360</updated>
+    </task>
+    <task id="LOCAL-00255" summary="Cleaving Impact &quot;Makes Giants Leap create an impact that deals damage based on the weapon in your main hand.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159393158</created>
+      <option name="number" value="00255" />
+      <option name="presentableId" value="LOCAL-00255" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159393158</updated>
+    </task>
+    <task id="LOCAL-00256" summary="Flame Charge &quot;Makes Flame Charge light enemies a flame.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159535798</created>
+      <option name="number" value="00256" />
+      <option name="presentableId" value="LOCAL-00256" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159535798</updated>
+    </task>
+    <task id="LOCAL-00257" summary="Flame Charge &quot;Makes Flame Charge light enemies a flame.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159635617</created>
+      <option name="number" value="00257" />
+      <option name="presentableId" value="LOCAL-00257" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159635617</updated>
+    </task>
+    <task id="LOCAL-00258" summary="Incinerating Impact &quot;Makes Giants Leap create an impact that lights enemies alight.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159687968</created>
+      <option name="number" value="00258" />
+      <option name="presentableId" value="LOCAL-00258" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159687968</updated>
+    </task>
+    <task id="LOCAL-00259" summary="Lingering Rage &quot;Make Oath of Rage last twice as long as base.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159846590</created>
+      <option name="number" value="00259" />
+      <option name="presentableId" value="LOCAL-00259" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159846590</updated>
+    </task>
+    <task id="LOCAL-00260" summary="Rejuvenating Rage &quot;Makes Oath Of Rage give the Regeneration effect.&quot;">
+      <option name="closed" value="true" />
+      <created>1762159935796</created>
+      <option name="number" value="00260" />
+      <option name="presentableId" value="LOCAL-00260" />
+      <option name="project" value="LOCAL" />
+      <updated>1762159935796</updated>
+    </task>
+    <task id="LOCAL-00261" summary="Shield Charge &quot;Makes Shield Charge deals two more deal, if using a shield.&quot;">
+      <option name="closed" value="true" />
+      <created>1762160069813</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1762160069813</updated>
+    </task>
+    <task id="LOCAL-00262" summary="Fixed wording in SneakAttack">
+      <option name="closed" value="true" />
+      <created>1762160205947</created>
+      <option name="number" value="00262" />
+      <option name="presentableId" value="LOCAL-00262" />
+      <option name="project" value="LOCAL" />
+      <updated>1762160205947</updated>
+    </task>
+    <task id="LOCAL-00263" summary="Thick Skin &quot;Takes 10% less damage from all damage sources.&quot;">
+      <option name="closed" value="true" />
+      <created>1762160279382</created>
+      <option name="number" value="00263" />
+      <option name="presentableId" value="LOCAL-00263" />
+      <option name="project" value="LOCAL" />
+      <updated>1762160279382</updated>
+    </task>
+    <task id="LOCAL-00264" summary="Rage -&gt; OathOfRage">
+      <option name="closed" value="true" />
+      <created>1762160326330</created>
+      <option name="number" value="00264" />
+      <option name="presentableId" value="LOCAL-00264" />
+      <option name="project" value="LOCAL" />
+      <updated>1762160326330</updated>
+    </task>
+    <task id="LOCAL-00265" summary="about to remove a lot (&gt;_&lt;)">
+      <option name="closed" value="true" />
+      <created>1763440118653</created>
+      <option name="number" value="00265" />
+      <option name="presentableId" value="LOCAL-00265" />
+      <option name="project" value="LOCAL" />
+      <updated>1763440118653</updated>
+    </task>
+    <task id="LOCAL-00266" summary="The TypeAdapter for trait">
+      <option name="closed" value="true" />
+      <created>1766561429950</created>
+      <option name="number" value="00266" />
+      <option name="presentableId" value="LOCAL-00266" />
+      <option name="project" value="LOCAL" />
+      <updated>1766561429950</updated>
+    </task>
+    <task id="LOCAL-00267" summary="Removed the diet package">
+      <option name="closed" value="true" />
+      <created>1768690967706</created>
+      <option name="number" value="00267" />
+      <option name="presentableId" value="LOCAL-00267" />
+      <option name="project" value="LOCAL" />
+      <updated>1768690967706</updated>
+    </task>
+    <task id="LOCAL-00268" summary="Added particle to anti gravity arrow">
+      <option name="closed" value="true" />
+      <created>1768691196701</created>
+      <option name="number" value="00268" />
+      <option name="presentableId" value="LOCAL-00268" />
+      <option name="project" value="LOCAL" />
+      <updated>1768691196701</updated>
+    </task>
+    <task id="LOCAL-00269" summary="Re-factored to use Main.GetInstance instead main, and made all traits have colors in the name instead of having a color field">
+      <option name="closed" value="true" />
+      <created>1768693862329</created>
+      <option name="number" value="00269" />
+      <option name="presentableId" value="LOCAL-00269" />
+      <option name="project" value="LOCAL" />
+      <updated>1768693862329</updated>
+    </task>
+    <task id="LOCAL-00270" summary="New files">
+      <option name="closed" value="true" />
+      <created>1768693945323</created>
+      <option name="number" value="00270" />
+      <option name="presentableId" value="LOCAL-00270" />
+      <option name="project" value="LOCAL" />
+      <updated>1768693945323</updated>
+    </task>
+    <task id="LOCAL-00271" summary="Re-factor race to have the colors in the name instead of in the color field">
+      <option name="closed" value="true" />
+      <created>1768695898224</created>
+      <option name="number" value="00271" />
+      <option name="presentableId" value="LOCAL-00271" />
+      <option name="project" value="LOCAL" />
+      <updated>1768695898224</updated>
+    </task>
+    <task id="LOCAL-00272" summary="Re-factor PlayableClasses to not use main">
+      <option name="closed" value="true" />
+      <created>1768696298077</created>
+      <option name="number" value="00272" />
+      <option name="presentableId" value="LOCAL-00272" />
+      <option name="project" value="LOCAL" />
+      <updated>1768696298077</updated>
+    </task>
+    <task id="LOCAL-00273" summary="Made to return if is cancelled">
+      <option name="closed" value="true" />
+      <created>1768696912464</created>
+      <option name="number" value="00273" />
+      <option name="presentableId" value="LOCAL-00273" />
+      <option name="project" value="LOCAL" />
+      <updated>1768696912464</updated>
+    </task>
+    <task id="LOCAL-00274" summary="Added some interactions with partys">
+      <option name="closed" value="true" />
+      <created>1768697930748</created>
+      <option name="number" value="00274" />
+      <option name="presentableId" value="LOCAL-00274" />
+      <option name="project" value="LOCAL" />
+      <updated>1768697930748</updated>
+    </task>
+    <task id="LOCAL-00275" summary="Added some miscellaneous thing">
+      <option name="closed" value="true" />
+      <created>1768697964083</created>
+      <option name="number" value="00275" />
+      <option name="presentableId" value="LOCAL-00275" />
+      <option name="project" value="LOCAL" />
+      <updated>1768697964084</updated>
+    </task>
+    <task id="LOCAL-00276" summary="made use NamespaceDefinitions">
+      <option name="closed" value="true" />
+      <created>1773034994626</created>
+      <option name="number" value="00276" />
+      <option name="presentableId" value="LOCAL-00276" />
+      <option name="project" value="LOCAL" />
+      <updated>1773034994627</updated>
+    </task>
+    <task id="LOCAL-00277" summary="made use NamespaceDefinitions">
+      <option name="closed" value="true" />
+      <created>1774429849766</created>
+      <option name="number" value="00277" />
+      <option name="presentableId" value="LOCAL-00277" />
+      <option name="project" value="LOCAL" />
+      <updated>1774429849767</updated>
+    </task>
+    <task id="LOCAL-00278" summary="made use NamespaceDefinitions">
+      <option name="closed" value="true" />
+      <created>1774429862921</created>
+      <option name="number" value="00278" />
+      <option name="presentableId" value="LOCAL-00278" />
+      <option name="project" value="LOCAL" />
+      <updated>1774429862921</updated>
+    </task>
+    <task id="LOCAL-00279" summary="Added a BaseLegendaryComponent">
+      <option name="closed" value="true" />
+      <created>1774429931112</created>
+      <option name="number" value="00279" />
+      <option name="presentableId" value="LOCAL-00279" />
+      <option name="project" value="LOCAL" />
+      <updated>1774429931112</updated>
+    </task>
+    <task id="LOCAL-00280" summary="Added a BossRoomWorldProperties">
+      <option name="closed" value="true" />
+      <created>1774430011085</created>
+      <option name="number" value="00280" />
+      <option name="presentableId" value="LOCAL-00280" />
+      <option name="project" value="LOCAL" />
+      <updated>1774430011085</updated>
+    </task>
+    <task id="LOCAL-00281" summary="please dont break">
+      <option name="closed" value="true" />
+      <created>1775768116375</created>
+      <option name="number" value="00281" />
+      <option name="presentableId" value="LOCAL-00281" />
+      <option name="project" value="LOCAL" />
+      <updated>1775768116375</updated>
+    </task>
+    <task id="LOCAL-00282" summary="please dont break">
+      <option name="closed" value="true" />
+      <created>1775768133124</created>
+      <option name="number" value="00282" />
+      <option name="presentableId" value="LOCAL-00282" />
+      <option name="project" value="LOCAL" />
+      <updated>1775768133124</updated>
+    </task>
+    <task id="LOCAL-00283" summary="save before I start work on making stat sheet hold onto player data (Race, Class, Etc)">
+      <option name="closed" value="true" />
+      <created>1777486365569</created>
+      <option name="number" value="00283" />
+      <option name="presentableId" value="LOCAL-00283" />
+      <option name="project" value="LOCAL" />
+      <updated>1777486365569</updated>
+    </task>
+    <task id="LOCAL-00284" summary="save before I start work on making stat sheet hold onto player data (Race, Class, Etc)">
+      <option name="closed" value="true" />
+      <created>1777486541805</created>
+      <option name="number" value="00284" />
+      <option name="presentableId" value="LOCAL-00284" />
+      <option name="project" value="LOCAL" />
+      <updated>1777486541805</updated>
+    </task>
+    <task id="LOCAL-00285" summary="changed the biome of the boss room world to the_void">
+      <option name="closed" value="true" />
+      <created>1778475146953</created>
+      <option name="number" value="00285" />
+      <option name="presentableId" value="LOCAL-00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1778475146953</updated>
+    </task>
+    <option name="localTasksCounter" value="286" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="b90f64a8-a35c-4125-ad7a-927d17363a8f" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="b90f64a8-a35c-4125-ad7a-927d17363a8f">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Flame Charge &quot;Makes Flame Charge light enemies a flame.&quot;" />
+    <MESSAGE value="Incinerating Impact &quot;Makes Giants Leap create an impact that lights enemies alight.&quot;" />
+    <MESSAGE value="Lingering Rage &quot;Make Oath of Rage last twice as long as base.&quot;" />
+    <MESSAGE value="Rejuvenating Rage &quot;Makes Oath Of Rage give the Regeneration effect.&quot;" />
+    <MESSAGE value="Shield Charge &quot;Makes Shield Charge deals two more deal, if using a shield.&quot;" />
+    <MESSAGE value="Fixed wording in SneakAttack" />
+    <MESSAGE value="Thick Skin &quot;Takes 10% less damage from all damage sources.&quot;" />
+    <MESSAGE value="Rage -&gt; OathOfRage" />
+    <MESSAGE value="about to remove a lot (&gt;_&lt;)" />
+    <MESSAGE value="The TypeAdapter for trait" />
+    <MESSAGE value="Removed the diet package" />
+    <MESSAGE value="Added particle to anti gravity arrow" />
+    <MESSAGE value="Re-factored to use Main.GetInstance instead main, and made all traits have colors in the name instead of having a color field" />
+    <MESSAGE value="New files" />
+    <MESSAGE value="Re-factor race to have the colors in the name instead of in the color field" />
+    <MESSAGE value="Re-factor PlayableClasses to not use main" />
+    <MESSAGE value="Made to return if is cancelled" />
+    <MESSAGE value="Added some interactions with partys" />
+    <MESSAGE value="Added some miscellaneous thing" />
+    <MESSAGE value="made use NamespaceDefinitions" />
+    <MESSAGE value="Added a BaseLegendaryComponent" />
+    <MESSAGE value="Added a BossRoomWorldProperties" />
+    <MESSAGE value="please dont break" />
+    <MESSAGE value="save before I start work on making stat sheet hold onto player data (Race, Class, Etc)" />
+    <MESSAGE value="changed the biome of the boss room world to the_void" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed the biome of the boss room world to the_void" />
+  </component>
+</project>

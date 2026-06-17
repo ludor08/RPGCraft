@@ -38,7 +38,7 @@ public class WindShot extends Trait
             // spawn the particle for wind level one
             Location locForWindLevelOne = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x, RPGutils.getFacingDirection(player).y, RPGutils.getFacingDirection(player).z);
 
-            RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, locForWindLevelOne, new Vector3d(0,0,0), Particle.CRIT, 0, 0.75f, 20, RPGutils.getFacingDirection(player));
+            RPGparticles.SpawnParticleDoughnut(5, locForWindLevelOne, new Vector3d(0,0,0), Particle.CRIT, 0, 0.75f, 20, RPGutils.getFacingDirection(player));
 
             // shoot the arrow
             e.getEntity().setVelocity(new Vector(e.getEntity().getVelocity().getX()*2,e.getEntity().getVelocity().getY()*2,e.getEntity().getVelocity().getZ()*2));
@@ -52,10 +52,15 @@ public class WindShot extends Trait
                 // spawn the particle for wind level one
                 Location locForWindLevelTwo = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x*3, RPGutils.getFacingDirection(player).y*3, RPGutils.getFacingDirection(player).z*3);
 
-                RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, locForWindLevelTwo, new Vector3d(0,0,0), Particle.CRIT, 0, 1.475f, 40, RPGutils.getFacingDirection(player));
+                RPGparticles.SpawnParticleDoughnut(5, locForWindLevelTwo, new Vector3d(0,0,0), Particle.CRIT, 0, 1.475f, 40, RPGutils.getFacingDirection(player));
 
                 for (Entity entity : entities)
                 {
+                    if (Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(player, entity))
+                    {
+                        continue;
+                    }
+
                     entity.setVelocity(entity.getVelocity().add(e.getEntity().getVelocity().divide(new Vector(4,4,4))));
                 }
             }

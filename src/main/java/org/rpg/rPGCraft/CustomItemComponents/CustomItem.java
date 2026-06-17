@@ -3,11 +3,9 @@ package org.rpg.rPGCraft.CustomItemComponents;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 
 import java.util.List;
 
@@ -88,7 +86,7 @@ public class CustomItem {
 
     public static ItemStack GetCustomItemStack(CustomItem customItem)
     {
-        // generates the icon for this race
+        // generates the icon for this item
         ItemStack item = new ItemStack(customItem.GetMaterial());
         ItemMeta itemMeta = item.getItemMeta();
 
@@ -118,11 +116,11 @@ public class CustomItem {
         // set the custom weapon key
         if (customItem.GetWeaponType() != null)
         {
-            itemMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetWeaponTypeKey(), PersistentDataType.STRING, customItem.GetWeaponType());
+            itemMeta.getPersistentDataContainer().set(MyNamespaces.WEAPON_TYPE.GetNamespacedKey(), PersistentDataType.STRING, customItem.GetWeaponType());
         }
 
         // set the items key and value
-        itemMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetCustomItemKey(), PersistentDataType.STRING, customItem.GetItemID());
+        itemMeta.getPersistentDataContainer().set(MyNamespaces.CUSTOM_ITEM.GetNamespacedKey(), PersistentDataType.STRING, customItem.GetItemID());
 
         // set the item meta
         item.setItemMeta(itemMeta);

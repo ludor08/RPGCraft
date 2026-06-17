@@ -37,7 +37,7 @@ public class ToxicSpores extends Trait
 
         for (Entity entity : e.getEntity().getNearbyEntities(1, 2, 1))
         {
-            if (Main.GetInstance().partyManager.IsInTheSameParty(e.getEntity(), entity))
+            if (Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(e.getEntity(), entity))
             {
                 continue;
             }

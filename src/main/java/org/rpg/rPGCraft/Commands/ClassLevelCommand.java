@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 
 public class ClassLevelCommand implements CommandExecutor
 {
@@ -35,7 +35,7 @@ public class ClassLevelCommand implements CommandExecutor
             switch (args[0])
             {
                 case "get":
-                    player.sendMessage(player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER).toString());
+                    player.sendMessage(player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER).toString());
                     break;
 
                 case "set":
@@ -44,13 +44,13 @@ public class ClassLevelCommand implements CommandExecutor
                         try
                         {
                             // if the player would have too much xp when the level is changed
-                            if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER) > main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1])))
+                            if (player.getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER) > main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1])))
                             {
                                 // set the players xp to 1 less than the max xp for that level
-                                player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]))-1);
+                                player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]))-1);
                             }
 
-                            player.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER, Integer.parseInt(args[1]));
+                            player.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER, Integer.parseInt(args[1]));
 
                             player.sendMessage(ChatColor.GREEN + "class level set to " + Integer.parseInt(args[1]));
                         }
@@ -76,15 +76,15 @@ public class ClassLevelCommand implements CommandExecutor
                         try
                         {
                             // if the player would have too much xp when the level is changed
-                            if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER) > main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]) + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER)))
+                            if (player.getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER) > main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]) + player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER)))
                             {
                                 // set the players xp to 1 less than the max xp for that level
-                                player.getPersistentDataContainer().set(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER, main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]) + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER)-1));
+                                player.getPersistentDataContainer().set(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER, main.statSheetManager.GetLevelXPRequirements(Integer.parseInt(args[1]) + player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER)-1));
                             }
 
-                            player.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER,  player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER) + Integer.parseInt(args[1]));
+                            player.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER,  player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER) + Integer.parseInt(args[1]));
 
-                            player.sendMessage(ChatColor.GREEN.toString() + args[1] + " added to your level. your total class level is now " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER));
+                            player.sendMessage(ChatColor.GREEN.toString() + args[1] + " added to your level. your total class level is now " + player.getPersistentDataContainer().get(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER));
                         }
                         catch (NumberFormatException e)
                         {

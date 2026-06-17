@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector3d;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class SteadyAim extends ActiveTrait
             player.sendMessage("You must be sneaking to activate this trait.");
         }
 
-        player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+        player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
     }
 
     @Override
@@ -76,7 +77,7 @@ public class SteadyAim extends ActiveTrait
                 {
                     if (projectile.getPersistentDataContainer().has(hasSteadyAimKey))
                     {
-                        RPGparticles.SpawnParticle(player.getWorld(), 50, projectile.getLocation(), new Vector3d(0,0,0), Particle.ASH, 0);
+                        RPGparticles.SpawnParticle(50, projectile.getLocation(), new Vector3d(0,0,0), Particle.ASH, 0);
                     }
                 }
             }
@@ -148,7 +149,7 @@ public class SteadyAim extends ActiveTrait
 
         for (Entity entity : entities)
         {
-            if (Main.GetInstance().partyManager.IsInTheSameParty(player, entity))
+            if (Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(player, entity))
             {
                 continue;
             }

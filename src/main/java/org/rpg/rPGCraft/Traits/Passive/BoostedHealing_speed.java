@@ -3,8 +3,13 @@ package org.rpg.rPGCraft.Traits.Passive;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -12,9 +17,6 @@ import java.util.List;
 
 public class BoostedHealing_speed extends Trait
 {
-    private final NamespacedKey boostedHealingDurationKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_duration");
-    private final NamespacedKey boostedHealingPowerKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_power");
-
     int boostedHealingDuration = 100;
     int boostedHealingPower = 0;
 
@@ -22,54 +24,15 @@ public class BoostedHealing_speed extends Trait
     {
         // add the name and lore
         super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Boosted Healing:Speed", "boosted healing speed", Material.SUGAR, false, List.of(
-                ChatColor.AQUA.toString() + "   - Makes all healing traits give speed one for five seconds."
+                ChatColor.AQUA.toString() + "   - Makes all healing traits give speed one for five seconds, to the target of said healing."
         ));
 
     }
 
     @Override
-    public void OnRemoveTraitBuff(Player player)
+    public int OnHealWithTrait(Entity healer, LivingEntity target, int cleanValue, int modifiedValue, EntityRegainHealthEvent.RegainReason regainReason)
     {
-        if (player.getPersistentDataContainer().has(boostedHealingDurationKey))
-        {
-            player.getPersistentDataContainer().set(boostedHealingDurationKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(boostedHealingDurationKey, PersistentDataType.INTEGER) - boostedHealingDuration);
-
-            if (player.getPersistentDataContainer().get(boostedHealingDurationKey, PersistentDataType.INTEGER) <= 0)
-            {
-                player.getPersistentDataContainer().remove(boostedHealingDurationKey);
-            }
-        }
-
-        if (player.getPersistentDataContainer().has(boostedHealingPowerKey))
-        {
-            player.getPersistentDataContainer().set(boostedHealingPowerKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(boostedHealingPowerKey, PersistentDataType.INTEGER) - boostedHealingPower);
-
-            if (player.getPersistentDataContainer().get(boostedHealingPowerKey, PersistentDataType.INTEGER) <= 0)
-            {
-                player.getPersistentDataContainer().remove(boostedHealingPowerKey);
-            }
-        }
-    }
-
-    @Override
-    public void OnGainTraitBuff(Player player)
-    {
-        if (player.getPersistentDataContainer().has(boostedHealingDurationKey))
-        {
-            player.getPersistentDataContainer().set(boostedHealingDurationKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(boostedHealingDurationKey, PersistentDataType.INTEGER) + boostedHealingDuration);
-        }
-        else
-        {
-            player.getPersistentDataContainer().set(boostedHealingDurationKey, PersistentDataType.INTEGER, boostedHealingDuration);
-        }
-
-        if (player.getPersistentDataContainer().has(boostedHealingPowerKey))
-        {
-            player.getPersistentDataContainer().set(boostedHealingPowerKey, PersistentDataType.INTEGER, player.getPersistentDataContainer().get(boostedHealingPowerKey, PersistentDataType.INTEGER) + boostedHealingPower);
-        }
-        else
-        {
-            player.getPersistentDataContainer().set(boostedHealingPowerKey, PersistentDataType.INTEGER, boostedHealingPower);
-        }
+        target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, boostedHealingDuration, boostedHealingPower));
+        return modifiedValue;
     }
 }

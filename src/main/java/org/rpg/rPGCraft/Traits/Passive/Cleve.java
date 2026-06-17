@@ -62,7 +62,7 @@ public class Cleve extends Trait
 
             for (Entity clevedEntity : clevedEnemies)
             {
-                if (Main.GetInstance().partyManager.IsInTheSameParty(player, clevedEntity))
+                if (Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(player, clevedEntity))
                 {
                     continue;
                 }

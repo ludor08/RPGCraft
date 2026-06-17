@@ -2,18 +2,13 @@ package org.rpg.rPGCraft.Definitions;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.persistence.PersistentDataType;
-import org.rpg.rPGCraft.CustomItemComponents.CustomItem;
-import org.rpg.rPGCraft.Entities.RPGCustomEntities.SkeletonWarrior;
-import org.rpg.rPGCraft.Entities.RPGCustomEntities.ZombieBrute;
-import org.rpg.rPGCraft.Entities.RPGCustomEntities.ZombieKing;
-import org.rpg.rPGCraft.Entities.RPGCustomEntities.ZombieKingSummonEntity;
+import org.rpg.rPGCraft.Entities.RPGCustomEntities.*;
 import org.rpg.rPGCraft.Entities.RPGCustomEntity;
 import org.rpg.rPGCraft.Entities.RPGEntities.CaveSpider;
+import org.rpg.rPGCraft.Entities.RPGEntities.EnderDragon;
 import org.rpg.rPGCraft.Entities.RPGEntities.Wither;
 import org.rpg.rPGCraft.Entities.RPGEntity;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
-import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.HashMap;
 
@@ -40,26 +35,31 @@ public class EntityDefinitions
         // normal entities
         AddEntityToMap(new CaveSpider());
         AddEntityToMap(new Wither());
-        AddEntityToMap(new Wither());
+        AddEntityToMap(new EnderDragon());
 
         // Custom entities
         AddEntityToMap(new SkeletonWarrior());
         AddEntityToMap(new ZombieBrute());
         AddEntityToMap(new ZombieKing());
+        AddEntityToMap(new ZombieKingVoidBombEntity());
         AddEntityToMap(new ZombieKingSummonEntity());
+        AddEntityToMap(new DiscardedSentientArmament());
+        AddEntityToMap(new ZombiePeasant());
+        AddEntityToMap(new ZombieKingFootman());
+        AddEntityToMap(new ZombieKingToxicCloudEntity());
     }
 
     public static RPGEntity GetRPGEntityByEntity(Entity entity)
     {
-        if (entity.getPersistentDataContainer().has(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING))
+        if (entity.getPersistentDataContainer().has(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            if (entityIdMap.containsKey(entity.getPersistentDataContainer().get(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING)))
+            if (entityIdMap.containsKey(entity.getPersistentDataContainer().get(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING)))
             {
-                return entityIdMap.get(entity.getPersistentDataContainer().get(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING));
+                return entityIdMap.get(entity.getPersistentDataContainer().get(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING));
             }
             else
             {
-                Main.GetInstance().getLogger().warning("Custom entity \"" + entity.getPersistentDataContainer().get(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING) + "\" is not contained in entityIdMap.");
+                Main.GetInstance().getLogger().warning("Custom entity \"" + entity.getPersistentDataContainer().get(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING) + "\" is not contained in entityIdMap.");
             }
         }
 
@@ -76,9 +76,9 @@ public class EntityDefinitions
 
     public static boolean HasDefinitionForEntity(Entity entity)
     {
-        if (entity.getPersistentDataContainer().has(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING))
+        if (entity.getPersistentDataContainer().has(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            if (entityIdMap.containsKey(entity.getPersistentDataContainer().get(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING)))
+            if (entityIdMap.containsKey(entity.getPersistentDataContainer().get(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING)))
             {
                 return true;
             }

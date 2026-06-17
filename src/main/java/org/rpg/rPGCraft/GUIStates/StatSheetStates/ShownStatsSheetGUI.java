@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -76,7 +77,7 @@ public class ShownStatsSheetGUI extends GUIState
         }
 
         ItemStack traitIcon = MenuManager.InitializeItemStack(Material.PAPER, ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + "Traits", traitsLore);
-        MenuManager.AddPersistentDataContainerToItemStack(traitIcon, NamespaceDefinitions.GetUIKey(), "traits");
+        MenuManager.AddPersistentDataContainerToItemStack(traitIcon, MyNamespaces.UI.GetNamespacedKey(), "traits");
 
         // place the icon four to the side and two down
         statMenu.setItem(MenuManager.FULL_ROW_SIZE*2+4, traitIcon);
@@ -123,9 +124,9 @@ public class ShownStatsSheetGUI extends GUIState
         // cancel the event so the player can't take items
         e.setCancelled(true);
 
-        if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey()))
+        if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.UI.GetNamespacedKey()))
         {
-            if (e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING).equals("traits"))
+            if (e.getCurrentItem().getPersistentDataContainer().get(MyNamespaces.UI.GetNamespacedKey(), PersistentDataType.STRING).equals("traits"))
             {
                 // play a button click sound
                 GetOwner().playSound(GetOwner().getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, 1);

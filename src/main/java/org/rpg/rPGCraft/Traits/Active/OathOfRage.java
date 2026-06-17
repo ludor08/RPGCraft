@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGparticles;
@@ -65,7 +65,7 @@ public class OathOfRage extends ActiveTrait
         }
         else
         {
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
+            player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) + GetModifiedCost(player));
         }
     }
 
@@ -77,11 +77,11 @@ public class OathOfRage extends ActiveTrait
             if (player.getPersistentDataContainer().get(rageTimerKey, PersistentDataType.INTEGER) > 0)
             {
                 RPGutils.AddToNamespacedKey(player, rageTimerKey, 0, -1);
-                RPGparticles.SpawnParticle(player.getWorld(), 3, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.RAID_OMEN, 1);
+                RPGparticles.SpawnParticle(3, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.RAID_OMEN, 1);
 
                 if (player.getPersistentDataContainer().has(rejuvenatingRageKey))
                 {
-                    RPGparticles.SpawnParticle(player.getWorld(), 1, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.HEART, 1);
+                    RPGparticles.SpawnParticle(1, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(1, 1, 1), Particle.HEART, 1);
                 }
             }
             else if (player.getPersistentDataContainer().get(rageTimerKey, PersistentDataType.INTEGER) <= 0)
@@ -123,7 +123,7 @@ public class OathOfRage extends ActiveTrait
             {
                 RPGutils.HealWithTrait(e.getDamager(), living, (int) Math.floor(e.getDamage()*0.1), EntityRegainHealthEvent.RegainReason.REGEN);
 
-                RPGparticles.SpawnBlockParticle(e.getEntity().getWorld(), 5*((int) e.getDamage()/3), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0.0625, 0.0625,0.0625), BlockType.REDSTONE_BLOCK.createBlockData(), 1);
+                RPGparticles.SpawnBlockParticle(5*((int) e.getDamage()/3), e.getEntity().getLocation().add(0,e.getEntity().getHeight()/2, 0), new Vector3d(0.0625, 0.0625,0.0625), BlockType.REDSTONE_BLOCK.createBlockData(), 1);
             }
         }
     }

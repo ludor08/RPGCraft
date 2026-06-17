@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 
 public class PartyCommand implements CommandExecutor
 {
@@ -34,6 +34,96 @@ public class PartyCommand implements CommandExecutor
 
             switch (args[0])
             {
+                case "friendlyFire":
+                    if (args.length > 1)
+                    {
+                        // if the party exists
+                        if (main.partyManager.PartyExists(args[1]))
+                        {
+                            // if the value for friendly fire was given
+                            if (args.length > 2)
+                            {
+                                // if the player has permissions less than 1 (member)
+                                if (main.partyManager.GetPermissionsForParty(player, args[1]) < 2)
+                                {
+                                    player.sendMessage(ChatColor.DARK_RED + "You do not have permission to do this. You need to have permission level two (owner/moderator).");
+                                    break;
+                                }
+
+                                // if the value was true
+                                boolean friendlyFire = Boolean.parseBoolean(args[2]);
+
+                                if (friendlyFire || args[2].equals("false"))
+                                {
+                                    main.partyManager.UpdateFriendlyFireRule(friendlyFire, args[1]);
+                                    player.sendMessage(ChatColor.GREEN + "You have successfully set friendlyFire to " + friendlyFire + " for " + "\"" + args[1] + "\"" + ".");
+                                }
+                                else
+                                {
+                                    player.sendMessage(ChatColor.DARK_RED + "Please provide a valid value (true or false) for friendlyFire.");
+                                }
+                            }
+                            else
+                            {
+                                player.sendMessage(ChatColor.DARK_RED + "Please provide a value for friendlyFire.");
+                            }
+                        }
+                        else
+                        {
+                            player.sendMessage(ChatColor.DARK_RED + "This party does not exist.");
+                        }
+                    }
+                    else
+                    {
+                        player.sendMessage(ChatColor.DARK_RED + "Please provide the name of the party you wish to change the rules of.");
+                    }
+                    break;
+
+                case "shouldShareClassXP":
+                    if (args.length > 1)
+                    {
+                        // if the party exists
+                        if (main.partyManager.PartyExists(args[1]))
+                        {
+                            // if the value for friendly fire was given
+                            if (args.length > 2)
+                            {
+                                // if the player has permissions less than 1 (member)
+                                if (main.partyManager.GetPermissionsForParty(player, args[1]) < 2)
+                                {
+                                    player.sendMessage(ChatColor.DARK_RED + "You do not have permission to do this. You need to have permission level two (owner/moderator) or more.");
+                                    break;
+                                }
+
+                                // if the value was true
+                                boolean shouldShareClassXP = Boolean.parseBoolean(args[2]);
+
+                                if (shouldShareClassXP || args[2].equals("false"))
+                                {
+                                    main.partyManager.UpdateShareClassXPRule(shouldShareClassXP, args[1]);
+                                    player.sendMessage(ChatColor.GREEN + "You have successfully set shouldShareClassXP to " + shouldShareClassXP + " for " + "\"" + args[1] + "\"" + ".");
+                                }
+                                else
+                                {
+                                    player.sendMessage(ChatColor.DARK_RED + "Please provide a valid value (true or false) for shouldShareClassXP.");
+                                }
+                            }
+                            else
+                            {
+                                player.sendMessage(ChatColor.DARK_RED + "Please provide a value for shouldShareClassXP.");
+                            }
+                        }
+                        else
+                        {
+                            player.sendMessage(ChatColor.DARK_RED + "This party does not exist.");
+                        }
+                    }
+                    else
+                    {
+                        player.sendMessage(ChatColor.DARK_RED + "Please provide the name of the party you wish to change the rules of.");
+                    }
+                    break;
+
                 case "create":
                     if (args.length > 1)
                     {
@@ -102,19 +192,19 @@ public class PartyCommand implements CommandExecutor
                     break;
 
                 case "accept":
-                    if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) != null)
+                    if (player.getPersistentDataContainer().get(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING) != null)
                     {
-                        if (main.partyManager.PartyExists(player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING)))
+                        if (main.partyManager.PartyExists(player.getPersistentDataContainer().get(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING)))
                         {
-                            main.partyManager.AddToParty(player, player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING), 0);
+                            main.partyManager.AddToParty(player, player.getPersistentDataContainer().get(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING), 0);
 
-                            player.sendMessage(ChatColor.GREEN + "You are now a part of the " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) + " party!");
+                            player.sendMessage(ChatColor.GREEN + "You are now a part of the " + player.getPersistentDataContainer().get(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING) + " party!");
 
-                            player.getPersistentDataContainer().remove(NamespaceDefinitions.GetLastPartyInviteKey());
+                            player.getPersistentDataContainer().remove(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey());
                         }
                         else
                         {
-                            player.sendMessage(ChatColor.DARK_RED + "Party + " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING) + " + does not exist.");
+                            player.sendMessage(ChatColor.DARK_RED + "Party + " + player.getPersistentDataContainer().get(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING) + " + does not exist.");
                         }
 
 
@@ -140,12 +230,33 @@ public class PartyCommand implements CommandExecutor
                             break;
                         }
 
-                        main.partyManager.RemoveFromParty(player, args[1]);
-                        player.sendMessage(ChatColor.GREEN + "You are no longer a part of the " + args[1] + " party.");
-
-                        if (main.partyManager.GetPlayersInParty(args[1]).isEmpty())
+                        if (main.partyManager.GetPlayersInParty(args[1]).size() <= 1)
                         {
                             main.partyManager.DisbandParty(args[1]);
+                        }
+                        else
+                        {
+                            int numberOfPermissionTwoPlayers = 0;
+
+                            for (Player playerInParty : main.partyManager.GetPlayersInParty(args[1]))
+                            {
+                                if (main.partyManager.GetPermissionsForParty(playerInParty, args[1]) <= 2)
+                                {
+                                    numberOfPermissionTwoPlayers++;
+                                }
+                            }
+
+                            // check if the party would still have a player with permission 2, don't let the player leave
+                            if (numberOfPermissionTwoPlayers <= 1)
+                            {
+                                main.partyManager.RemoveFromParty(player, args[1]);
+                                player.sendMessage(ChatColor.GREEN + "You are no longer a part of the " + args[1] + " party.");
+                            }
+                            else
+                            {
+                                player.sendMessage(ChatColor.DARK_RED + "You can not leave a party without at least one player at permission level two.");
+                            }
+
                         }
 
                     }

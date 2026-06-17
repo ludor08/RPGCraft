@@ -3,8 +3,7 @@ package org.rpg.rPGCraft.CustomItemComponents;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 
 public class ItemAttribute
 {
@@ -30,6 +29,6 @@ public class ItemAttribute
 
     public AttributeModifier GetAttributeModifier()
     {
-        return new AttributeModifier(NamespaceDefinitions.GetItemAttributeKey(), amount, operation, equipmentSlot.getGroup());
+        return new AttributeModifier(MyNamespaces.CUSTOM_ITEM_ATTRIBUTE.GetNamespacedKey(), amount, operation, equipmentSlot.getGroup());
     }
 }

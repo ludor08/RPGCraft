@@ -41,6 +41,6 @@ public class BreathOfTheDragons extends ActiveTrait
         // spawn the particle
         Location loc = player.getEyeLocation().add(RPGutils.getFacingDirection(player).x, RPGutils.getFacingDirection(player).y, RPGutils.getFacingDirection(player).z);
 
-        RPGparticles.SpawnParticleDoughnut(player.getWorld(), 5, loc, new Vector3d(0,0,0), Particle.DRAGON_BREATH, 0, 0.5f, 20, RPGutils.getFacingDirection(player));
+        RPGparticles.SpawnParticleDoughnut(5, loc, new Vector3d(0,0,0), Particle.DRAGON_BREATH, 0, 0.5f, 20, RPGutils.getFacingDirection(player));
     }
 }

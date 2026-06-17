@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.joml.Vector2d;
 import org.rpg.rPGCraft.*;
-import org.rpg.rPGCraft.Definitions.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 
 public class ConfirmClassGUI extends GUIState
@@ -115,7 +115,7 @@ public class ConfirmClassGUI extends GUIState
         if (notAtTheTop)
         {
             ItemStack upButton = MenuManager.InitializeItemStack(Material.ARROW, "Up");
-            MenuManager.AddPersistentDataContainerToItemStack(upButton, NamespaceDefinitions.GetUIKey(), "up");
+            MenuManager.AddPersistentDataContainerToItemStack(upButton, MyNamespaces.UI.GetNamespacedKey(), "up");
 
             inventory.setItem(MenuManager.FULL_ROW_SIZE * 6 - 1, upButton);
         }
@@ -125,7 +125,7 @@ public class ConfirmClassGUI extends GUIState
         {
             // add the up item to the bottom row and 7 to the side
             ItemStack downButton = MenuManager.InitializeItemStack(Material.ARROW, "Down");
-            MenuManager.AddPersistentDataContainerToItemStack(downButton, NamespaceDefinitions.GetUIKey(), "down");
+            MenuManager.AddPersistentDataContainerToItemStack(downButton, MyNamespaces.UI.GetNamespacedKey(), "down");
 
             inventory.setItem(MenuManager.FULL_ROW_SIZE * 6 - 2, downButton);
         }
@@ -138,12 +138,12 @@ public class ConfirmClassGUI extends GUIState
         e.setCancelled(true);
 
         // if a UI button was pressed
-        if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey()))
+        if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.UI.GetNamespacedKey()))
         {
             // play a button click sound
             GetOwner().playSound(GetOwner().getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, 1);
 
-            switch (e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING))
+            switch (e.getCurrentItem().getPersistentDataContainer().get(MyNamespaces.UI.GetNamespacedKey(), PersistentDataType.STRING))
             {
                 case "up":
                     yOffset++;
@@ -158,10 +158,10 @@ public class ConfirmClassGUI extends GUIState
         }
 
         // if the player clicked the confirm button
-        if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetUIKey())
-                && e.getCurrentItem().getPersistentDataContainer().get(NamespaceDefinitions.GetUIKey(), PersistentDataType.STRING).equals("confirm"))
+        if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.UI.GetNamespacedKey())
+                && e.getCurrentItem().getPersistentDataContainer().get(MyNamespaces.UI.GetNamespacedKey(), PersistentDataType.STRING).equals("confirm"))
         {
-            Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).SetClassPersistent(playableClass.name);
+            Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).SetClass(playableClass);
 
             // send the confirmation message
             GetOwner().sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + "Class Selected!");

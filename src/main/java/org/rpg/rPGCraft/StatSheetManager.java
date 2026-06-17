@@ -5,22 +5,17 @@ import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.Container;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.rpg.rPGCraft.CustomItemComponents.CustomItem;
-import org.rpg.rPGCraft.Definitions.CustomItemDefinitions;
 import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
@@ -65,7 +60,7 @@ public class StatSheetManager implements Listener
         }
 
         // if the player does not have a stat sheet give them one
-        return AddStatSheet(new StatSheet(player.getUniqueId()));
+        return AddStatSheet(new StatSheet(player));
     }
 
     // Adder
@@ -115,16 +110,21 @@ public class StatSheetManager implements Listener
     public StatSheetManager()
     {
         this.main = Main.GetInstance();
+        main.statSheetManager = this;
+
         Bukkit.getPluginManager().registerEvents(this,main);
 
         attackInputCanceledKey = new NamespacedKey(main, "attack_input_canceled");
+    }
 
+    public void InitializeStatSheets()
+    {
         for (Player player : Bukkit.getOnlinePlayers())
         {
             // if there is no stat sheet assigned to a player when they join
             if (FindStatSheetByPlayer(player) == null)
             {
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -218,7 +218,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(e.getPlayer().getUniqueId()));
+            AddStatSheet(new StatSheet(e.getPlayer()));
         }
     }
 
@@ -239,7 +239,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -247,7 +247,7 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnDealDamageEvent(EntityDamageByEntityEvent e)
     {
-        if (main.partyManager.IsInTheSameParty(e.getEntity(), e.getDamager()))
+        if (main.partyManager.ShouldHitBeStoppedByParty(e.getEntity(), e.getDamager()))
         {
             e.setCancelled(true);
         }
@@ -276,7 +276,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -308,7 +308,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -330,7 +330,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -376,7 +376,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -398,7 +398,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -420,7 +420,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId()));
+            AddStatSheet(new StatSheet(player));
         }
     }
 
@@ -441,7 +441,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId()));
+            AddStatSheet(new StatSheet(player));
         }
     }
 
@@ -462,7 +462,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId()));
+            AddStatSheet(new StatSheet(player));
         }
     }
 
@@ -483,7 +483,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId()));
+            AddStatSheet(new StatSheet(player));
         }
     }
 
@@ -504,7 +504,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(player.getUniqueId()));
+            AddStatSheet(new StatSheet(player));
         }
     }
 
@@ -525,7 +525,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -545,7 +545,7 @@ public class StatSheetManager implements Listener
         else
         {
             // give them one :)
-            AddStatSheet(new StatSheet(e.getPlayer().getUniqueId()));
+            AddStatSheet(new StatSheet(e.getPlayer()));
         }
     }
 
@@ -567,7 +567,7 @@ public class StatSheetManager implements Listener
             else
             {
                 // give them one :)
-                AddStatSheet(new StatSheet(player.getUniqueId()));
+                AddStatSheet(new StatSheet(player));
             }
         }
     }
@@ -581,6 +581,16 @@ public class StatSheetManager implements Listener
     @EventHandler
     public void OnJoinEvent(PlayerJoinEvent e)
     {
+        // if there is no stat sheet assigned to a player when they join
+        if (main.statSheetManager.FindStatSheetByPlayer(e.getPlayer()) == null)
+        {
+            main.statSheetManager.AddStatSheet(new StatSheet(e.getPlayer()));
+        }
+        else
+        {
+            main.statSheetManager.FindStatSheetByPlayer(e.getPlayer()).SetPlayer(e.getPlayer());
+        }
+
         if (!FindStatSheetByPlayer(e.getPlayer()).IsTickTimerRunning())
         {
             FindStatSheetByPlayer(e.getPlayer()).StartTickTimer();

@@ -2,6 +2,7 @@ package org.rpg.rPGCraft;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.rpg.rPGCraft.Traits.Trait;
@@ -72,6 +73,24 @@ public class Race {
 
         // return the icon
         return raceIcon;
+    }
+
+    public void GainTraits(Player player)
+    {
+        // Run the on gain trait buffs
+        for (Trait trait : traits)
+        {
+            trait.OnGainTraitBuff(player);
+        }
+    }
+
+    public void LoseTraits(Player player)
+    {
+        // Remove the on gain trait buffs
+        for (Trait trait : traits)
+        {
+            trait.OnRemoveTraitBuff(player);
+        }
     }
 
 }

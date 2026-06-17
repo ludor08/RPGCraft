@@ -7,8 +7,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.RPGraycast;
 import org.rpg.rPGCraft.RPGutils;
 import org.rpg.rPGCraft.Traits.Trait;
@@ -43,7 +43,7 @@ public class Ricochet extends Trait
             if (e.getHitBlock() != null)
             {
                 // if the player has at least 10 mana
-                if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) >= 10)
+                if (((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) >= 10)
                 {
                     // get the nearby entities
                     List<Entity> closeEntities = RPGutils.SortEntityListByDistance(e.getEntity().getNearbyEntities(range,range,range),e.getEntity().getLocation());
@@ -81,7 +81,7 @@ public class Ricochet extends Trait
                         }, 2);
 
                         // take away the mana
-                        ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)-10);
+                        ((Player)e.getEntity().getShooter()).getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, ((Player)e.getEntity().getShooter()).getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)-10);
 
                         break;
                     }

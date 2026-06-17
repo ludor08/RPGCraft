@@ -9,7 +9,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.joml.Vector3d;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGparticles;
@@ -21,6 +21,8 @@ public class GrapplingHookArrow extends ActiveTrait
 {
     NamespacedKey grapplingSpeedReduction = new NamespacedKey(Main.GetInstance(), "grappling_hook_speed_reduction");
     NamespacedKey noFallDamageTime = new NamespacedKey(Main.GetInstance(), "grappling_hook_no_fall_damage_time");
+
+    NamespacedKey utilityArrowKey = new NamespacedKey(Main.GetInstance(), "utility_arrow");
 
     public GrapplingHookArrow() {
         // add the name and lore
@@ -45,11 +47,12 @@ public class GrapplingHookArrow extends ActiveTrait
         {
             Arrow arrow = player.launchProjectile(Arrow.class);
             arrow.getPersistentDataContainer().set(grapplingSpeedReduction, PersistentDataType.FLOAT, 2f);
+            arrow.getPersistentDataContainer().set(utilityArrowKey, PersistentDataType.BOOLEAN, true);
         }
         else
         {
             player.sendMessage("You must be using a bow or crossbow to use this trait.");
-            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) + GetCost());
+            player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) + GetCost());
         }
     }
 
@@ -68,7 +71,7 @@ public class GrapplingHookArrow extends ActiveTrait
 
                 player.teleport(teleLocation);
 
-                RPGparticles.SpawnParticle(player.getWorld(), 50, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(player.getWidth()/2, player.getHeight()/2, player.getWidth()/2), Particle.ENCHANT, 0);
+                RPGparticles.SpawnParticle(50, player.getLocation().add(0, player.getHeight()/2, 0), new Vector3d(player.getWidth()/2, player.getHeight()/2, player.getWidth()/2), Particle.ENCHANT, 0);
             }
             else
             {

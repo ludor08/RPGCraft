@@ -7,10 +7,9 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Entities.LegendaryComponent;
 import org.rpg.rPGCraft.Entities.RPGEntity;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class WitherLegendaryComponent extends LegendaryComponent
     {
         super(
                 0.05f,
-                RPGEntity.ConstructAttributeHashMap(List.of(Attribute.MAX_HEALTH), List.of(new AttributeModifier(NamespaceDefinitions.GetLegendaryMobAttributeKey(), 2d, AttributeModifier.Operation.ADD_SCALAR))),
+                RPGEntity.ConstructAttributeHashMap(List.of(Attribute.MAX_HEALTH), List.of(new AttributeModifier(MyNamespaces.LEGENDARY_MOB_ATTRIBUTE.GetNamespacedKey(), 2d, AttributeModifier.Operation.ADD_SCALAR))),
                 2,
                 2
         );

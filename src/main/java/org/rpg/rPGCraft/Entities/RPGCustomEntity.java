@@ -1,16 +1,14 @@
 package org.rpg.rPGCraft.Entities;
 
 import org.bukkit.Location;
-import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
-
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.Animation.Animation;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
+import org.rpg.rPGCraft.EntityManager;
 
 public abstract class RPGCustomEntity extends RPGEntity
 {
@@ -19,8 +17,9 @@ public abstract class RPGCustomEntity extends RPGEntity
     private final String name_id;
     private final boolean shouldHaveGearRandomized;
     private final int level;
+    private final Animation defaultAnimation;
 
-    public RPGCustomEntity(EntityType baseEntityType, String baseName, String name_id, boolean shouldHaveGearRandomized, int level, int xpDropped, boolean shouldShowLevel, LegendaryComponent legendaryComponent, EntityState initialState)
+    public RPGCustomEntity(EntityType baseEntityType, String baseName, String name_id, boolean shouldHaveGearRandomized, int level, int xpDropped, boolean shouldShowLevel, LegendaryComponent legendaryComponent, EntityState initialState, Animation defaultAnimation)
     {
         super(baseEntityType, level, xpDropped, shouldShowLevel, legendaryComponent, initialState);
         this.baseEntityType = baseEntityType;
@@ -28,6 +27,7 @@ public abstract class RPGCustomEntity extends RPGEntity
         this.name_id = name_id;
         this.shouldHaveGearRandomized = shouldHaveGearRandomized;
         this.level = level;
+        this.defaultAnimation = defaultAnimation;
     }
 
     public EntityType GetBaseEntityType()
@@ -45,6 +45,11 @@ public abstract class RPGCustomEntity extends RPGEntity
         return baseName;
     }
 
+    public Animation GetDefaultAnimation()
+    {
+        return defaultAnimation;
+    }
+
     public boolean GetShouldHaveGearRandomized()
     {
         return shouldHaveGearRandomized;
@@ -52,16 +57,26 @@ public abstract class RPGCustomEntity extends RPGEntity
 
     public Entity SpawnCustomEntity(Location location)
     {
-        LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, baseEntityType, shouldHaveGearRandomized);
-        entity.getPersistentDataContainer().set(NamespaceDefinitions.GetCustomMobKey(), PersistentDataType.STRING, name_id);
-        entity.getPersistentDataContainer().set(NamespaceDefinitions.GetLevelKey(), PersistentDataType.INTEGER, level);
+        Entity entity = location.getWorld().spawnEntity(location, baseEntityType, shouldHaveGearRandomized);
+        entity.getPersistentDataContainer().set(MyNamespaces.CUSTOM_MOB.GetNamespacedKey(), PersistentDataType.STRING, name_id);
+        entity.getPersistentDataContainer().set(MyNamespaces.LEVEL.GetNamespacedKey(), PersistentDataType.INTEGER, level);
+
+        entity.setCustomName(GetBaseName());
+        EntityManager.SetEntityLevel(entity, GetLevel(), ShouldShowLevel());
+
+        if (defaultAnimation != null)
+        {
+            entity.getPersistentDataContainer().set(MyNamespaces.DEFAULT_ANIMATION.GetNamespacedKey(), PersistentDataType.STRING, defaultAnimation.GetNameID());
+            EntityManager.AssignAnimation(entity, defaultAnimation);
+        }
 
         if (GetInitialState() != null)
         {
-            entity.getPersistentDataContainer().set(NamespaceDefinitions.GetCurrentStateKey(), PersistentDataType.STRING, GetInitialState().GetStateID());
+            SetStateOfEntity(entity, GetInitialState());
         }
 
         InitilizeCustomEntity(entity);
+        OnSummon(entity);
         return entity;
     }
 

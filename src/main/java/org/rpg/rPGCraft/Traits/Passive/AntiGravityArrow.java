@@ -47,7 +47,7 @@ public class AntiGravityArrow extends Trait
                 {
                     if (projectile.getPersistentDataContainer().has(antiGravityKey))
                     {
-                        RPGparticles.SpawnParticle(player.getWorld(), 50, projectile.getLocation(), new Vector3d(0,0,0), Particle.ENCHANT, 0);
+                        RPGparticles.SpawnParticle(50, projectile.getLocation(), new Vector3d(0,0,0), Particle.ENCHANT, 0);
                     }
                 }
             }

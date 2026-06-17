@@ -19,7 +19,7 @@ public class Rogue extends PlayableClass
     // name of the race
     public Rogue()
     {
-        super("Rogue", ChatColor.DARK_RED, Material.IRON_SWORD, List.of(ChatColor.AQUA + "Uses close and long range weapons, is focused on combos."), new TraitTree(List.of(
+        super("Rogue", ChatColor.DARK_RED, Material.IRON_SWORD, List.of(ChatColor.AQUA + "Uses close and long range weapons, is primarily focused on combos."), new TraitTree(List.of(
                 new Node(new Vector2d(4,0), List.of(new Combo()), "000"),
                 new Node(new Vector2d(4,1), List.of(new Dash()), "000"),
                 new Node(new Vector2d(3,1), List.of(new LungingDash()), "000"),

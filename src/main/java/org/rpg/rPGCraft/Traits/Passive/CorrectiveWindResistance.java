@@ -15,6 +15,8 @@ import java.util.Objects;
 
 public class CorrectiveWindResistance extends Trait
 {
+    NamespacedKey utilityArrowKey = new NamespacedKey(Main.GetInstance(), "utility_arrow");
+
     float range = 10f;
     float accuracy = 2;
     
@@ -30,7 +32,7 @@ public class CorrectiveWindResistance extends Trait
     {
         for (Entity randomEntity : player.getWorld().getEntities())
         {
-            if (randomEntity instanceof Projectile projectile && projectile.getShooter() == player)
+            if (randomEntity instanceof Projectile projectile && projectile.getShooter() == player && (!projectile.getPersistentDataContainer().has(utilityArrowKey)))
             {
                 // get the nearby entities
                 List<Entity> closeEntities = RPGutils.SortEntityListByDistance(projectile.getNearbyEntities(range,range,range),projectile.getLocation());
@@ -54,7 +56,7 @@ public class CorrectiveWindResistance extends Trait
 
                     if (target instanceof LivingEntity livingTarget)
                     {
-                        if (Main.GetInstance().partyManager.IsInTheSameParty(player, livingTarget))
+                        if (Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(player, livingTarget))
                         {
                             continue;
                         }

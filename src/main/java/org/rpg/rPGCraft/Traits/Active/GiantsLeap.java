@@ -44,7 +44,7 @@ public class GiantsLeap extends ActiveTrait
     {
         Vector3d direction = RPGutils.getFacingDirection(player);
 
-        RPGparticles.SpawnBlockParticle(player.getWorld(), 300, player.getLocation().add(0, 0.1, 0), new Vector3d(0.375,0,0.375), player.getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
+        RPGparticles.SpawnBlockParticle(300, player.getLocation().add(0, 0.1, 0), new Vector3d(0.375,0,0.375), player.getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1, 1.7f, 1);
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, SoundCategory.PLAYERS, 1, 2f, 1);
 
@@ -67,7 +67,7 @@ public class GiantsLeap extends ActiveTrait
                 if (e.getEntity().getPersistentDataContainer().has(giantsImpactKey))
                 {
                     List<Entity> shockwavedEntitys = e.getEntity().getNearbyEntities(2,0.5, 2);
-                    RPGparticles.SpawnBlockParticle(e.getEntity().getWorld(), 1000, e.getEntity().getLocation().add(0, 0.1, 0), new Vector3d(1,0.025,1), e.getEntity().getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
+                    RPGparticles.SpawnBlockParticle(1000, e.getEntity().getLocation().add(0, 0.1, 0), new Vector3d(1,0.025,1), e.getEntity().getLocation().add(new Vector(0,-1,0)).getBlock().getBlockData(), 1);
                     e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 0.75f, 1);
                     e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 1.25f, 1);
                     e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, SoundCategory.PLAYERS, 3, 1f, 1);
@@ -86,7 +86,7 @@ public class GiantsLeap extends ActiveTrait
 
                     for (Entity shockwavedEntity : shockwavedEntitys)
                     {
-                        if (main.partyManager.IsInTheSameParty(e.getEntity(), shockwavedEntity))
+                        if (main.partyManager.ShouldHitBeStoppedByParty(e.getEntity(), shockwavedEntity))
                         {
                             continue;
                         }

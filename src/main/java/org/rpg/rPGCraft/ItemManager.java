@@ -69,26 +69,6 @@ public class ItemManager
         // Custom Items
         main.saveResource("CustomItems.json", true);
 
-        /*
-        List<CustomItem> customItemList = List.of(new CustomItem("test item with enchacntment", List.of(), Material.ARROW, 125125, "test_item", List.of(), List.of(), List.of(new ItemEnchantment(Enchantment.EFFICIENCY, 2)), null));
-
-        File customItems = new File(main.getDataFolder(), "CustomItems.json");
-        try {
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeHierarchyAdapter(Trait.class, new TraitTypeAdapter());
-            builder.registerTypeHierarchyAdapter(Attribute.class, new AttributeTypeAdapter());
-            builder.registerTypeHierarchyAdapter(Enchantment.class, new EnchantmentTypeAdapter());
-            Gson gson = builder.create();
-            Writer writer = new FileWriter(customItems);
-
-            gson.toJson(customItemList, writer);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-         //*/
-
     }
 
     /// TODO turn these into json/yml files

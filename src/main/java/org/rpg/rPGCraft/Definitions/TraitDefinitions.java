@@ -63,6 +63,7 @@ public class TraitDefinitions
         AddTraitToMap(new BetterSmokeBomb());
         AddTraitToMap(new BloodyRetreat());
         AddTraitToMap(new BoostedHealing_speed());
+        AddTraitToMap(new BoostedHealing_power());
         AddTraitToMap(new BullCharge());
         AddTraitToMap(new Charge());
         AddTraitToMap(new Claws());
@@ -137,6 +138,7 @@ public class TraitDefinitions
         AddTraitToMap(new CancelMainHandEntityInteraction());
         AddTraitToMap(new CancelOffHandEntityInteraction());
         AddTraitToMap(new GracefulStep());
+        AddTraitToMap(new NecromanticTitle());
     }
 
     public static Trait GetTraitByID(String name_id)

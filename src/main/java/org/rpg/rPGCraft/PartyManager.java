@@ -5,11 +5,9 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +18,10 @@ import java.util.Objects;
 public class PartyManager
 {
     File partyFile;
+    File partyRulesFile;
 
     YamlConfiguration modifyPartyFile;
+    YamlConfiguration modifyPartyRulesFile;
     Main main;
 
     public PartyManager()
@@ -42,6 +42,15 @@ public class PartyManager
         }
 
         modifyPartyFile = YamlConfiguration.loadConfiguration(partyFile);
+
+        // party rules
+        partyRulesFile = new File(main.getDataFolder(), "partyRules.yml");
+        if (!partyRulesFile.exists())
+        {
+            main.saveResource("partyRules.yml", false);
+        }
+
+        modifyPartyRulesFile = YamlConfiguration.loadConfiguration(partyRulesFile);
     }
 
     public List<String> GetParties()
@@ -91,14 +100,14 @@ public class PartyManager
              {
                  return true;
              }
-             else if (entity instanceof Wolf wolf)
+             else if (entity instanceof Tameable tameable)
              {
-                 if (!wolf.isTamed())
+                 if (!tameable.isTamed())
                  {
                      return false;
                  }
 
-                 if (wolf.getOwner() instanceof Entity owner && modifyPartyFile.get(partyName + "." + owner.getUniqueId()) != null)
+                 if (tameable.getOwner() instanceof Entity owner && modifyPartyFile.get(partyName + "." + owner.getUniqueId()) != null)
                  {
                      return true;
                  }
@@ -148,6 +157,37 @@ public class PartyManager
         return false;
     }
 
+    public boolean ShouldHitBeStoppedByParty(Entity entity1, Entity entity2)
+    {
+        if (main.partyManager.IsInTheSameParty(entity1, entity2))
+        {
+            for (String party : main.partyManager.SharedParties(entity1, entity2))
+            {
+                if (!main.partyManager.DoesPartyHaveFriendlyFire(party))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public List<String> SharedParties(Entity entity1, Entity entity2)
+    {
+        List<String> parties = new ArrayList<>();
+
+        for (String party : GetPartiesWithPlayer(entity1))
+        {
+            if (IsInParty(entity2, party))
+            {
+                parties.add(party);
+            }
+        }
+
+        return parties;
+    }
+
     public boolean PartyExists(String partyName)
     {
         return modifyPartyFile.get(partyName) != null;
@@ -155,6 +195,7 @@ public class PartyManager
 
     public void CreateParty(Player owner, String partyName)
     {
+        // if the party doesn't exist, make the party
         if (modifyPartyFile.get(partyName) == null)
         {
             modifyPartyFile.set(partyName + "." + owner.getUniqueId().toString(), 2);
@@ -164,14 +205,68 @@ public class PartyManager
                 throw new RuntimeException(e);
             }
         }
+
+        // if the party doesn't have a rule set, make one
+        if (modifyPartyRulesFile.get(partyName) == null)
+        {
+            SetDefaultPartyRules(partyName);
+        }
+    }
+
+    private void SetDefaultPartyRules(String partyName)
+    {
+        modifyPartyRulesFile.set(partyName + ".should_share_class_xp", false);
+        modifyPartyRulesFile.set(partyName + ".friendly_fire", false);
+
+        try {
+            modifyPartyRulesFile.save(partyRulesFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean DoesPartyHaveFriendlyFire(String partyName)
+    {
+        return (boolean) modifyPartyFile.get(partyName + ".friendly_fire");
+    }
+
+    public void UpdateFriendlyFireRule(boolean friendlyFire, String partyName)
+    {
+        modifyPartyRulesFile.set(partyName + ".friendly_fire", friendlyFire);
+
+        try {
+            modifyPartyRulesFile.save(partyRulesFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void UpdateShareClassXPRule(boolean shouldShare, String partyName)
+    {
+        modifyPartyRulesFile.set(partyName + ".should_share_class_xp", shouldShare);
+
+        try {
+            modifyPartyRulesFile.save(partyRulesFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean DoesPartyShareClassXP(String partyName)
+    {
+        return (boolean) modifyPartyFile.get(partyName + ".should_share_class_xp");
     }
 
     public void DisbandParty(String partyName)
     {
         if (modifyPartyFile.get(partyName) != null)
         {
-            System.out.println("i did a thing");
             modifyPartyFile.set(partyName, null);
+        }
+
+        if (modifyPartyRulesFile.get(partyName) != null)
+        {
+            modifyPartyRulesFile.set(partyName, null);
         }
     }
 
@@ -230,7 +325,7 @@ public class PartyManager
 
     public void InvitePlayerToParty(Entity entity, String partyName)
     {
-        entity.getPersistentDataContainer().set(NamespaceDefinitions.GetLastPartyInviteKey(), PersistentDataType.STRING, partyName);
+        entity.getPersistentDataContainer().set(MyNamespaces.LAST_PARTY_INVITE.GetNamespacedKey(), PersistentDataType.STRING, partyName);
 
         // send a message
         TextComponent clickJoinMessage = new TextComponent("§a§l[Click Here]");
@@ -243,6 +338,28 @@ public class PartyManager
 
 
         entity.spigot().sendMessage(baseComponents);
+    }
 
+    public List<Player> GetPlayersToShareClassXpWith(Player player)
+    {
+        List<Player> players = new ArrayList<>();
+
+        for (String party : GetPartiesWithPlayer(player))
+        {
+            if (!DoesPartyShareClassXP(party))
+            {
+                continue;
+            }
+
+            for (Player partyMembers : GetPlayersInParty(party))
+            {
+                if (!players.contains(partyMembers))
+                {
+                    players.add(partyMembers);
+                }
+            }
+        }
+
+        return players;
     }
 }

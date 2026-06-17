@@ -8,11 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SelectClassGUI extends GUIState
 {
@@ -39,7 +39,7 @@ public class SelectClassGUI extends GUIState
 
             // add the PersistentDataContainer to the icon
             ItemMeta iconMeta = icon.getItemMeta();
-            iconMeta.getPersistentDataContainer().set(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING, playableClass.name);
+            iconMeta.getPersistentDataContainer().set(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING, playableClass.name);
 
             icon.setItemMeta(iconMeta);
 
@@ -60,24 +60,12 @@ public class SelectClassGUI extends GUIState
         e.setCancelled(true);
 
         // if the player didn't click a border
-        if (e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING))
+        if (e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING))
         {
-            // get the PersistentDataContainer of the icon clicked
-            String classPersistent = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(NamespaceDefinitions.GetClassKey(), PersistentDataType.STRING);
+            // play a button click sound
+            GetOwner().playSound(GetOwner().getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, 1);
 
-            // find the race clicked
-            for (PlayableClass playableClass : Main.GetInstance().GetChooseAbleClasses())
-            {
-                // if the race name is the same as the race of what the player click, open the new subrace menu
-                if (Objects.equals(playableClass.name, classPersistent))
-                {
-                    // play a button click sound
-                    GetOwner().playSound(GetOwner().getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, 1);
-
-                    MenuManager.AssignGUIState(new ConfirmClassGUI(GetOwner(), this, playableClass), GetOwner());
-                }
-            }
-
+            MenuManager.AssignGUIState(new ConfirmClassGUI(GetOwner(), this, Main.GetInstance().statSheetManager.FindClass(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MyNamespaces.CLASS.GetNamespacedKey(), PersistentDataType.STRING))), GetOwner());
         }
 
     }

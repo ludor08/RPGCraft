@@ -119,7 +119,7 @@ public class RPGraycast
             if (particle != null)
             {
                 // spawn the particle
-                RPGparticles.SpawnParticle(location.getWorld(), numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
+                RPGparticles.SpawnParticle(numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
             }
         }
 
@@ -214,7 +214,7 @@ public class RPGraycast
             if (particle != null)
             {
                 // spawn the particle
-                RPGparticles.SpawnParticle(location.getWorld(), numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
+                RPGparticles.SpawnParticle(numberOfParticles, new Location(location.getWorld(), position.x, position.y, position.z), new Vector3d(0,0,0), particle, 0);
             }
         }
 

@@ -36,17 +36,14 @@ public class ResetCommand implements CommandExecutor
             switch (args[0])
             {
                 case "class":
-                    main.statSheetManager.FindStatSheetByPlayer(player).ResetClassPersistent();
+                    main.statSheetManager.FindStatSheetByPlayer(player).ResetClass();
 
                     // pick a new class
                     MenuManager.AssignGUIState(new SelectClassGUI(player, null), player);
-                    //player.openInventory(main.menuManager.CreateClassMenu(player, main.GetChooseAbleClasses()));
-                    player.sendMessage("In testing");
-                    Bukkit.getLogger().warning("Code has been removed for testing reasons.");
                     break;
 
                 case "race":
-                    main.statSheetManager.FindStatSheetByPlayer(player).ResetRacePersistent();
+                    main.statSheetManager.FindStatSheetByPlayer(player).ResetRace();
 
                     // pick a new race
                     MenuManager.AssignGUIState(new SelectRaceGUI(player, null), player);

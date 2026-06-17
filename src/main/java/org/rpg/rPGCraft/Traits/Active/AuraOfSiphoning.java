@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.rpg.rPGCraft.NamespaceDefinitions;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Traits.ActiveTrait;
 import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.RPGutils;
@@ -48,7 +48,7 @@ public class AuraOfSiphoning extends ActiveTrait
 
             if (player.getPersistentDataContainer().get(siphoningTickKey, PersistentDataType.INTEGER) >= 10)
             {
-                if (player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) < manaCost)
+                if (player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) < manaCost)
                 {
                     player.getPersistentDataContainer().set(siphoningKey, PersistentDataType.BOOLEAN, false);
                     return;
@@ -58,7 +58,7 @@ public class AuraOfSiphoning extends ActiveTrait
                 {
                     if (entity instanceof LivingEntity livingEntity)
                     {
-                        if (main.partyManager.IsInTheSameParty(player, livingEntity))
+                        if (main.partyManager.ShouldHitBeStoppedByParty(player, livingEntity))
                         {
                             continue;
                         }
@@ -70,17 +70,17 @@ public class AuraOfSiphoning extends ActiveTrait
 
                         RPGutils.DamageWithTrait(livingEntity, player, 1, false);
 
-                        if (livingEntity.getPersistentDataContainer().has(NamespaceDefinitions.GetManaKey()))
+                        if (livingEntity.getPersistentDataContainer().has(MyNamespaces.MANA.GetNamespacedKey()))
                         {
-                            if (livingEntity.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER) > 1)
+                            if (livingEntity.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER) > 1)
                             {
-                                player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, Math.min(player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)+1,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER)));
-                                livingEntity.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)-2);
+                                player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, Math.min(player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)+1,player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER)));
+                                livingEntity.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)-2);
                             }
                         }
                         else
                         {
-                            player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, Math.min(player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)+1,player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaMaxKey(), PersistentDataType.INTEGER)));
+                            player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, Math.min(player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)+1,player.getPersistentDataContainer().get(MyNamespaces.MANA_MAX.GetNamespacedKey(), PersistentDataType.INTEGER)));
                         }
 
                         if (player.getPersistentDataContainer().has(weaknessLevelKey))
@@ -90,7 +90,7 @@ public class AuraOfSiphoning extends ActiveTrait
                     }
                 }
 
-                player.getPersistentDataContainer().set(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(NamespaceDefinitions.GetManaKey(), PersistentDataType.INTEGER)-manaCost);
+                player.getPersistentDataContainer().set(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER, player.getPersistentDataContainer().get(MyNamespaces.MANA.GetNamespacedKey(), PersistentDataType.INTEGER)-manaCost);
             }
 
             player.getWorld().spawnParticle(Particle.ASH, player.getLocation(), 100, 2,2,2);

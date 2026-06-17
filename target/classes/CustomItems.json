@@ -1,7 +1,7 @@
 [
   {
     "name":"Lesser Detoxifying Charm",
-    "lore":["Gives you immunity to the poison effect when held."],
+    "lore":["Mithridatim: Gives you immunity to the poison effect when held."],
     "material":"NAME_TAG",
     "maxStackSize":1,
     "itemID":"lesser_detoxifying_charm",
@@ -57,7 +57,7 @@
   },
   {
     "name":"Reinforced Twig Wand",
-    "lore":["Gives you +25 max mana when held in the main hand."],
+    "lore":["Greater Capacity: Gives you +25 max mana when held in the main hand."],
     "material":"NAME_TAG",
     "maxStackSize":1,
     "itemID":"reinforced_twig_wand",
@@ -96,5 +96,41 @@
     "itemAttributes":[],
 
     "itemEnchantments": []
+  },
+  {
+    "name":"Ferula of the last Pope",
+    "lore":["Greater Capacity: Gives you +50 max mana when held in the main hand.", "Boosted Healing Power: Makes all healing traits 150% as effective when held in the main hand.", "Necromantic Title: Zombies and skeletons will no longer target you when this ferula is in your main hand."],
+    "material":"NAME_TAG",
+    "maxStackSize":1,
+    "itemID":"ferula_of_the_last_pope",
+    "customModelData":3,
+
+    "itemEnhancements":
+    [
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"greater capacity 2"}
+      },
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"boosted healing power"}
+      },
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"cancel main hand entity interaction"}
+      },
+      {
+        "useCase":"InMainHand",
+        "trait":{"name_id":"necromantic title"}
+      },
+      {
+        "useCase":"InOffHand",
+        "trait":{"name_id":"cancel off hand entity interaction"}
+      }
+    ],
+
+    "itemAttributes":[],
+
+    "itemEnchantments":[]
   }
 ]

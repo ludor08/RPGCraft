@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 
 public class ClassXPCommand implements CommandExecutor
 {
@@ -35,7 +35,7 @@ public class ClassXPCommand implements CommandExecutor
             switch (args[0])
             {
                 case "get":
-                    player.sendMessage(player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER).toString());
+                    player.sendMessage(player.getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER).toString());
                     break;
 
                 case "set":
@@ -63,8 +63,8 @@ public class ClassXPCommand implements CommandExecutor
                     {
                         try
                         {
-                            main.statSheetManager.FindStatSheetByPlayer(player).GiveXP(Integer.parseInt(args[1]));
-                            player.sendMessage(ChatColor.GREEN.toString() + Integer.parseInt(args[1]) + " class xp added. your total class xp is now " + player.getPersistentDataContainer().get(NamespaceDefinitions.GetClassXPKey(), PersistentDataType.INTEGER));
+                            main.statSheetManager.FindStatSheetByPlayer(player).GiveXP(Integer.parseInt(args[1]), false);
+                            player.sendMessage(ChatColor.GREEN.toString() + Integer.parseInt(args[1]) + " class xp added. your total class xp is now " + player.getPersistentDataContainer().get(MyNamespaces.CLASS_XP.GetNamespacedKey(), PersistentDataType.INTEGER));
                         }
                         catch (NumberFormatException e)
                         {

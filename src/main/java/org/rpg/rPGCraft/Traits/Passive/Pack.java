@@ -23,10 +23,10 @@ public class Pack extends Trait
     public Pack() {
         // add the name and lore
         super(ChatColor.AQUA + ChatColor.BOLD.toString() + "Pack", "pack", Material.BONE, true, List.of(
-                ChatColor.AQUA.toString() + "   - For every tamed wolf or a player (these can be any race)",
+                ChatColor.AQUA.toString() + "   - For every tamed pet or a player (these can be any race)",
                 ChatColor.AQUA.toString() + "     within 10 blocks that hasn’t the last damage source and is in the same party as you,",
                 ChatColor.AQUA.toString() + "     you gain +2 base defense (to a max of +10), and +1 damage (to a max of +5),",
-                ChatColor.AQUA.toString() + "     and the wolf(s) and the player(s) gain resistance one."
+                ChatColor.AQUA.toString() + "     and the pet(s) and the player(s) gain resistance one."
         ));
 
         packModKey = new NamespacedKey(Main.GetInstance(), "pack");

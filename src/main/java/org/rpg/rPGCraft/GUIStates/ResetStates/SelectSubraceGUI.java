@@ -6,10 +6,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
-import org.rpg.rPGCraft.Main;
 import org.rpg.rPGCraft.MenuManager;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.Race;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class SelectSubraceGUI extends GUIState
         for (Race race : parentRace.subraces)
         {
             ItemStack icon = race.GetRaceIcon();
-            MenuManager.AddPersistentDataContainerToItemStack(icon, NamespaceDefinitions.GetRaceKey(), race.name);
+            MenuManager.AddPersistentDataContainerToItemStack(icon, MyNamespaces.RACE.GetNamespacedKey(), race.name);
 
             raceIcons.add(icon);
         }
@@ -70,10 +69,10 @@ public class SelectSubraceGUI extends GUIState
         e.setCancelled(true);
 
         // if the player didn't click a border
-        if (e.getCurrentItem().getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
+        if (e.getCurrentItem().getPersistentDataContainer().has(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING))
         {
             // get the PersistentDataContainer of the icon clicked
-            String racePersistent = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING);
+            String racePersistent = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING);
 
             // find the race clicked
             for (Race race : parentRace.subraces)

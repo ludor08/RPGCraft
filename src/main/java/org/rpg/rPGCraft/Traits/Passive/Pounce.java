@@ -48,7 +48,7 @@ public class Pounce extends Trait
 
             int distance = (int) (player.getFallDistance()-1);
 
-            if (distance-3 < 1) e.setCancelled(true);
+            if (distance-5 < 1) e.setCancelled(true);
         }
     }
 

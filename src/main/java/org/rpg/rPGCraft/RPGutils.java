@@ -15,6 +15,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
+import org.rpg.rPGCraft.Traits.Trait;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,6 +134,21 @@ public class RPGutils
 
     /// spatial
 
+    public static List<Location> GetPointsOfACircle(Location location, float radius, int segments, Vector3d facing)
+    {
+        List<Location> points = new ArrayList<>();
+
+        for (int i = 1; i < segments; i++)
+        {
+            Vector3d offset = RPGutils.getLocationOffsetByVector(location, facing, 0, (float) Math.cos((Math.PI * 2) / ((double) i / 20)) * radius, (float) Math.sin((Math.PI * 2) / ((double) i / 20)) * radius);
+            Location offsetLocation = new Location(location.getWorld(), offset.x, offset.y, offset.z);
+
+            points.add(offsetLocation);
+        }
+
+        return points;
+    }
+
     public static double getDistance(Location location1, Location location2)
     {
         Vector3d baseDistances = new Vector3d(Math.abs(location1.getX() - location2.getX()), Math.abs(location1.getY() - location2.getY()), Math.abs(location1.getZ() - location2.getZ()));
@@ -179,7 +195,7 @@ public class RPGutils
 
     public static @NotNull Vector3d getDirection(Location startLocation, Location endLocation)
     {
-        return new Vector3d((startLocation.getX() - endLocation.getX()), startLocation.getY() - endLocation.getY(), (startLocation.getZ() - endLocation.getZ())).normalize();
+        return new Vector3d(startLocation.getX() - endLocation.getX(), startLocation.getY() - endLocation.getY(), startLocation.getZ() - endLocation.getZ()).normalize();
     }
 
     public static @NotNull Vector3d getFacingDirection(Entity entity)
@@ -278,14 +294,25 @@ public class RPGutils
 
     public static void HealWithTrait(Entity healer, LivingEntity target, int value, EntityRegainHealthEvent.RegainReason regainReason)
     {
-        NamespacedKey boostedHealingDurationKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_duration");
-        NamespacedKey boostedHealingPowerKey = new NamespacedKey(Main.GetInstance(),"boostedHealing_speed_power");
-
         int amountToBeHealed = value;
 
-        if (healer.getPersistentDataContainer().has(boostedHealingDurationKey) && healer.getPersistentDataContainer().has(boostedHealingPowerKey))
+        // if the healer is a player
+        if (healer instanceof Player player)
         {
-            target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, healer.getPersistentDataContainer().get(boostedHealingDurationKey, PersistentDataType.INTEGER),healer.getPersistentDataContainer().get(boostedHealingPowerKey, PersistentDataType.INTEGER)));
+            // if the player has a stat sheet
+            if (Main.GetInstance().statSheetManager.FindStatSheetByPlayer(player) != null)
+            {
+                for (Trait trait : Main.GetInstance().statSheetManager.FindStatSheetByPlayer(player).GetActiveTraits())
+                {
+                    amountToBeHealed = trait.OnHealWithTrait(healer, target, value, amountToBeHealed, regainReason);
+                }
+            }
+            // if they do not have one
+            else
+            {
+                // give them one :)
+                Main.GetInstance().statSheetManager.AddStatSheet(new StatSheet(player));
+            }
         }
 
         target.heal(amountToBeHealed, regainReason);
@@ -297,7 +324,7 @@ public class RPGutils
 
         if (attacker != null)
         {
-            if (!Main.GetInstance().partyManager.IsInTheSameParty(attacker, target))
+            if (!Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(attacker, target))
             {
                 RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !sendInput);
                 target.damage(damageAmount, attacker);
@@ -316,7 +343,7 @@ public class RPGutils
 
         if (attacker != null)
         {
-            if (!Main.GetInstance().partyManager.IsInTheSameParty(attacker, target))
+            if (!Main.GetInstance().partyManager.ShouldHitBeStoppedByParty(attacker, target))
             {
                 RPGutils.SetNamespacedKeyValue(attacker, attackInputCanceledKey, !doSendInput);
                 attacker.attack(target);
@@ -355,27 +382,43 @@ public class RPGutils
         entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, value);
     }
 
-    public static void AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, int baseLevel, int amountToBeAdded)
+    public static int AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, int baseLevel, int amountToBeAdded)
     {
+        int value;
+
         if (entity.getPersistentDataContainer().has(namespacedKey))
         {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, entity.getPersistentDataContainer().get(namespacedKey, PersistentDataType.INTEGER) + amountToBeAdded);
+            value = entity.getPersistentDataContainer().get(namespacedKey, PersistentDataType.INTEGER) + amountToBeAdded;
+
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, value);
         }
         else
         {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, baseLevel + amountToBeAdded);
+            value = baseLevel + amountToBeAdded;
+
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, value);
         }
+
+        return value;
     }
 
-    public static void AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, float baseLevel, float amountToBeAdded)
+    public static float AddToNamespacedKey(Entity entity, NamespacedKey namespacedKey, float baseLevel, float amountToBeAdded)
     {
+        float value;
+
         if (entity.getPersistentDataContainer().has(namespacedKey))
         {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, entity.getPersistentDataContainer().get(namespacedKey, PersistentDataType.FLOAT) + amountToBeAdded);
+            value = entity.getPersistentDataContainer().get(namespacedKey, PersistentDataType.FLOAT) + amountToBeAdded;
+
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, value);
         }
         else
         {
-            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, baseLevel + amountToBeAdded);
+            value = baseLevel + amountToBeAdded;
+
+            entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.FLOAT, value);
         }
+
+        return value;
     }
 }

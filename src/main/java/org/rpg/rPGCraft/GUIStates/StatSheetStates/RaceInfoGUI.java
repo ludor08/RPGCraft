@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.rpg.rPGCraft.*;
+import org.rpg.rPGCraft.Definitions.MyNamespaces;
 import org.rpg.rPGCraft.GUIStates.GUIState;
 import org.rpg.rPGCraft.Traits.Trait;
 
@@ -38,7 +39,7 @@ public class RaceInfoGUI extends GUIState
         raceInfoMenu.setItem(MenuManager.FULL_ROW_SIZE*4, traitBackButton);
 
         // Get the race of the owner
-        Race race = Main.GetInstance().statSheetManager.FindRace(GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING));
+        Race race = Main.GetInstance().statSheetManager.FindStatSheetByPlayer(GetOwner()).GetRace();
 
         // get the parentRace icon
         ItemStack raceIcon = race.GetRaceIcon();
@@ -63,7 +64,7 @@ public class RaceInfoGUI extends GUIState
             {
                 // save the persistent in the subraceIcon
                 ItemStack subraceIcon = subrace.GetRaceIcon();
-                MenuManager.AddPersistentDataContainerToItemStack(subraceIcon, NamespaceDefinitions.GetRaceKey(), subrace.name);
+                MenuManager.AddPersistentDataContainerToItemStack(subraceIcon, MyNamespaces.RACE.GetNamespacedKey(), subrace.name);
 
                 // add subraceIcon to subraceIcons
                 subraceIcons.add(subraceIcon);
@@ -98,13 +99,13 @@ public class RaceInfoGUI extends GUIState
         e.setCancelled(true);
 
         // if the player didn't click a border
-        if (e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING))
+        if (e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING))
         {
             // get the PersistentDataContainer of the icon clicked
-            String clickedPersistent = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING);
+            String clickedPersistent = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING);
 
             // get the PersistentDataContainer of the parent
-            String parentPersistent = Main.GetInstance().statSheetManager.FindRace(GetOwner().getPersistentDataContainer().get(NamespaceDefinitions.GetRaceKey(), PersistentDataType.STRING)).name;
+            String parentPersistent = Main.GetInstance().statSheetManager.FindRace(GetOwner().getPersistentDataContainer().get(MyNamespaces.RACE.GetNamespacedKey(), PersistentDataType.STRING)).name;
 
             // if the player didn't click the parent race, generate and open the confirm menu
             if (!Objects.equals(clickedPersistent, parentPersistent))

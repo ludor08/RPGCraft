@@ -1,31 +1,14 @@
 package org.rpg.rPGCraft.Definitions;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
-import org.bukkit.persistence.PersistentDataType;
-import org.rpg.rPGCraft.Entities.EntityState;
-import org.rpg.rPGCraft.Entities.RPGEntity;
+import org.bukkit.structure.StructureManager;
 import org.rpg.rPGCraft.Main;
-import org.rpg.rPGCraft.NamespaceDefinitions;
 import org.rpg.rPGCraft.RPGStructure;
-import org.rpg.rPGCraft.Structures.SpawnPlatformStructure;
+import org.rpg.rPGCraft.Structures.ZombieKingArena;
 import org.rpg.rPGCraft.Structures.TestStructure;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class StructureDefinitions
 {
@@ -42,7 +25,7 @@ public class StructureDefinitions
         RPGStructureIdMap = new HashMap<String, RPGStructure>();
 
         AddRPGStructureToMap(new TestStructure());
-        AddRPGStructureToMap(new SpawnPlatformStructure());
+        AddRPGStructureToMap(new ZombieKingArena());
     }
 
     public static boolean HasDefinitionForRPGStructure(String name_id)
@@ -66,7 +49,7 @@ public class StructureDefinitions
     public static File GetStructureFileByID(String name_id)
     {
         File structuresFolder = Main.GetInstance().worldManager.GetStructuresFolder();
-        File structureFile = new File(structuresFolder, name_id);
+        File structureFile = new File(structuresFolder, name_id + ".nbt");
 
         if (structureFile.exists())
         {

@@ -1,5 +1,5 @@
 name: RPGCraft
-version: '2.2-BETA'
+version: '2.33-BETA'
 main: org.rpg.rPGCraft.Main
 api-version: '1.21'
 prefix: RPGCraft
@@ -24,5 +24,5 @@ commands:
   rpgspawn:
     permission: "2"
 
-  test_add_structure:
+  test:
     permission: "2"
